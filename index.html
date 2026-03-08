@@ -19,17 +19,23 @@
       --blue:#80B0F8;
       --red:#F87888;
       --bg:#131A1C;
+      --bg-2:#101617;
       --surface:#1A2224;
       --surface-2:#202A2D;
-      --border:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.08);
+      --line-strong:rgba(255,255,255,.12);
       --text:#FFFFFF;
       --muted:rgba(255,255,255,.72);
-      --soft:rgba(255,255,255,.46);
+      --soft:rgba(255,255,255,.48);
       --blue-dim:rgba(128,176,248,.14);
       --red-dim:rgba(248,120,136,.14);
       --shadow:0 24px 70px rgba(0,0,0,.30);
+      --shadow-soft:0 12px 32px rgba(0,0,0,.18);
       --max:1180px;
-      --radius:28px;
+      --radius-xl:32px;
+      --radius-lg:24px;
+      --radius-md:18px;
+      --transition:.28s ease;
     }
 
     *{box-sizing:border-box}
@@ -39,22 +45,36 @@
       color:var(--text);
       font-family:'Outfit','Noto Sans KR',system-ui,sans-serif;
       background:
-        radial-gradient(circle at 14% 16%, rgba(128,176,248,.08), transparent 28%),
-        radial-gradient(circle at 86% 18%, rgba(248,120,136,.08), transparent 24%),
-        linear-gradient(180deg,#131A1C 0%,#101617 100%);
+        radial-gradient(circle at 12% 12%, rgba(128,176,248,.10), transparent 24%),
+        radial-gradient(circle at 88% 16%, rgba(248,120,136,.10), transparent 22%),
+        linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);
       word-break:keep-all;
+      overflow-x:hidden;
     }
 
     a{text-decoration:none;color:inherit}
+    img{display:block;max-width:100%}
+
     .wrap{
       width:min(var(--max), calc(100% - 32px));
       margin:0 auto;
     }
 
+    .fade-up{
+      opacity:0;
+      transform:translateY(28px);
+      transition:opacity .8s ease, transform .8s ease;
+    }
+
+    .fade-up.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
     .nav{
       position:sticky;
       top:0;
-      z-index:50;
+      z-index:60;
       backdrop-filter:blur(14px);
       background:rgba(19,26,28,.76);
       border-bottom:1px solid rgba(255,255,255,.04);
@@ -77,19 +97,19 @@
       min-width:0;
     }
 
-    .brand-badge{
+    .brand-mark{
       display:flex;
       width:56px;
       height:36px;
       border-radius:12px;
       overflow:hidden;
-      border:1px solid var(--border);
+      border:1px solid var(--line);
       background:var(--surface);
-      box-shadow:var(--shadow);
+      box-shadow:var(--shadow-soft);
       flex:0 0 auto;
     }
 
-    .brand-badge div{
+    .brand-mark div{
       flex:1;
       display:flex;
       align-items:center;
@@ -99,12 +119,12 @@
       letter-spacing:-.5px;
     }
 
-    .brand-badge .pa{
+    .brand-mark .pa{
       color:var(--blue);
       background:var(--blue-dim);
     }
 
-    .brand-badge .ct{
+    .brand-mark .ct{
       color:var(--red);
       background:var(--red-dim);
     }
@@ -113,15 +133,15 @@
       display:block;
       font-size:18px;
       font-weight:900;
-      letter-spacing:-.6px;
       line-height:1;
+      letter-spacing:-.6px;
     }
 
     .brand-text span{
       display:block;
       margin-top:5px;
-      font-size:11px;
       color:var(--soft);
+      font-size:11px;
       letter-spacing:1.4px;
       text-transform:uppercase;
     }
@@ -135,32 +155,63 @@
     }
 
     .nav-links a{
-      color:var(--muted);
-      font-size:14px;
       padding:10px 12px;
       border-radius:12px;
+      color:var(--muted);
+      font-size:14px;
       white-space:nowrap;
+      transition:background var(--transition), color var(--transition), transform var(--transition);
     }
 
     .nav-links a:hover{
       background:rgba(255,255,255,.04);
+      color:#fff;
     }
 
     .nav-cta{
       background:linear-gradient(135deg,var(--blue),#6F9FF1);
       color:#101617 !important;
       font-weight:800;
+      box-shadow:0 8px 22px rgba(128,176,248,.22);
     }
 
     .hero{
-      padding:78px 0 56px;
+      position:relative;
+      padding:86px 0 70px;
+      overflow:hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:auto auto 10% -10%;
+      width:480px;
+      height:480px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(128,176,248,.10), transparent 62%);
+      filter:blur(20px);
+      pointer-events:none;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0 -10% auto auto;
+      width:420px;
+      height:420px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(248,120,136,.10), transparent 60%);
+      filter:blur(20px);
+      pointer-events:none;
     }
 
     .hero-grid{
       display:grid;
-      grid-template-columns:1.08fr .92fr;
-      gap:36px;
+      grid-template-columns:1.1fr .9fr;
+      gap:38px;
       align-items:center;
+      position:relative;
+      z-index:1;
     }
 
     .eyebrow{
@@ -169,13 +220,14 @@
       gap:10px;
       padding:10px 14px;
       border-radius:999px;
-      border:1px solid var(--border);
+      border:1px solid var(--line);
       background:rgba(255,255,255,.03);
       color:var(--muted);
       font-size:12px;
       font-weight:700;
       letter-spacing:1.2px;
       text-transform:uppercase;
+      box-shadow:var(--shadow-soft);
     }
 
     .dot{
@@ -188,25 +240,25 @@
     }
 
     h1{
-      margin:22px 0 18px;
-      font-size:clamp(40px, 6.5vw, 78px);
-      line-height:1.03;
-      letter-spacing:-2.8px;
+      margin:24px 0 18px;
+      font-size:clamp(42px, 7vw, 86px);
+      line-height:1.02;
+      letter-spacing:-3px;
       font-weight:900;
     }
 
     .sub-kr{
       display:block;
+      margin-bottom:12px;
+      color:#fff;
       font-size:clamp(22px, 2.4vw, 30px);
       line-height:1.25;
       letter-spacing:-.8px;
-      color:#fff;
-      margin-bottom:10px;
     }
 
     .grad{
       display:block;
-      line-height:1.02;
+      line-height:1;
       background:linear-gradient(90deg,var(--blue) 0%, #C8DCFF 30%, #FFFFFF 52%, #FFD1D6 72%, var(--red) 100%);
       -webkit-background-clip:text;
       background-clip:text;
@@ -214,17 +266,17 @@
     }
 
     .hero-copy{
-      max-width:700px;
       margin:0;
+      max-width:720px;
     }
 
     .hero-copy .ko{
       display:block;
+      margin-bottom:10px;
       color:#fff;
       font-size:18px;
       line-height:1.8;
       font-weight:500;
-      margin-bottom:10px;
     }
 
     .hero-copy .en{
@@ -235,10 +287,10 @@
     }
 
     .hero-actions{
-      margin-top:30px;
       display:flex;
       flex-wrap:wrap;
       gap:12px;
+      margin-top:30px;
     }
 
     .btn{
@@ -248,22 +300,22 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      font-weight:800;
       font-size:15px;
-      border:1px solid transparent;
-      transition:transform .18s ease, opacity .18s ease;
+      font-weight:800;
       white-space:nowrap;
+      border:1px solid transparent;
+      transition:transform var(--transition), opacity var(--transition), box-shadow var(--transition), background var(--transition);
     }
 
     .btn:hover{
-      transform:translateY(-1px);
-      opacity:.97;
+      transform:translateY(-2px);
+      opacity:.98;
     }
 
     .btn-primary{
       background:linear-gradient(135deg,var(--blue),#6F9FF1);
       color:#101617;
-      box-shadow:0 10px 30px rgba(128,176,248,.24);
+      box-shadow:0 12px 30px rgba(128,176,248,.26);
     }
 
     .btn-secondary{
@@ -286,8 +338,8 @@
       border-radius:999px;
       font-size:12px;
       font-weight:700;
-      border:1px solid transparent;
       white-space:nowrap;
+      border:1px solid transparent;
     }
 
     .tag.blue{
@@ -305,10 +357,10 @@
     .hero-card{
       position:relative;
       overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius:30px;
       padding:24px;
+      border-radius:var(--radius-xl);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
       box-shadow:var(--shadow);
     }
 
@@ -317,18 +369,18 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(circle at left top, rgba(128,176,248,.12), transparent 28%),
-        radial-gradient(circle at right bottom, rgba(248,120,136,.12), transparent 26%);
+        radial-gradient(circle at left top, rgba(128,176,248,.14), transparent 28%),
+        radial-gradient(circle at right bottom, rgba(248,120,136,.14), transparent 26%);
       pointer-events:none;
     }
 
     .panel{
       position:relative;
       z-index:1;
+      padding:22px;
+      border-radius:24px;
       background:rgba(10,14,15,.34);
       border:1px solid rgba(255,255,255,.05);
-      border-radius:22px;
-      padding:22px;
       backdrop-filter:blur(10px);
     }
 
@@ -341,8 +393,8 @@
     }
 
     .panel-head .label{
-      font-size:12px;
       color:var(--soft);
+      font-size:12px;
       font-weight:700;
       letter-spacing:1.3px;
       text-transform:uppercase;
@@ -361,16 +413,16 @@
     }
 
     .logo-box{
-      background:var(--surface);
-      border:1px solid var(--border);
-      border-radius:20px;
-      padding:22px 20px 18px;
       margin-bottom:18px;
+      padding:22px 20px 18px;
+      border-radius:22px;
+      background:var(--surface);
+      border:1px solid var(--line);
     }
 
     .logo-word{
       margin:0;
-      font-size:70px;
+      font-size:72px;
       line-height:.95;
       letter-spacing:-3px;
       font-weight:900;
@@ -383,21 +435,21 @@
       display:flex;
       width:170px;
       height:2px;
+      margin-top:14px;
       overflow:hidden;
       border-radius:4px;
-      margin-top:14px;
     }
 
     .logo-line .l{
       flex:1;
       background:var(--blue);
-      opacity:.78;
+      opacity:.8;
     }
 
     .logo-line .r{
       flex:1;
       background:var(--red);
-      opacity:.78;
+      opacity:.8;
     }
 
     .logo-caption{
@@ -418,9 +470,16 @@
       gap:12px;
       align-items:flex-start;
       padding:14px;
-      border-radius:16px;
+      border-radius:18px;
       background:rgba(255,255,255,.03);
       border:1px solid rgba(255,255,255,.05);
+      transition:transform var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .mini:hover{
+      transform:translateY(-3px);
+      border-color:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
     }
 
     .mini-no{
@@ -465,7 +524,7 @@
     }
 
     section.block{
-      padding:34px 0 90px;
+      padding:36px 0 96px;
     }
 
     .section-head{
@@ -477,24 +536,20 @@
     }
 
     .kicker{
+      margin-bottom:10px;
       color:var(--soft);
       font-size:12px;
       font-weight:700;
       letter-spacing:2px;
       text-transform:uppercase;
-      margin-bottom:10px;
       white-space:nowrap;
     }
 
     h2{
       margin:0;
-      font-size:clamp(28px, 4vw, 44px);
+      font-size:clamp(28px, 4vw, 46px);
       line-height:1.12;
       letter-spacing:-1.5px;
-    }
-
-    .section-title-break{
-      display:block;
     }
 
     .section-desc{
@@ -518,27 +573,21 @@
     .card,
     .target{
       background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border:1px solid var(--border);
-      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
     }
 
     .card{
-      border-radius:24px;
       padding:24px;
+      border-radius:26px;
+      transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
     }
 
-    .card h3{
-      margin:0 0 12px;
-      font-size:22px;
-      letter-spacing:-.7px;
-      line-height:1.3;
-    }
-
-    .card p{
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.75;
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 20px 50px rgba(0,0,0,.24);
+      border-color:var(--line-strong);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
     }
 
     .icon-badge{
@@ -547,9 +596,9 @@
       height:44px;
       align-items:center;
       justify-content:center;
+      margin-bottom:18px;
       border-radius:14px;
       font-weight:900;
-      margin-bottom:18px;
     }
 
     .problem-grid .card:nth-child(1) .icon-badge,
@@ -570,6 +619,20 @@
       color:#fff;
     }
 
+    .card h3{
+      margin:0 0 12px;
+      font-size:22px;
+      line-height:1.3;
+      letter-spacing:-.7px;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.75;
+    }
+
     .flow{
       display:grid;
       grid-template-columns:repeat(6,1fr);
@@ -577,17 +640,23 @@
     }
 
     .step{
-      min-height:192px;
+      min-height:196px;
       padding:20px 16px;
-      border-radius:22px;
+      border-radius:24px;
       background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border:1px solid var(--border);
-      box-shadow:var(--shadow);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      transition:transform var(--transition), border-color var(--transition);
+    }
+
+    .step:hover{
+      transform:translateY(-4px);
+      border-color:var(--line-strong);
     }
 
     .step-no{
-      font-size:12px;
       color:var(--soft);
+      font-size:12px;
       font-weight:800;
       letter-spacing:1.5px;
       text-transform:uppercase;
@@ -597,17 +666,17 @@
     .step h4{
       margin:14px 0 8px;
       font-size:20px;
-      letter-spacing:-.5px;
       line-height:1.35;
+      letter-spacing:-.5px;
     }
 
     .step .en{
       display:block;
       margin-bottom:10px;
-      font-size:12px;
       color:var(--soft);
-      text-transform:uppercase;
+      font-size:12px;
       letter-spacing:1.1px;
+      text-transform:uppercase;
     }
 
     .step p{
@@ -618,17 +687,24 @@
     }
 
     .target{
-      text-align:center;
       padding:22px 16px;
-      border-radius:22px;
+      border-radius:24px;
+      text-align:center;
+      transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .target:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 50px rgba(0,0,0,.22);
+      border-color:var(--line-strong);
     }
 
     .target strong{
       display:block;
       margin-bottom:8px;
       font-size:20px;
-      letter-spacing:-.5px;
       line-height:1.35;
+      letter-spacing:-.5px;
     }
 
     .target span{
@@ -641,9 +717,9 @@
     .cta{
       width:min(var(--max), calc(100% - 32px));
       margin:0 auto 100px;
-      padding:34px;
-      border-radius:30px;
-      border:1px solid var(--border);
+      padding:36px;
+      border-radius:32px;
+      border:1px solid var(--line);
       background:
         radial-gradient(circle at left top, rgba(128,176,248,.10), transparent 26%),
         radial-gradient(circle at right bottom, rgba(248,120,136,.10), transparent 24%),
@@ -688,6 +764,12 @@
       font-family:inherit;
       font-size:15px;
       outline:none;
+      transition:border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .cta-form input:focus{
+      border-color:rgba(128,176,248,.36);
+      box-shadow:0 0 0 4px rgba(128,176,248,.10);
     }
 
     .cta-form button{
@@ -702,6 +784,13 @@
       font-weight:900;
       cursor:pointer;
       white-space:nowrap;
+      box-shadow:0 10px 26px rgba(128,176,248,.24);
+      transition:transform var(--transition), opacity var(--transition);
+    }
+
+    .cta-form button:hover{
+      transform:translateY(-2px);
+      opacity:.98;
     }
 
     .footer{
@@ -727,114 +816,36 @@
     .footer-mark .ct{color:var(--red)}
 
     @media (max-width:1100px){
-      .hero-grid{
-        grid-template-columns:1fr;
-      }
-
-      .problem-grid,
-      .value-grid{
-        grid-template-columns:1fr;
-      }
-
-      .flow{
-        grid-template-columns:repeat(3,1fr);
-      }
-
-      .target-grid{
-        grid-template-columns:repeat(3,1fr);
-      }
-
-      .cta{
-        grid-template-columns:1fr;
-      }
-
-      .cta-form{
-        justify-content:flex-start;
-      }
-
-      .section-head{
-        grid-template-columns:1fr;
-      }
+      .hero-grid{grid-template-columns:1fr}
+      .problem-grid,.value-grid{grid-template-columns:1fr}
+      .flow{grid-template-columns:repeat(3,1fr)}
+      .target-grid{grid-template-columns:repeat(3,1fr)}
+      .cta{grid-template-columns:1fr}
+      .cta-form{justify-content:flex-start}
+      .section-head{grid-template-columns:1fr}
     }
 
     @media (max-width:760px){
-      .nav-inner{
-        min-height:68px;
-      }
-
-      .nav-links a:not(.nav-cta){
-        display:none;
-      }
-
-      .hero{
-        padding-top:42px;
-      }
-
-      h1{
-        letter-spacing:-2px;
-      }
-
-      .hero-copy .ko{
-        font-size:16px;
-      }
-
-      .hero-copy .en{
-        font-size:14px;
-      }
-
-      .hero-actions{
-        flex-direction:column;
-        align-items:stretch;
-      }
-
-      .btn{
-        width:100%;
-      }
-
-      .flow{
-        grid-template-columns:1fr;
-      }
-
-      .target-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .cta-form{
-        flex-direction:column;
-        align-items:stretch;
-      }
-
-      .cta-form input,
-      .cta-form button{
-        width:100%;
-      }
-
-      .footer-inner{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .section-title-break{
-        display:inline;
-      }
+      .nav-inner{min-height:68px}
+      .nav-links a:not(.nav-cta){display:none}
+      .hero{padding-top:42px}
+      h1{letter-spacing:-2px}
+      .hero-copy .ko{font-size:16px}
+      .hero-copy .en{font-size:14px}
+      .hero-actions{flex-direction:column;align-items:stretch}
+      .btn{width:100%}
+      .flow{grid-template-columns:1fr}
+      .target-grid{grid-template-columns:1fr 1fr}
+      .cta-form{flex-direction:column;align-items:stretch}
+      .cta-form input,.cta-form button{width:100%}
+      .footer-inner{flex-direction:column;align-items:flex-start}
     }
 
     @media (max-width:520px){
-      .target-grid{
-        grid-template-columns:1fr;
-      }
-
-      .logo-word{
-        font-size:54px;
-      }
-
-      .cta h3{
-        font-size:28px;
-      }
-
-      .sub-kr{
-        font-size:22px;
-      }
+      .target-grid{grid-template-columns:1fr}
+      .logo-word{font-size:56px}
+      .cta h3{font-size:28px}
+      .sub-kr{font-size:22px}
     }
   </style>
 </head>
@@ -842,7 +853,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="#" class="brand" aria-label="PACT Home">
-        <div class="brand-badge" aria-hidden="true">
+        <div class="brand-mark" aria-hidden="true">
           <div class="pa">pa</div>
           <div class="ct">ct</div>
         </div>
@@ -864,7 +875,7 @@
   <main>
     <section class="hero">
       <div class="wrap hero-grid">
-        <div>
+        <div class="fade-up">
           <div class="eyebrow">
             <span class="dot"></span>
             Launching Soon
@@ -872,11 +883,11 @@
 
           <h1>
             <span class="sub-kr">목소리를 모아 실제 합의까지</span>
-            <span class="grad">From voices to real agreements.</span>
+            <span class="grad">From voices to<br>real agreements.</span>
           </h1>
 
           <p class="hero-copy">
-            <span class="ko">PACT는 개인의 목소리를 집단의 힘으로 모아 실제 협상과 합의까지 이끌어내는<br>집단 협상 플랫폼입니다.</span>
+            <span class="ko">PACT는 개인의 목소리를 집단의 힘으로 모아<br>실제 협상과 합의까지 이끌어내는 집단 협상 플랫폼입니다.</span>
             <span class="en">PACT is a collective negotiation platform built to move beyond petitions and scattered coordination, toward structured negotiation and real agreements.</span>
           </p>
 
@@ -892,7 +903,7 @@
           </div>
         </div>
 
-        <div class="hero-card">
+        <div class="hero-card fade-up">
           <div class="panel">
             <div class="panel-head">
               <div class="label">PACT Preview</div>
@@ -940,13 +951,10 @@
 
     <section class="block" id="problem">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head fade-up">
           <div>
             <div class="kicker">Problem</div>
-            <h2>
-              개인은 약하고,<br class="section-title-break">
-              집단은 있어도 프로세스가 없다.
-            </h2>
+            <h2>개인은 약하고,<br>집단은 있어도 프로세스가 없다.</h2>
           </div>
 
           <p class="section-desc">
@@ -955,19 +963,19 @@
         </div>
 
         <div class="problem-grid">
-          <div class="card">
+          <div class="card fade-up">
             <div class="icon-badge">01</div>
             <h3>개인의 협상력 부족</h3>
             <p>노동자, 세입자, 입주민, 소상공인, 시민은 개인 단위로 요구를 전달해도 영향력이 낮거나 불이익을 감수해야 하는 경우가 많습니다.</p>
           </div>
 
-          <div class="card">
+          <div class="card fade-up">
             <div class="icon-badge">02</div>
             <h3>집단이 되어도 불투명</h3>
             <p>사람들이 모여도 대표자의 독단, 과정 비공개, 외부 합의 같은 문제가 생기기 쉽습니다. 청원과 서명은 있어도 협상 프로세스는 부족합니다.</p>
           </div>
 
-          <div class="card">
+          <div class="card fade-up">
             <div class="icon-badge">03</div>
             <h3>합의까지 이어지는 플랫폼 부재</h3>
             <p>청원에서 끝나는 서비스는 있지만, 협상과 합의까지 이어지는 구조를 하나의 플랫폼으로 제공하는 사례는 드뭅니다.</p>
@@ -978,13 +986,10 @@
 
     <section class="block" id="solution">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head fade-up">
           <div>
             <div class="kicker">Solution</div>
-            <h2>
-              청원에서 끝나지 않고,<br class="section-title-break">
-              협상과 합의까지.
-            </h2>
+            <h2>청원에서 끝나지 않고,<br>협상과 합의까지.</h2>
           </div>
 
           <p class="section-desc">
@@ -993,19 +998,19 @@
         </div>
 
         <div class="value-grid">
-          <div class="card">
+          <div class="card fade-up">
             <div class="icon-badge">pa</div>
             <h3>참여를 모으고</h3>
             <p>같은 문제를 가진 사람들이 쉽게 참여하고, 링크 공유와 서명 수집으로 집단 협상력을 형성할 수 있습니다.</p>
           </div>
 
-          <div class="card">
+          <div class="card fade-up">
             <div class="icon-badge">ct</div>
             <h3>요구를 정리하고</h3>
             <p>요구사항을 등록하고 투표로 우선순위를 정해 개인의 의견을 집단의 공식 요구로 정리합니다.</p>
           </div>
 
-          <div class="card">
+          <div class="card fade-up">
             <div class="icon-badge">+1</div>
             <h3>합의를 투명하게 만듭니다</h3>
             <p>공식 문서 전달, 결과 공개, 참여자 동의 구조를 통해 협상 과정의 신뢰와 투명성을 높입니다.</p>
@@ -1016,13 +1021,10 @@
 
     <section class="block" id="flow">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head fade-up">
           <div>
             <div class="kicker">How It Works</div>
-            <h2>
-              PACT는 이렇게<br class="section-title-break">
-              진행됩니다.
-            </h2>
+            <h2>PACT는 이렇게 진행됩니다.</h2>
           </div>
 
           <p class="section-desc">
@@ -1031,42 +1033,42 @@
         </div>
 
         <div class="flow">
-          <div class="step">
+          <div class="step fade-up">
             <div class="step-no">Step 1</div>
             <h4>이슈 등록</h4>
             <span class="en">Issue Setup</span>
             <p>협상 주제, 상대방, 요구사항을 등록하고 시작합니다.</p>
           </div>
 
-          <div class="step">
+          <div class="step fade-up">
             <div class="step-no">Step 2</div>
             <h4>집단 구성</h4>
             <span class="en">Recruit & Sign</span>
             <p>공유 링크와 서명 수집으로 참여자를 모읍니다.</p>
           </div>
 
-          <div class="step">
+          <div class="step fade-up">
             <div class="step-no">Step 3</div>
             <h4>의견 수렴</h4>
             <span class="en">Vote & Prioritize</span>
             <p>요구사항 투표와 우선순위 정리로 집단의 의사를 모읍니다.</p>
           </div>
 
-          <div class="step">
+          <div class="step fade-up">
             <div class="step-no">Step 4</div>
             <h4>공식 전달</h4>
             <span class="en">Formal Delivery</span>
             <p>자동 문서를 생성하고 공식 채널로 전달합니다.</p>
           </div>
 
-          <div class="step">
+          <div class="step fade-up">
             <div class="step-no">Step 5</div>
             <h4>피드백 공개</h4>
             <span class="en">Feedback & Update</span>
             <p>응답 기한과 결과를 공개해 과정의 투명성을 유지합니다.</p>
           </div>
 
-          <div class="step">
+          <div class="step fade-up">
             <div class="step-no">Step 6</div>
             <h4>합의 도출</h4>
             <span class="en">Agreement</span>
@@ -1078,13 +1080,10 @@
 
     <section class="block">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head fade-up">
           <div>
-            <div class="kicker">Who It's For</div>
-            <h2>
-              PACT는 이런 집단을 위해<br class="section-title-break">
-              설계되었습니다.
-            </h2>
+            <div class="kicker">Who It’s For</div>
+            <h2>PACT는 이런 집단을 위해<br>설계되었습니다.</h2>
           </div>
 
           <p class="section-desc">
@@ -1093,27 +1092,27 @@
         </div>
 
         <div class="target-grid">
-          <div class="target">
+          <div class="target fade-up">
             <strong>노동자 · 노조</strong>
             <span>임금, 근로조건, 부당해고 등</span>
           </div>
 
-          <div class="target">
+          <div class="target fade-up">
             <strong>입주민</strong>
             <span>관리비, 하자보수, 재건축 등</span>
           </div>
 
-          <div class="target">
+          <div class="target fade-up">
             <strong>재개발 조합원</strong>
             <span>비리, 불투명 운영, 정보 비대칭</span>
           </div>
 
-          <div class="target">
+          <div class="target fade-up">
             <strong>세입자</strong>
             <span>임대료, 보증금, 계약 조건</span>
           </div>
 
-          <div class="target">
+          <div class="target fade-up">
             <strong>소상공인 · 시민</strong>
             <span>불공정 계약, 정책 민원, 공공 이슈</span>
           </div>
@@ -1121,7 +1120,7 @@
       </div>
     </section>
 
-    <section class="cta" id="waitlist">
+    <section class="cta fade-up" id="waitlist">
       <div>
         <h3>PACT 얼리 액세스 신청</h3>
         <p>
@@ -1143,8 +1142,22 @@
       <div>© 2026 PACT. All rights reserved.</div>
     </div>
   </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.14
+    });
+
+    document.querySelectorAll('.fade-up').forEach((el) => {
+      observer.observe(el);
+    });
+  </script>
 </body>
 </html>
-
-
-
