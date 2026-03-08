@@ -1,132 +1,823 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PACT — Collective Negotiation Platform</title>
+  <meta name="description" content="PACT is a collective negotiation platform designed to help people organize, align, and move together." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<title>PACT</title>
+  <style>
+    :root{
+      --blue:#80B0F8;
+      --red:#F87888;
+      --bg:#131A1C;
+      --surface:#1A2224;
+      --surface-2:#202A2D;
+      --border:rgba(255,255,255,0.08);
+      --text:#FFFFFF;
+      --muted:rgba(255,255,255,0.62);
+      --faint:rgba(255,255,255,0.16);
+      --blue-dim:rgba(128,176,248,0.14);
+      --red-dim:rgba(248,120,136,0.14);
+      --shadow:0 20px 60px rgba(0,0,0,0.35);
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Outfit',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(128,176,248,0.10), transparent 28%),
+        radial-gradient(circle at 85% 25%, rgba(248,120,136,0.10), transparent 24%),
+        linear-gradient(180deg, #131A1C 0%, #111719 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
 
-<style>
+    a{color:inherit;text-decoration:none}
 
-body{
-background:#131A1C;
-color:white;
-font-family:'Outfit',sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
+    .page{
+      width:100%;
+      overflow:hidden;
+    }
 
-.container{
-text-align:center;
-max-width:700px;
-padding:40px;
-}
+    .nav{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      padding:20px 0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:relative;
+      z-index:10;
+    }
 
-.logo{
-font-size:120px;
-font-weight:900;
-letter-spacing:-6px;
-line-height:1;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
 
-.pa{color:#80B0F8;}
-.ct{color:#F87888;}
+    .brand-mark{
+      display:flex;
+      width:54px;
+      height:34px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:var(--surface);
+      box-shadow:var(--shadow);
+    }
 
-.tagline{
-margin-top:10px;
-letter-spacing:4px;
-font-size:13px;
-color:rgba(255,255,255,0.4);
-}
+    .brand-mark .left,
+    .brand-mark .right{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:-0.5px;
+    }
 
-.headline{
-margin-top:40px;
-font-size:42px;
-font-weight:800;
-}
+    .brand-mark .left{
+      background:var(--blue-dim);
+      color:var(--blue);
+    }
 
-.sub{
-margin-top:16px;
-color:rgba(255,255,255,0.5);
-line-height:1.6;
-}
+    .brand-mark .right{
+      background:var(--red-dim);
+      color:var(--red);
+    }
 
-.email{
-margin-top:40px;
-display:flex;
-justify-content:center;
-gap:10px;
-}
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      line-height:1;
+    }
 
-input{
-padding:14px 16px;
-width:260px;
-border-radius:8px;
-border:1px solid rgba(255,255,255,0.1);
-background:#1A2224;
-color:white;
-}
+    .brand-text strong{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-0.7px;
+    }
 
-button{
-padding:14px 22px;
-border:none;
-border-radius:8px;
-background:#80B0F8;
-color:#131A1C;
-font-weight:700;
-cursor:pointer;
-}
+    .brand-text span{
+      margin-top:5px;
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
 
-button:hover{
-opacity:.9;
-}
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
 
-.footer{
-margin-top:60px;
-font-size:12px;
-color:rgba(255,255,255,0.3);
-}
+    .nav-link{
+      font-size:14px;
+      color:var(--muted);
+    }
 
-</style>
+    .nav-cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:11px 16px;
+      border-radius:12px;
+      border:1px solid rgba(128,176,248,0.22);
+      background:rgba(128,176,248,0.10);
+      color:var(--blue);
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .hero{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      padding:46px 0 64px;
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap:44px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+      color:rgba(255,255,255,0.72);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    .eyebrow-dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:linear-gradient(90deg,var(--blue),var(--red));
+      box-shadow:0 0 18px rgba(128,176,248,0.6);
+    }
+
+    h1{
+      margin:24px 0 16px;
+      font-size:clamp(46px, 7vw, 86px);
+      line-height:0.98;
+      letter-spacing:-3px;
+      font-weight:900;
+    }
+
+    .grad{
+      background:linear-gradient(90deg,var(--blue) 0%, #b4ceff 22%, #ffffff 45%, #ffd2d8 72%, var(--red) 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero-sub{
+      max-width:640px;
+      margin:0;
+      color:var(--muted);
+      font-size:19px;
+      line-height:1.7;
+      font-weight:300;
+    }
+
+    .hero-actions{
+      margin-top:30px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .btn-primary,
+    .btn-secondary{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:52px;
+      padding:0 20px;
+      border-radius:14px;
+      font-size:15px;
+      font-weight:800;
+      transition:transform .18s ease, opacity .18s ease, border-color .18s ease;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--blue), #6b9cf0);
+      color:#0f1416;
+      box-shadow:0 10px 30px rgba(128,176,248,0.25);
+    }
+
+    .btn-secondary{
+      border:1px solid rgba(248,120,136,0.28);
+      background:rgba(248,120,136,0.08);
+      color:var(--red);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover{
+      transform:translateY(-1px);
+      opacity:0.96;
+    }
+
+    .hero-meta{
+      margin-top:26px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      padding:9px 13px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:0.2px;
+      border:1px solid transparent;
+    }
+
+    .chip.blue{
+      background:var(--blue-dim);
+      color:var(--blue);
+      border-color:rgba(128,176,248,0.18);
+    }
+
+    .chip.red{
+      background:var(--red-dim);
+      color:var(--red);
+      border-color:rgba(248,120,136,0.18);
+    }
+
+    .hero-card{
+      position:relative;
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero-card:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at top left, rgba(128,176,248,0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(248,120,136,0.12), transparent 26%);
+      pointer-events:none;
+    }
+
+    .panel{
+      position:relative;
+      z-index:1;
+      background:rgba(10,14,15,0.36);
+      border:1px solid rgba(255,255,255,0.05);
+      border-radius:22px;
+      padding:26px;
+      backdrop-filter:blur(10px);
+    }
+
+    .panel-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .panel-label{
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+      letter-spacing:1.4px;
+      text-transform:uppercase;
+    }
+
+    .panel-status{
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      color:var(--blue);
+      background:var(--blue-dim);
+      border:1px solid rgba(128,176,248,0.18);
+    }
+
+    .logo-showcase{
+      margin-bottom:24px;
+      padding:20px 18px 18px;
+      border-radius:18px;
+      background:var(--surface);
+      border:1px solid var(--border);
+    }
+
+    .logo-big{
+      font-size:68px;
+      font-weight:900;
+      letter-spacing:-3px;
+      line-height:0.95;
+      margin:0;
+    }
+
+    .logo-big .pa{color:var(--blue)}
+    .logo-big .ct{color:var(--red)}
+
+    .logo-line{
+      display:flex;
+      width:100%;
+      max-width:180px;
+      height:2px;
+      margin-top:14px;
+      overflow:hidden;
+      border-radius:3px;
+    }
+
+    .logo-line .l{flex:1;background:var(--blue);opacity:0.75}
+    .logo-line .r{flex:1;background:var(--red);opacity:0.75}
+
+    .logo-caption{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+
+    .feature-list{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+
+    .feature{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.05);
+    }
+
+    .feature-icon{
+      flex:0 0 34px;
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .feature:nth-child(1) .feature-icon{
+      background:var(--blue-dim);
+      color:var(--blue);
+    }
+
+    .feature:nth-child(2) .feature-icon{
+      background:var(--red-dim);
+      color:var(--red);
+    }
+
+    .feature:nth-child(3) .feature-icon{
+      background:rgba(255,255,255,0.08);
+      color:#ffffff;
+    }
+
+    .feature strong{
+      display:block;
+      margin-bottom:4px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .feature span{
+      display:block;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .section{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      padding:0 0 90px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:24px;
+      margin-bottom:24px;
+    }
+
+    .section-kicker{
+      font-size:12px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .section h2{
+      margin:0;
+      font-size:clamp(28px, 4vw, 44px);
+      line-height:1.08;
+      letter-spacing:-1.6px;
+    }
+
+    .section-desc{
+      max-width:540px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.7;
+      margin:0;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:24px;
+      min-height:240px;
+      box-shadow:var(--shadow);
+    }
+
+    .card-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:42px;
+      height:42px;
+      padding:0 12px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+
+    .card:nth-child(1) .card-badge{
+      background:var(--blue-dim);
+      color:var(--blue);
+    }
+
+    .card:nth-child(2) .card-badge{
+      background:var(--red-dim);
+      color:var(--red);
+    }
+
+    .card:nth-child(3) .card-badge{
+      background:rgba(255,255,255,0.08);
+      color:#fff;
+    }
+
+    .card h3{
+      margin:0 0 12px;
+      font-size:22px;
+      letter-spacing:-0.7px;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .waitlist{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto 100px;
+      padding:34px;
+      border:1px solid var(--border);
+      border-radius:28px;
+      background:
+        radial-gradient(circle at left top, rgba(128,176,248,0.10), transparent 26%),
+        radial-gradient(circle at right bottom, rgba(248,120,136,0.10), transparent 24%),
+        var(--surface);
+      box-shadow:var(--shadow);
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:22px;
+      align-items:center;
+    }
+
+    .waitlist h3{
+      margin:0 0 10px;
+      font-size:32px;
+      line-height:1.08;
+      letter-spacing:-1px;
+    }
+
+    .waitlist p{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.7;
+    }
+
+    .waitlist-form{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .waitlist-form input{
+      width:290px;
+      max-width:100%;
+      height:54px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:#111719;
+      color:#fff;
+      padding:0 16px;
+      font-family:inherit;
+      font-size:15px;
+      outline:none;
+    }
+
+    .waitlist-form button{
+      height:54px;
+      padding:0 20px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg, var(--blue), #6b9cf0);
+      color:#0f1416;
+      font-family:inherit;
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .footer{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      padding:0 0 36px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      color:rgba(255,255,255,0.42);
+      font-size:13px;
+    }
+
+    .footer-logo{
+      font-weight:900;
+      letter-spacing:-0.6px;
+    }
+
+    .footer-logo .pa{color:var(--blue)}
+    .footer-logo .ct{color:var(--red)}
+
+    @media (max-width: 1024px){
+      .hero{
+        grid-template-columns:1fr;
+        padding-top:30px;
+      }
+      .cards{
+        grid-template-columns:1fr;
+      }
+      .waitlist{
+        grid-template-columns:1fr;
+      }
+      .waitlist-form{
+        justify-content:flex-start;
+      }
+    }
+
+    @media (max-width: 720px){
+      .nav{
+        padding:16px 0;
+      }
+      .nav-links{
+        display:none;
+      }
+      .hero{
+        gap:24px;
+        padding-bottom:56px;
+      }
+      h1{
+        letter-spacing:-2px;
+      }
+      .hero-sub{
+        font-size:17px;
+      }
+      .hero-actions{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .btn-primary,
+      .btn-secondary{
+        width:100%;
+      }
+      .hero-card{
+        padding:18px;
+      }
+      .panel{
+        padding:18px;
+      }
+      .logo-big{
+        font-size:54px;
+      }
+      .waitlist{
+        padding:22px;
+      }
+      .waitlist h3{
+        font-size:26px;
+      }
+      .waitlist-form{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .waitlist-form input,
+      .waitlist-form button{
+        width:100%;
+      }
+      .footer{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
 
-<div class="container">
+    <nav class="nav">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <div class="left">pa</div>
+          <div class="right">ct</div>
+        </div>
+        <div class="brand-text">
+          <strong>PACT</strong>
+          <span>Collective Negotiation</span>
+        </div>
+      </div>
 
-<div class="logo">
-<span class="pa">pa</span><span class="ct">ct</span>
-</div>
+      <div class="nav-links">
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#waitlist">Waitlist</a>
+        <a class="nav-cta" href="#waitlist">Join Early Access</a>
+      </div>
+    </nav>
 
-<div class="tagline">
-COLLECTIVE NEGOTIATION PLATFORM
-</div>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          Launching Soon
+        </div>
 
-<div class="headline">
-Negotiate Better.<br>
-Together.
-</div>
+        <h1>
+          A better way to
+          <span class="grad">negotiate together.</span>
+        </h1>
 
-<div class="sub">
-Organize people, align interests,<br>
-and move negotiations forward.
-</div>
+        <p class="hero-sub">
+          PACT is a collective negotiation platform built for people who need more than scattered messages, informal coordination, and fragmented decision-making.
+        </p>
 
-<div class="email">
-<input placeholder="Enter your email">
-<button>Join Waitlist</button>
-</div>
+        <div class="hero-actions">
+          <a href="#waitlist" class="btn-primary">Join Waitlist</a>
+          <a href="#about" class="btn-secondary">See the Vision</a>
+        </div>
 
-<div class="footer">
-© 2026 PACT
-</div>
+        <div class="hero-meta">
+          <span class="chip blue">Collective action</span>
+          <span class="chip red">Structured alignment</span>
+          <span class="chip blue">Clear negotiation flow</span>
+        </div>
+      </div>
 
-</div>
+      <div class="hero-card">
+        <div class="panel">
+          <div class="panel-top">
+            <div class="panel-label">Brand Signal</div>
+            <div class="panel-status">PACT Preview</div>
+          </div>
 
+          <div class="logo-showcase">
+            <p class="logo-big"><span class="pa">pa</span><span class="ct">ct</span></p>
+            <div class="logo-line">
+              <div class="l"></div>
+              <div class="r"></div>
+            </div>
+            <div class="logo-caption">Collective Negotiation Platform</div>
+          </div>
+
+          <div class="feature-list">
+            <div class="feature">
+              <div class="feature-icon">01</div>
+              <div>
+                <strong>Organize participants</strong>
+                <span>Bring stakeholders into one structured negotiation environment.</span>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div class="feature-icon">02</div>
+              <div>
+                <strong>Align priorities</strong>
+                <span>Turn scattered opinions into visible positions, shared demands, and focused agendas.</span>
+              </div>
+            </div>
+
+            <div class="feature">
+              <div class="feature-icon">03</div>
+              <div>
+                <strong>Move with clarity</strong>
+                <span>Create a negotiation process that feels collective, transparent, and actionable.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker">Why Pact</div>
+          <h2>Not just communication.<br>Structured negotiation.</h2>
+        </div>
+        <p class="section-desc">
+          PACT is designed for situations where people need to coordinate, form consensus, and negotiate as a group with more discipline and visibility.
+        </p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-badge">pa</div>
+          <h3>Participation</h3>
+          <p>
+            Gather voices into one place instead of losing momentum across chat rooms, private messages, and ad hoc spreadsheets.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-badge">ct</div>
+          <h3>Collective Terms</h3>
+          <p>
+            Translate individual opinions into collective positions, priorities, and negotiation-ready proposals.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-badge">+1</div>
+          <h3>Execution</h3>
+          <p>
+            Move from discussion to action with a workflow that makes decisions, demands, and next steps legible to everyone involved.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="waitlist" id="waitlist">
+      <div>
+        <h3>Get early access to PACT.</h3>
+        <p>
+          Be the first to know when the platform opens. Join the waitlist and follow the launch.
+        </p>
+      </div>
+
+      <form class="waitlist-form">
+        <input type="email" placeholder="Enter your email" aria-label="Email address">
+        <button type="submit">Join Waitlist</button>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
+      <div>© 2026 PACT. All rights reserved.</div>
+    </footer>
+
+  </div>
 </body>
 </html>
