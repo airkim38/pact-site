@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PACT — Collective Negotiation Platform</title>
-  <meta name="description" content="PACT is a collective negotiation platform designed to help people organize, align, and move together." />
+  <title>PACT | 목소리를 모아 실제 합의까지</title>
+  <meta name="description" content="PACT는 개인의 목소리를 집단의 힘으로 모아 실제 협상과 합의까지 이끌어내는 집단 협상 플랫폼입니다." />
+  <meta property="og:title" content="PACT | 집단 협상 플랫폼" />
+  <meta property="og:description" content="목소리를 모아 실제 합의까지. 청원에서 끝나지 않고 협상과 합의까지 이어지는 구조." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#131A1C" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -15,45 +20,50 @@
       --red:#F87888;
       --bg:#131A1C;
       --surface:#1A2224;
-      --surface-2:#202A2D;
-      --border:rgba(255,255,255,0.08);
+      --surface2:#1F2A2D;
+      --border:rgba(255,255,255,.08);
       --text:#FFFFFF;
-      --muted:rgba(255,255,255,0.62);
-      --faint:rgba(255,255,255,0.16);
-      --blue-dim:rgba(128,176,248,0.14);
-      --red-dim:rgba(248,120,136,0.14);
-      --shadow:0 20px 60px rgba(0,0,0,0.35);
+      --muted:rgba(255,255,255,.68);
+      --soft:rgba(255,255,255,.42);
+      --blue-dim:rgba(128,176,248,.14);
+      --red-dim:rgba(248,120,136,.14);
+      --shadow:0 24px 70px rgba(0,0,0,.32);
+      --radius:26px;
+      --max:1180px;
     }
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family:'Outfit',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(128,176,248,0.10), transparent 28%),
-        radial-gradient(circle at 85% 25%, rgba(248,120,136,0.10), transparent 24%),
-        linear-gradient(180deg, #131A1C 0%, #111719 100%);
       color:var(--text);
-      min-height:100vh;
+      font-family:'Outfit','Noto Sans KR',system-ui,sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(128,176,248,.08), transparent 28%),
+        radial-gradient(circle at 84% 20%, rgba(248,120,136,.08), transparent 24%),
+        linear-gradient(180deg,#131A1C 0%,#101617 100%);
     }
 
-    a{color:inherit;text-decoration:none}
-
-    .page{
-      width:100%;
-      overflow:hidden;
-    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max), calc(100% - 32px)); margin:0 auto}
 
     .nav{
-      width:min(1180px, calc(100% - 32px));
+      position:sticky;
+      top:0;
+      z-index:40;
+      backdrop-filter: blur(14px);
+      background:rgba(19,26,28,.74);
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+    .nav-inner{
+      width:min(var(--max), calc(100% - 32px));
       margin:0 auto;
-      padding:20px 0;
+      min-height:76px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      position:relative;
-      z-index:10;
+      gap:16px;
     }
 
     .brand{
@@ -61,55 +71,40 @@
       align-items:center;
       gap:14px;
     }
-
-    .brand-mark{
+    .brand-badge{
       display:flex;
-      width:54px;
-      height:34px;
+      width:56px;
+      height:36px;
       border-radius:12px;
       overflow:hidden;
       border:1px solid var(--border);
       background:var(--surface);
       box-shadow:var(--shadow);
     }
-
-    .brand-mark .left,
-    .brand-mark .right{
+    .brand-badge div{
       flex:1;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:14px;
       font-weight:900;
-      letter-spacing:-0.5px;
+      font-size:14px;
+      letter-spacing:-.5px;
     }
-
-    .brand-mark .left{
-      background:var(--blue-dim);
-      color:var(--blue);
-    }
-
-    .brand-mark .right{
-      background:var(--red-dim);
-      color:var(--red);
-    }
-
-    .brand-text{
-      display:flex;
-      flex-direction:column;
-      line-height:1;
-    }
+    .brand-badge .pa{color:var(--blue);background:var(--blue-dim)}
+    .brand-badge .ct{color:var(--red);background:var(--red-dim)}
 
     .brand-text strong{
+      display:block;
       font-size:18px;
       font-weight:900;
-      letter-spacing:-0.7px;
+      letter-spacing:-.6px;
+      line-height:1;
     }
-
     .brand-text span{
+      display:block;
       margin-top:5px;
       font-size:11px;
-      color:var(--muted);
+      color:var(--soft);
       letter-spacing:1.5px;
       text-transform:uppercase;
     }
@@ -117,34 +112,28 @@
     .nav-links{
       display:flex;
       align-items:center;
-      gap:14px;
+      gap:12px;
     }
-
-    .nav-link{
-      font-size:14px;
+    .nav-links a{
       color:var(--muted);
-    }
-
-    .nav-cta{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:11px 16px;
-      border-radius:12px;
-      border:1px solid rgba(128,176,248,0.22);
-      background:rgba(128,176,248,0.10);
-      color:var(--blue);
       font-size:14px;
-      font-weight:700;
+      padding:10px 12px;
+      border-radius:12px;
+    }
+    .nav-links a:hover{background:rgba(255,255,255,.04)}
+    .nav-cta{
+      background:linear-gradient(135deg,var(--blue),#6f9ff1);
+      color:#101617 !important;
+      font-weight:800;
     }
 
     .hero{
-      width:min(1180px, calc(100% - 32px));
-      margin:0 auto;
-      padding:46px 0 64px;
+      padding:76px 0 54px;
+    }
+    .hero-grid{
       display:grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap:44px;
+      grid-template-columns:1.08fr .92fr;
+      gap:36px;
       align-items:center;
     }
 
@@ -152,47 +141,61 @@
       display:inline-flex;
       align-items:center;
       gap:10px;
-      padding:9px 14px;
+      padding:10px 14px;
       border-radius:999px;
       border:1px solid var(--border);
-      background:rgba(255,255,255,0.03);
-      color:rgba(255,255,255,0.72);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
       font-size:12px;
       font-weight:700;
-      letter-spacing:1.5px;
+      letter-spacing:1.4px;
       text-transform:uppercase;
     }
-
-    .eyebrow-dot{
-      width:7px;
-      height:7px;
-      border-radius:50%;
+    .dot{
+      width:8px;height:8px;border-radius:50%;
       background:linear-gradient(90deg,var(--blue),var(--red));
-      box-shadow:0 0 18px rgba(128,176,248,0.6);
+      box-shadow:0 0 18px rgba(128,176,248,.6);
     }
 
     h1{
-      margin:24px 0 16px;
-      font-size:clamp(46px, 7vw, 86px);
-      line-height:0.98;
+      margin:22px 0 16px;
+      font-size:clamp(42px,7vw,82px);
+      line-height:1.02;
       letter-spacing:-3px;
       font-weight:900;
     }
-
+    .sub-kr{
+      display:block;
+      font-size:clamp(22px,2.4vw,30px);
+      color:#fff;
+      letter-spacing:-.8px;
+      margin-bottom:6px;
+    }
     .grad{
-      background:linear-gradient(90deg,var(--blue) 0%, #b4ceff 22%, #ffffff 45%, #ffd2d8 72%, var(--red) 100%);
+      background:linear-gradient(90deg,var(--blue) 0%, #c8dcff 30%, #fff 52%, #ffd1d6 72%, var(--red) 100%);
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
+      display:block;
     }
 
-    .hero-sub{
-      max-width:640px;
-      margin:0;
+    .hero-copy{
+      max-width:700px;
       color:var(--muted);
-      font-size:19px;
-      line-height:1.7;
-      font-weight:300;
+      font-size:18px;
+      line-height:1.8;
+      margin:0;
+    }
+    .hero-copy .ko{
+      display:block;
+      color:#fff;
+      font-weight:500;
+      margin-bottom:8px;
+    }
+    .hero-copy .en{
+      display:block;
+      color:var(--soft);
+      font-size:16px;
     }
 
     .hero-actions{
@@ -201,324 +204,317 @@
       flex-wrap:wrap;
       gap:12px;
     }
-
-    .btn-primary,
-    .btn-secondary{
+    .btn{
+      min-height:54px;
+      padding:0 20px;
+      border-radius:14px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-height:52px;
-      padding:0 20px;
-      border-radius:14px;
-      font-size:15px;
       font-weight:800;
+      font-size:15px;
+      border:1px solid transparent;
       transition:transform .18s ease, opacity .18s ease, border-color .18s ease;
     }
-
+    .btn:hover{transform:translateY(-1px);opacity:.97}
     .btn-primary{
-      background:linear-gradient(135deg, var(--blue), #6b9cf0);
-      color:#0f1416;
-      box-shadow:0 10px 30px rgba(128,176,248,0.25);
+      background:linear-gradient(135deg,var(--blue),#6f9ff1);
+      color:#101617;
+      box-shadow:0 10px 30px rgba(128,176,248,.24);
     }
-
     .btn-secondary{
-      border:1px solid rgba(248,120,136,0.28);
-      background:rgba(248,120,136,0.08);
+      background:rgba(248,120,136,.08);
       color:var(--red);
+      border-color:rgba(248,120,136,.28);
     }
 
-    .btn-primary:hover,
-    .btn-secondary:hover{
-      transform:translateY(-1px);
-      opacity:0.96;
-    }
-
-    .hero-meta{
-      margin-top:26px;
+    .hero-tags{
       display:flex;
       flex-wrap:wrap;
       gap:10px;
+      margin-top:26px;
     }
-
-    .chip{
+    .tag{
       display:inline-flex;
       align-items:center;
-      padding:9px 13px;
+      padding:10px 14px;
       border-radius:999px;
       font-size:12px;
       font-weight:700;
-      letter-spacing:0.2px;
       border:1px solid transparent;
     }
-
-    .chip.blue{
-      background:var(--blue-dim);
-      color:var(--blue);
-      border-color:rgba(128,176,248,0.18);
-    }
-
-    .chip.red{
-      background:var(--red-dim);
-      color:var(--red);
-      border-color:rgba(248,120,136,0.18);
-    }
+    .tag.blue{background:var(--blue-dim); color:var(--blue); border-color:rgba(128,176,248,.18)}
+    .tag.red{background:var(--red-dim); color:var(--red); border-color:rgba(248,120,136,.18)}
 
     .hero-card{
-      position:relative;
-      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
       border:1px solid var(--border);
-      border-radius:28px;
-      padding:28px;
+      border-radius:30px;
+      padding:24px;
       box-shadow:var(--shadow);
+      position:relative;
       overflow:hidden;
     }
-
     .hero-card:before{
       content:"";
-      position:absolute;
-      inset:0;
+      position:absolute; inset:0;
       background:
-        radial-gradient(circle at top left, rgba(128,176,248,0.12), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(248,120,136,0.12), transparent 26%);
+        radial-gradient(circle at left top, rgba(128,176,248,.12), transparent 28%),
+        radial-gradient(circle at right bottom, rgba(248,120,136,.12), transparent 26%);
       pointer-events:none;
     }
-
     .panel{
       position:relative;
       z-index:1;
-      background:rgba(10,14,15,0.36);
-      border:1px solid rgba(255,255,255,0.05);
+      background:rgba(10,14,15,.34);
+      border:1px solid rgba(255,255,255,.05);
       border-radius:22px;
-      padding:26px;
+      padding:22px;
       backdrop-filter:blur(10px);
     }
-
-    .panel-top{
+    .panel-head{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:16px;
-      margin-bottom:24px;
+      gap:12px;
+      margin-bottom:20px;
     }
-
-    .panel-label{
+    .panel-head .label{
       font-size:12px;
+      color:var(--soft);
       font-weight:700;
-      color:var(--muted);
-      letter-spacing:1.4px;
+      letter-spacing:1.5px;
       text-transform:uppercase;
     }
-
-    .panel-status{
+    .status{
       padding:8px 10px;
       border-radius:999px;
+      background:var(--blue-dim);
+      border:1px solid rgba(128,176,248,.18);
+      color:var(--blue);
       font-size:11px;
       font-weight:800;
-      color:var(--blue);
-      background:var(--blue-dim);
-      border:1px solid rgba(128,176,248,0.18);
     }
 
-    .logo-showcase{
-      margin-bottom:24px;
-      padding:20px 18px 18px;
-      border-radius:18px;
+    .logo-box{
       background:var(--surface);
       border:1px solid var(--border);
+      border-radius:20px;
+      padding:22px 20px 18px;
+      margin-bottom:18px;
     }
-
-    .logo-big{
-      font-size:68px;
-      font-weight:900;
+    .logo-word{
+      font-size:70px;
+      line-height:.95;
       letter-spacing:-3px;
-      line-height:0.95;
+      font-weight:900;
       margin:0;
     }
-
-    .logo-big .pa{color:var(--blue)}
-    .logo-big .ct{color:var(--red)}
-
+    .logo-word .pa{color:var(--blue)}
+    .logo-word .ct{color:var(--red)}
     .logo-line{
       display:flex;
-      width:100%;
-      max-width:180px;
+      width:170px;
       height:2px;
-      margin-top:14px;
       overflow:hidden;
-      border-radius:3px;
+      border-radius:4px;
+      margin-top:14px;
     }
-
-    .logo-line .l{flex:1;background:var(--blue);opacity:0.75}
-    .logo-line .r{flex:1;background:var(--red);opacity:0.75}
-
+    .logo-line .l{flex:1;background:var(--blue);opacity:.78}
+    .logo-line .r{flex:1;background:var(--red);opacity:.78}
     .logo-caption{
-      margin-top:12px;
+      margin-top:11px;
+      color:var(--soft);
       font-size:12px;
-      color:var(--muted);
       letter-spacing:2px;
       text-transform:uppercase;
     }
 
-    .feature-list{
+    .mini-list{
       display:grid;
-      grid-template-columns:1fr;
       gap:12px;
     }
-
-    .feature{
+    .mini{
       display:flex;
-      align-items:flex-start;
       gap:12px;
+      align-items:flex-start;
       padding:14px;
       border-radius:16px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid rgba(255,255,255,0.05);
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.05);
     }
-
-    .feature-icon{
-      flex:0 0 34px;
-      width:34px;
-      height:34px;
-      border-radius:12px;
+    .mini-no{
+      flex:0 0 36px;
+      width:36px;height:36px;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:14px;
-      font-weight:800;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:900;
     }
-
-    .feature:nth-child(1) .feature-icon{
-      background:var(--blue-dim);
-      color:var(--blue);
-    }
-
-    .feature:nth-child(2) .feature-icon{
-      background:var(--red-dim);
-      color:var(--red);
-    }
-
-    .feature:nth-child(3) .feature-icon{
-      background:rgba(255,255,255,0.08);
-      color:#ffffff;
-    }
-
-    .feature strong{
+    .mini:nth-child(1) .mini-no{background:var(--blue-dim);color:var(--blue)}
+    .mini:nth-child(2) .mini-no{background:var(--red-dim);color:var(--red)}
+    .mini:nth-child(3) .mini-no{background:rgba(255,255,255,.08);color:#fff}
+    .mini strong{
       display:block;
-      margin-bottom:4px;
       font-size:14px;
-      font-weight:700;
+      margin-bottom:4px;
     }
-
-    .feature span{
+    .mini span{
       display:block;
       color:var(--muted);
       font-size:13px;
       line-height:1.6;
     }
 
-    .section{
-      width:min(1180px, calc(100% - 32px));
-      margin:0 auto;
-      padding:0 0 90px;
+    section.block{
+      padding:34px 0 90px;
     }
-
     .section-head{
       display:flex;
-      align-items:end;
       justify-content:space-between;
+      align-items:end;
       gap:24px;
       margin-bottom:24px;
     }
-
-    .section-kicker{
+    .kicker{
+      color:var(--soft);
       font-size:12px;
+      font-weight:700;
       letter-spacing:2px;
       text-transform:uppercase;
-      color:var(--muted);
-      font-weight:700;
       margin-bottom:10px;
     }
-
-    .section h2{
+    h2{
       margin:0;
-      font-size:clamp(28px, 4vw, 44px);
+      font-size:clamp(28px,4vw,44px);
       line-height:1.08;
-      letter-spacing:-1.6px;
+      letter-spacing:-1.5px;
     }
-
     .section-desc{
       max-width:540px;
+      margin:0;
       color:var(--muted);
       font-size:16px;
-      line-height:1.7;
-      margin:0;
+      line-height:1.8;
     }
 
-    .cards{
+    .problem-grid,
+    .value-grid,
+    .target-grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
       gap:18px;
     }
+    .problem-grid{grid-template-columns:repeat(3,1fr)}
+    .value-grid{grid-template-columns:repeat(3,1fr)}
+    .target-grid{grid-template-columns:repeat(5,1fr)}
 
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
       border:1px solid var(--border);
       border-radius:24px;
       padding:24px;
-      min-height:240px;
       box-shadow:var(--shadow);
     }
-
-    .card-badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:42px;
-      height:42px;
-      padding:0 12px;
-      border-radius:14px;
-      font-size:14px;
-      font-weight:900;
-      margin-bottom:18px;
-    }
-
-    .card:nth-child(1) .card-badge{
-      background:var(--blue-dim);
-      color:var(--blue);
-    }
-
-    .card:nth-child(2) .card-badge{
-      background:var(--red-dim);
-      color:var(--red);
-    }
-
-    .card:nth-child(3) .card-badge{
-      background:rgba(255,255,255,0.08);
-      color:#fff;
-    }
-
     .card h3{
       margin:0 0 12px;
       font-size:22px;
-      letter-spacing:-0.7px;
+      letter-spacing:-.7px;
     }
-
     .card p{
       margin:0;
       color:var(--muted);
       line-height:1.75;
       font-size:15px;
     }
+    .icon-badge{
+      display:inline-flex;
+      min-width:44px;
+      height:44px;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+    .problem-grid .card:nth-child(1) .icon-badge,
+    .value-grid .card:nth-child(1) .icon-badge{background:var(--blue-dim);color:var(--blue)}
+    .problem-grid .card:nth-child(2) .icon-badge,
+    .value-grid .card:nth-child(2) .icon-badge{background:var(--red-dim);color:var(--red)}
+    .problem-grid .card:nth-child(3) .icon-badge,
+    .value-grid .card:nth-child(3) .icon-badge{background:rgba(255,255,255,.08);color:#fff}
 
-    .waitlist{
-      width:min(1180px, calc(100% - 32px));
-      margin:0 auto 100px;
-      padding:34px;
+    .flow{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:14px;
+    }
+    .step{
+      padding:20px 16px;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
       border:1px solid var(--border);
-      border-radius:28px;
+      box-shadow:var(--shadow);
+      min-height:190px;
+    }
+    .step-no{
+      font-size:12px;
+      color:var(--soft);
+      font-weight:800;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+    .step h4{
+      margin:14px 0 10px;
+      font-size:20px;
+      letter-spacing:-.5px;
+    }
+    .step .en{
+      display:block;
+      font-size:12px;
+      color:var(--soft);
+      margin-bottom:10px;
+      text-transform:uppercase;
+      letter-spacing:1.2px;
+    }
+    .step p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.65;
+      font-size:14px;
+    }
+
+    .target{
+      text-align:center;
+      padding:22px 16px;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+    .target strong{
+      display:block;
+      font-size:20px;
+      margin-bottom:7px;
+      letter-spacing:-.5px;
+    }
+    .target span{
+      display:block;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .cta{
+      margin:0 auto 100px;
+      width:min(var(--max), calc(100% - 32px));
+      padding:34px;
+      border-radius:30px;
+      border:1px solid var(--border);
       background:
-        radial-gradient(circle at left top, rgba(128,176,248,0.10), transparent 26%),
-        radial-gradient(circle at right bottom, rgba(248,120,136,0.10), transparent 24%),
+        radial-gradient(circle at left top, rgba(128,176,248,.10), transparent 26%),
+        radial-gradient(circle at right bottom, rgba(248,120,136,.10), transparent 24%),
         var(--surface);
       box-shadow:var(--shadow);
       display:grid;
@@ -526,34 +522,30 @@
       gap:22px;
       align-items:center;
     }
-
-    .waitlist h3{
+    .cta h3{
       margin:0 0 10px;
-      font-size:32px;
-      line-height:1.08;
+      font-size:34px;
       letter-spacing:-1px;
+      line-height:1.1;
     }
-
-    .waitlist p{
+    .cta p{
       margin:0;
       color:var(--muted);
+      line-height:1.75;
       font-size:15px;
-      line-height:1.7;
     }
-
-    .waitlist-form{
+    .cta-form{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-
-    .waitlist-form input{
+    .cta-form input{
       width:290px;
       max-width:100%;
       height:54px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,.08);
       background:#111719;
       color:#fff;
       padding:0 16px;
@@ -561,263 +553,354 @@
       font-size:15px;
       outline:none;
     }
-
-    .waitlist-form button{
+    .cta-form button{
       height:54px;
       padding:0 20px;
       border:none;
       border-radius:14px;
-      background:linear-gradient(135deg, var(--blue), #6b9cf0);
-      color:#0f1416;
+      background:linear-gradient(135deg,var(--blue),#6f9ff1);
+      color:#101617;
       font-family:inherit;
       font-size:15px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
     }
 
     .footer{
-      width:min(1180px, calc(100% - 32px));
+      padding:0 0 34px;
+    }
+    .footer-inner{
+      width:min(var(--max), calc(100% - 32px));
       margin:0 auto;
-      padding:0 0 36px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
       gap:16px;
-      color:rgba(255,255,255,0.42);
+      color:var(--soft);
       font-size:13px;
     }
-
-    .footer-logo{
+    .footer-mark{
       font-weight:900;
-      letter-spacing:-0.6px;
+      letter-spacing:-.5px;
+    }
+    .footer-mark .pa{color:var(--blue)}
+    .footer-mark .ct{color:var(--red)}
+
+    @media (max-width:1100px){
+      .hero-grid{grid-template-columns:1fr}
+      .problem-grid,.value-grid{grid-template-columns:1fr}
+      .flow{grid-template-columns:repeat(3,1fr)}
+      .target-grid{grid-template-columns:repeat(3,1fr)}
+      .cta{grid-template-columns:1fr}
+      .cta-form{justify-content:flex-start}
     }
 
-    .footer-logo .pa{color:var(--blue)}
-    .footer-logo .ct{color:var(--red)}
-
-    @media (max-width: 1024px){
-      .hero{
-        grid-template-columns:1fr;
-        padding-top:30px;
-      }
-      .cards{
-        grid-template-columns:1fr;
-      }
-      .waitlist{
-        grid-template-columns:1fr;
-      }
-      .waitlist-form{
-        justify-content:flex-start;
-      }
+    @media (max-width:760px){
+      .nav-inner{min-height:68px}
+      .nav-links a:not(.nav-cta){display:none}
+      .hero{padding-top:42px}
+      .hero-copy{font-size:16px}
+      .hero-copy .en{font-size:14px}
+      .hero-actions{flex-direction:column;align-items:stretch}
+      .btn{width:100%}
+      .flow{grid-template-columns:1fr}
+      .target-grid{grid-template-columns:1fr 1fr}
+      .cta-form{flex-direction:column;align-items:stretch}
+      .cta-form input,.cta-form button{width:100%}
+      .footer-inner{flex-direction:column;align-items:flex-start}
     }
 
-    @media (max-width: 720px){
-      .nav{
-        padding:16px 0;
-      }
-      .nav-links{
-        display:none;
-      }
-      .hero{
-        gap:24px;
-        padding-bottom:56px;
-      }
-      h1{
-        letter-spacing:-2px;
-      }
-      .hero-sub{
-        font-size:17px;
-      }
-      .hero-actions{
-        flex-direction:column;
-        align-items:stretch;
-      }
-      .btn-primary,
-      .btn-secondary{
-        width:100%;
-      }
-      .hero-card{
-        padding:18px;
-      }
-      .panel{
-        padding:18px;
-      }
-      .logo-big{
-        font-size:54px;
-      }
-      .waitlist{
-        padding:22px;
-      }
-      .waitlist h3{
-        font-size:26px;
-      }
-      .waitlist-form{
-        flex-direction:column;
-        align-items:stretch;
-      }
-      .waitlist-form input,
-      .waitlist-form button{
-        width:100%;
-      }
-      .footer{
-        flex-direction:column;
-        align-items:flex-start;
-      }
+    @media (max-width:520px){
+      .target-grid{grid-template-columns:1fr}
+      .logo-word{font-size:54px}
+      h1{letter-spacing:-2px}
+      .cta h3{font-size:28px}
     }
   </style>
 </head>
 <body>
-  <div class="page">
-
-    <nav class="nav">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <div class="left">pa</div>
-          <div class="right">ct</div>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="brand" aria-label="PACT Home">
+        <div class="brand-badge" aria-hidden="true">
+          <div class="pa">pa</div>
+          <div class="ct">ct</div>
         </div>
         <div class="brand-text">
           <strong>PACT</strong>
-          <span>Collective Negotiation</span>
+          <span>Collective Negotiation Platform</span>
         </div>
-      </div>
+      </a>
 
       <div class="nav-links">
-        <a class="nav-link" href="#about">About</a>
-        <a class="nav-link" href="#waitlist">Waitlist</a>
-        <a class="nav-cta" href="#waitlist">Join Early Access</a>
+        <a href="#problem">문제</a>
+        <a href="#solution">해결</a>
+        <a href="#flow">진행 방식</a>
+        <a href="#waitlist" class="nav-cta">얼리 액세스 신청</a>
       </div>
-    </nav>
+    </div>
+  </nav>
 
+  <main>
     <section class="hero">
-      <div>
-        <div class="eyebrow">
-          <span class="eyebrow-dot"></span>
-          Launching Soon
-        </div>
-
-        <h1>
-          A better way to
-          <span class="grad">negotiate together.</span>
-        </h1>
-
-        <p class="hero-sub">
-          PACT is a collective negotiation platform built for people who need more than scattered messages, informal coordination, and fragmented decision-making.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#waitlist" class="btn-primary">Join Waitlist</a>
-          <a href="#about" class="btn-secondary">See the Vision</a>
-        </div>
-
-        <div class="hero-meta">
-          <span class="chip blue">Collective action</span>
-          <span class="chip red">Structured alignment</span>
-          <span class="chip blue">Clear negotiation flow</span>
-        </div>
-      </div>
-
-      <div class="hero-card">
-        <div class="panel">
-          <div class="panel-top">
-            <div class="panel-label">Brand Signal</div>
-            <div class="panel-status">PACT Preview</div>
-          </div>
-
-          <div class="logo-showcase">
-            <p class="logo-big"><span class="pa">pa</span><span class="ct">ct</span></p>
-            <div class="logo-line">
-              <div class="l"></div>
-              <div class="r"></div>
-            </div>
-            <div class="logo-caption">Collective Negotiation Platform</div>
-          </div>
-
-          <div class="feature-list">
-            <div class="feature">
-              <div class="feature-icon">01</div>
-              <div>
-                <strong>Organize participants</strong>
-                <span>Bring stakeholders into one structured negotiation environment.</span>
-              </div>
-            </div>
-
-            <div class="feature">
-              <div class="feature-icon">02</div>
-              <div>
-                <strong>Align priorities</strong>
-                <span>Turn scattered opinions into visible positions, shared demands, and focused agendas.</span>
-              </div>
-            </div>
-
-            <div class="feature">
-              <div class="feature-icon">03</div>
-              <div>
-                <strong>Move with clarity</strong>
-                <span>Create a negotiation process that feels collective, transparent, and actionable.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="about">
-      <div class="section-head">
+      <div class="wrap hero-grid">
         <div>
-          <div class="section-kicker">Why Pact</div>
-          <h2>Not just communication.<br>Structured negotiation.</h2>
-        </div>
-        <p class="section-desc">
-          PACT is designed for situations where people need to coordinate, form consensus, and negotiate as a group with more discipline and visibility.
-        </p>
-      </div>
+          <div class="eyebrow">
+            <span class="dot"></span>
+            Launching Soon
+          </div>
 
-      <div class="cards">
-        <div class="card">
-          <div class="card-badge">pa</div>
-          <h3>Participation</h3>
-          <p>
-            Gather voices into one place instead of losing momentum across chat rooms, private messages, and ad hoc spreadsheets.
+          <h1>
+            <span class="sub-kr">목소리를 모아 실제 합의까지</span>
+            <span class="grad">From voices to real agreements.</span>
+          </h1>
+
+          <p class="hero-copy">
+            <span class="ko">PACT는 개인의 목소리를 집단의 힘으로 모아 실제 협상과 합의까지 이끌어내는 집단 협상 플랫폼입니다.</span>
+            <span class="en">PACT is a collective negotiation platform built to move beyond petitions and scattered coordination, toward structured negotiation and real agreements.</span>
           </p>
+
+          <div class="hero-actions">
+            <a href="#waitlist" class="btn btn-primary">얼리 액세스 신청</a>
+            <a href="#solution" class="btn btn-secondary">플랫폼 소개</a>
+          </div>
+
+          <div class="hero-tags">
+            <span class="tag blue">청원에서 끝나지 않는 구조</span>
+            <span class="tag red">협상과 합의까지 연결</span>
+            <span class="tag blue">집단 의사결정의 투명성</span>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-badge">ct</div>
-          <h3>Collective Terms</h3>
-          <p>
-            Translate individual opinions into collective positions, priorities, and negotiation-ready proposals.
-          </p>
-        </div>
+        <div class="hero-card">
+          <div class="panel">
+            <div class="panel-head">
+              <div class="label">PACT Preview</div>
+              <div class="status">Beta 2026</div>
+            </div>
 
-        <div class="card">
-          <div class="card-badge">+1</div>
-          <h3>Execution</h3>
-          <p>
-            Move from discussion to action with a workflow that makes decisions, demands, and next steps legible to everyone involved.
-          </p>
+            <div class="logo-box">
+              <p class="logo-word"><span class="pa">pa</span><span class="ct">ct</span></p>
+              <div class="logo-line">
+                <div class="l"></div>
+                <div class="r"></div>
+              </div>
+              <div class="logo-caption">집단 협상 플랫폼</div>
+            </div>
+
+            <div class="mini-list">
+              <div class="mini">
+                <div class="mini-no">01</div>
+                <div>
+                  <strong>같은 문제를 가진 사람들을 모으고</strong>
+                  <span>링크 공유와 서명 수집으로 협상력을 만들 수 있습니다.</span>
+                </div>
+              </div>
+
+              <div class="mini">
+                <div class="mini-no">02</div>
+                <div>
+                  <strong>요구사항을 정리하고 우선순위를 정하고</strong>
+                  <span>투표 기반으로 집단의 요구를 명확하게 정리합니다.</span>
+                </div>
+              </div>
+
+              <div class="mini">
+                <div class="mini-no">03</div>
+                <div>
+                  <strong>공식 전달과 피드백 공개까지</strong>
+                  <span>문서 생성, 공식 전달, 결과 공개를 하나의 흐름으로 연결합니다.</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="waitlist" id="waitlist">
+    <section class="block" id="problem">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Problem</div>
+            <h2>개인은 약하고,<br>집단은 있어도 프로세스가 없다.</h2>
+          </div>
+          <p class="section-desc">
+            사업계획서 기준으로 Pact가 풀고자 하는 핵심 문제는 두 가지다. 개인은 기업·기관 앞에서 협상력이 낮고, 사람들이 모여도 실제 협상과 합의로 이어지는 구조가 없다는 점이다. :contentReference[oaicite:2]{index=2}
+          </p>
+        </div>
+
+        <div class="problem-grid">
+          <div class="card">
+            <div class="icon-badge">01</div>
+            <h3>개인의 협상력 부족</h3>
+            <p>노동자, 세입자, 입주민, 소상공인, 시민은 개인 단위로는 요구를 전달해도 불이익을 감수해야 하거나 영향력이 매우 낮다.</p>
+          </div>
+
+          <div class="card">
+            <div class="icon-badge">02</div>
+            <h3>집단이 되어도 불투명</h3>
+            <p>사람들이 모여도 대표자의 독단, 과정 비공개, 외부 합의 같은 문제가 생기기 쉽다. 청원과 서명은 있어도 협상 프로세스는 부족하다.</p>
+          </div>
+
+          <div class="card">
+            <div class="icon-badge">03</div>
+            <h3>합의까지 이어지는 플랫폼 부재</h3>
+            <p>청원에서 끝나는 서비스는 있지만, 협상과 합의까지 이어지는 구조를 하나의 플랫폼으로 제공하는 사례는 드물다. :contentReference[oaicite:3]{index=3}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="solution">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Solution</div>
+            <h2>청원에서 끝나지 않고<br>협상과 합의까지.</h2>
+          </div>
+          <p class="section-desc">
+            Pact의 핵심 솔루션은 개인의 목소리를 집단의 힘으로 모아 실제 합의까지 이끌어내는 것이다. 1단계는 플랫폼형 도구를 제공하고, 이후 전문가 연결로 확장하는 구조다. :contentReference[oaicite:4]{index=4}
+          </p>
+        </div>
+
+        <div class="value-grid">
+          <div class="card">
+            <div class="icon-badge">pa</div>
+            <h3>Participation</h3>
+            <p>같은 문제를 가진 사람들이 쉽게 참여하고, 링크 공유와 서명 수집으로 집단 협상력을 만든다.</p>
+          </div>
+
+          <div class="card">
+            <div class="icon-badge">ct</div>
+            <h3>Collective Terms</h3>
+            <p>요구사항을 등록하고 투표로 우선순위를 정해 개인 의견을 집단의 공식 요구로 정리한다.</p>
+          </div>
+
+          <div class="card">
+            <div class="icon-badge">+1</div>
+            <h3>Transparent Agreement</h3>
+            <p>공식 문서 전달, 결과 공개, 과반수 동의 구조를 통해 합의 과정의 투명성과 신뢰를 높인다. :contentReference[oaicite:5]{index=5}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="flow">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker">How it Works</div>
+            <h2>PACT는 이렇게 진행됩니다.</h2>
+          </div>
+          <p class="section-desc">
+            사업계획서에 정리된 서비스 핵심 흐름을 랜딩페이지용으로 그대로 반영했다: 이슈 등록 → 집단 구성 → 의견 수렴 → 공식 전달 → 피드백 공개 → 합의 도출. :contentReference[oaicite:6]{index=6}
+          </p>
+        </div>
+
+        <div class="flow">
+          <div class="step">
+            <div class="step-no">Step 1</div>
+            <h4>이슈 등록</h4>
+            <span class="en">Issue Setup</span>
+            <p>협상 주제, 상대방, 요구사항을 등록하고 시작합니다.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-no">Step 2</div>
+            <h4>집단 구성</h4>
+            <span class="en">Recruit & Sign</span>
+            <p>공유 링크와 서명 수집으로 참여자를 모읍니다.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-no">Step 3</div>
+            <h4>의견 수렴</h4>
+            <span class="en">Vote & Prioritize</span>
+            <p>요구사항 투표와 우선순위 정리로 민주적 의사결정을 만듭니다.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-no">Step 4</div>
+            <h4>공식 전달</h4>
+            <span class="en">Formal Delivery</span>
+            <p>자동 문서 생성과 공식 채널 전달로 협상을 공식화합니다.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-no">Step 5</div>
+            <h4>피드백 공개</h4>
+            <span class="en">Feedback & Update</span>
+            <p>응답 기한과 결과를 공개해 과정의 투명성을 유지합니다.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-no">Step 6</div>
+            <h4>합의 도출</h4>
+            <span class="en">Agreement</span>
+            <p>합의문 작성과 과반수 동의 구조로 외부 합의를 방지합니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Who it's For</div>
+            <h2>PACT는 이런 집단을 위해 설계됩니다.</h2>
+          </div>
+          <p class="section-desc">
+            사업계획서의 주요 타깃 영역은 노동자/노조, 아파트 입주민, 재개발 조합원, 세입자, 소상공인, 시민이다. :contentReference[oaicite:7]{index=7}
+          </p>
+        </div>
+
+        <div class="target-grid">
+          <div class="target">
+            <strong>노동자·노조</strong>
+            <span>임금, 근로조건, 부당해고 등</span>
+          </div>
+          <div class="target">
+            <strong>입주민</strong>
+            <span>관리비, 하자보수, 재건축 등</span>
+          </div>
+          <div class="target">
+            <strong>재개발 조합원</strong>
+            <span>비리, 불투명 운영, 정보 비대칭</span>
+          </div>
+          <div class="target">
+            <strong>세입자</strong>
+            <span>임대료, 보증금, 계약 조건</span>
+          </div>
+          <div class="target">
+            <strong>소상공인·시민</strong>
+            <span>불공정 계약, 정책 민원, 공공 이슈</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="waitlist">
       <div>
-        <h3>Get early access to PACT.</h3>
+        <h3>PACT 얼리 액세스 신청</h3>
         <p>
-          Be the first to know when the platform opens. Join the waitlist and follow the launch.
+          플랫폼 출시 소식을 가장 먼저 받아보세요.<br>
+          초기 사용자, 협업 제안, 파트너 문의도 함께 받을 수 있습니다.
         </p>
       </div>
 
-      <form class="waitlist-form">
-        <input type="email" placeholder="Enter your email" aria-label="Email address">
-        <button type="submit">Join Waitlist</button>
+      <form class="cta-form" onsubmit="event.preventDefault(); alert('준비중입니다. 문의 수집 방식이 정해지면 연결해주세요.');">
+        <input type="email" placeholder="이메일 주소를 입력하세요" aria-label="Email address">
+        <button type="submit">대기열 등록</button>
       </form>
     </section>
+  </main>
 
-    <footer class="footer">
-      <div class="footer-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-mark"><span class="pa">pa</span><span class="ct">ct</span></div>
       <div>© 2026 PACT. All rights reserved.</div>
-    </footer>
-
-  </div>
+    </div>
+  </footer>
 </body>
 </html>
