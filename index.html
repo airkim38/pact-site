@@ -21,6 +21,7 @@
       --bg: #131A1C;
       --bg2: #0E1618;
       --surface: #1A2224;
+      --surface2: #162022;
       --line: rgba(255,255,255,.07);
       --line2: rgba(255,255,255,.13);
       --text: #FFFFFF;
@@ -31,19 +32,42 @@
       --shadow: 0 24px 64px rgba(0,0,0,.28);
       --shadow-blue: 0 12px 32px rgba(128,176,248,.28);
       --max: 1080px;
+      --radius-lg: 32px;
+      --radius-md: 24px;
+      --radius-sm: 16px;
+      --transition: .2s ease;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Outfit', 'Noto Sans KR', sans-serif;
-      background: var(--bg2);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(128,176,248,.08), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(248,120,136,.07), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
       color: var(--text);
       overflow-x: hidden;
       word-break: keep-all;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
 
     .sr-only {
       position: absolute;
@@ -84,6 +108,8 @@
       letter-spacing: -1px;
       cursor: pointer;
       white-space: nowrap;
+      line-height: 1;
+      flex: 0 0 auto;
     }
 
     .logo .pa { color: var(--blue); }
@@ -93,6 +119,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .nav-ghost {
@@ -101,11 +129,10 @@
       background: transparent;
       border: 1px solid var(--line2);
       color: var(--muted);
-      font-family: inherit;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      transition: all .18s;
+      transition: all var(--transition);
       white-space: nowrap;
     }
 
@@ -119,7 +146,6 @@
       border-radius: 11px;
       background: linear-gradient(135deg, var(--blue), #6F9FF1);
       color: #0E1618;
-      font-family: inherit;
       font-size: 13px;
       font-weight: 800;
       border: none;
@@ -138,7 +164,7 @@
     .hero {
       position: relative;
       overflow: hidden;
-      padding: 96px 28px 80px;
+      padding: 96px 28px 84px;
       max-width: var(--max);
       margin: 0 auto;
       display: flex;
@@ -176,15 +202,22 @@
       z-index: 1;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      padding: 9px 18px;
-      border-radius: 12px;
+      padding: 10px 18px;
+      border-radius: 14px;
       border: 1px solid var(--line2);
       background: rgba(255,255,255,.03);
       margin-bottom: 18px;
       white-space: nowrap;
       max-width: 100%;
       overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .dict-card::-webkit-scrollbar {
+      display: none;
     }
 
     .dict-word {
@@ -194,14 +227,16 @@
       line-height: 1;
     }
 
-    .dict-word .pa { color: #80B0F8; }
-    .dict-word .ct { color: #F87888; }
+    .dict-word .pa { color: var(--blue); }
+    .dict-word .ct { color: var(--red); }
+
     .dict-pron {
       color: var(--blue);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       line-height: 1;
     }
+
     .dict-pos {
       color: var(--soft);
       font-size: 11px;
@@ -209,17 +244,20 @@
       font-weight: 600;
       line-height: 1;
     }
+
     .dict-meaning {
       color: var(--text);
       font-size: 13px;
       font-weight: 700;
       line-height: 1;
     }
+
     .dict-divider {
       color: rgba(255,255,255,.15);
       font-size: 12px;
       line-height: 1;
     }
+
     .dict-ex {
       color: var(--soft);
       font-size: 12px;
@@ -258,7 +296,7 @@
       color: var(--soft);
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 1.4px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       margin-bottom: 32px;
     }
@@ -269,6 +307,7 @@
       border-radius: 50%;
       background: linear-gradient(90deg, var(--blue), var(--red));
       box-shadow: 0 0 10px rgba(128,176,248,.6);
+      flex: 0 0 auto;
     }
 
     .hero-title {
@@ -276,7 +315,7 @@
       z-index: 1;
       font-size: clamp(38px, 6vw, 78px);
       font-weight: 900;
-      line-height: 1.06;
+      line-height: 1.08;
       letter-spacing: -2.5px;
       margin-bottom: 28px;
     }
@@ -284,13 +323,13 @@
     .hero-title .line1 {
       display: block;
       color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .hero-title .line2 {
       display: block;
       color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .hero-title .line3 {
@@ -304,7 +343,7 @@
     .hero-sub {
       position: relative;
       z-index: 1;
-      max-width: 680px;
+      max-width: 700px;
       margin: 0 auto 18px;
       color: var(--muted);
       font-size: 17px;
@@ -319,7 +358,7 @@
     .hero-definition {
       position: relative;
       z-index: 1;
-      max-width: 680px;
+      max-width: 700px;
       margin: 0 auto 48px;
       color: #fff;
       font-size: 16px;
@@ -337,8 +376,8 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 760px;
-      margin-bottom: 40px;
+      max-width: 780px;
+      margin-bottom: 42px;
     }
 
     .examples-label {
@@ -362,12 +401,12 @@
       border-radius: 999px;
       font-size: 13px;
       font-weight: 600;
-      line-height: 1.4;
+      line-height: 1.45;
       border: 1px solid var(--line2);
       background: rgba(255,255,255,.03);
       color: var(--muted);
       cursor: default;
-      transition: all .2s;
+      transition: all var(--transition);
     }
 
     .ex-tag:hover {
@@ -393,7 +432,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 680px;
+      max-width: 700px;
       padding: 32px 32px 28px;
       border-radius: 28px;
       background: linear-gradient(160deg, rgba(128,176,248,.10) 0%, rgba(255,255,255,.03) 60%);
@@ -405,13 +444,14 @@
       font-size: 19px;
       font-weight: 800;
       letter-spacing: -.5px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .start-hint {
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.7;
+      line-height: 1.75;
       margin-bottom: 20px;
     }
 
@@ -429,10 +469,10 @@
       background: rgba(0,0,0,.28);
       color: #fff;
       padding: 0 18px;
-      font-family: inherit;
       font-size: 15px;
       outline: none;
       transition: border-color .2s, box-shadow .2s;
+      min-width: 0;
     }
 
     .start-input:focus {
@@ -450,7 +490,6 @@
       border-radius: 14px;
       background: linear-gradient(135deg, var(--blue), #6F9FF1);
       color: #0E1618;
-      font-family: inherit;
       font-size: 15px;
       font-weight: 900;
       border: none;
@@ -458,6 +497,7 @@
       white-space: nowrap;
       box-shadow: 0 8px 24px rgba(128,176,248,.28);
       transition: transform .18s, box-shadow .18s;
+      flex: 0 0 auto;
     }
 
     .start-go:hover {
@@ -468,7 +508,7 @@
     .start-note {
       color: var(--soft);
       font-size: 12px;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .start-note span {
@@ -480,7 +520,7 @@
     .how {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 80px 28px;
+      padding: 84px 28px;
     }
 
     .section-kicker {
@@ -505,14 +545,14 @@
       font-size: 16px;
       line-height: 1.8;
       margin-bottom: 40px;
-      max-width: 560px;
+      max-width: 580px;
     }
 
     .compare {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .compare-col {
@@ -564,7 +604,7 @@
       gap: 10px;
       color: var(--muted);
       font-size: 14px;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
     .compare-item .mark {
@@ -599,7 +639,7 @@
 
     .steps-wrap {
       display: grid;
-      grid-template-columns: repeat(6,1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 12px;
     }
 
@@ -611,6 +651,7 @@
       transition: transform .2s, border-color .2s;
       position: relative;
       overflow: hidden;
+      min-height: 188px;
     }
 
     .step-card::after {
@@ -723,13 +764,13 @@
       border-radius: 16px;
       background: linear-gradient(135deg, var(--blue), #6F9FF1);
       color: #0E1618;
-      font-family: inherit;
       font-size: 16px;
       font-weight: 900;
       border: none;
       cursor: pointer;
       box-shadow: 0 12px 32px rgba(128,176,248,.28);
       transition: transform .18s, box-shadow .18s;
+      white-space: nowrap;
     }
 
     .cta-btn:hover {
@@ -768,50 +809,164 @@
     .footer-logo .pa { color: var(--blue); }
     .footer-logo .ct { color: var(--red); }
 
+    /* ── Tablet ── */
     @media (max-width: 860px) {
-      .compare { grid-template-columns: 1fr; }
-      .steps-wrap { grid-template-columns: repeat(3,1fr); }
+      .compare {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-wrap {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .section-desc {
+        max-width: 100%;
+      }
     }
 
+    /* ── Mobile ── */
     @media (max-width: 600px) {
       .nav-inner {
         padding: 0 20px;
+        min-height: 60px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      .nav-right {
+        gap: 6px;
+      }
+
+      .nav-ghost {
+        padding: 7px 10px;
+        font-size: 11px;
+        border-radius: 10px;
+      }
+
+      .nav-primary {
+        padding: 8px 12px;
+        font-size: 11px;
+        border-radius: 10px;
       }
 
       .hero {
-        padding: 56px 20px 60px;
+        padding: 44px 20px 56px;
       }
 
       .dict-card {
+        white-space: normal;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        gap: 6px 8px;
+        padding: 12px 14px;
         margin-bottom: 14px;
+        width: 100%;
+      }
+
+      .dict-divider {
+        display: none;
+      }
+
+      .dict-ex {
+        display: block;
+        width: 100%;
+        line-height: 1.45;
+      }
+
+      .launch-badge {
+        margin-bottom: 14px;
+        padding: 8px 12px;
+        font-size: 11px;
+      }
+
+      .eyebrow {
+        margin-bottom: 24px;
+        padding: 8px 14px;
+        font-size: 11px;
+        letter-spacing: .8px;
       }
 
       .hero-title {
-        margin-bottom: 22px;
+        font-size: 36px;
+        line-height: 1.18;
+        letter-spacing: -1px;
+        margin-bottom: 20px;
       }
 
-      .hero-sub {
+      .hero-title .line1 {
         margin-bottom: 14px;
       }
 
+      .hero-title .line2 {
+        margin-bottom: 8px;
+      }
+
+      .hero-sub {
+        font-size: 15px;
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+
       .hero-definition {
-        margin-bottom: 34px;
+        font-size: 15px;
+        line-height: 1.8;
+        margin-bottom: 30px;
+      }
+
+      .examples-wrap {
+        margin-bottom: 30px;
+      }
+
+      .examples-label {
+        font-size: 11px;
+        margin-bottom: 12px;
+      }
+
+      .examples-cloud {
+        gap: 8px;
+      }
+
+      .ex-tag {
+        padding: 9px 13px;
+        font-size: 12px;
+        line-height: 1.45;
       }
 
       .start-card {
         padding: 24px 20px;
+        border-radius: 24px;
+      }
+
+      .start-q {
+        font-size: 18px;
+      }
+
+      .start-hint {
+        font-size: 13px;
+        line-height: 1.75;
       }
 
       .start-input-wrap {
         flex-direction: column;
       }
 
-      .start-go {
-        width: 100%;
+      .start-input {
+        height: 50px;
+        font-size: 14px;
       }
 
-      .steps-wrap {
-        grid-template-columns: 1fr 1fr;
+      .start-go {
+        width: 100%;
+        height: 50px;
+        font-size: 14px;
+      }
+
+      .start-note {
+        font-size: 11px;
+        line-height: 1.65;
       }
 
       .how,
@@ -821,8 +976,82 @@
         padding-right: 20px;
       }
 
+      .how {
+        padding-top: 64px;
+        padding-bottom: 72px;
+      }
+
+      .process {
+        padding-bottom: 72px;
+      }
+
+      .section-kicker {
+        font-size: 11px;
+        letter-spacing: 1.4px;
+      }
+
+      .section-title {
+        font-size: 28px;
+        line-height: 1.25;
+        margin-bottom: 12px;
+      }
+
+      .section-desc {
+        font-size: 15px;
+        line-height: 1.75;
+        margin-bottom: 28px;
+      }
+
+      .compare-col {
+        padding: 22px 18px;
+        border-radius: 20px;
+      }
+
+      .compare-item {
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .steps-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .step-card {
+        min-height: auto;
+        padding: 18px 16px;
+      }
+
+      .step-name {
+        font-size: 16px;
+      }
+
+      .step-desc {
+        font-size: 13px;
+      }
+
       .cta-box {
-        padding: 36px 24px;
+        padding: 34px 22px;
+        border-radius: 24px;
+      }
+
+      .cta-title {
+        font-size: 28px;
+        line-height: 1.2;
+      }
+
+      .cta-desc {
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .cta-btn {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 15px;
+      }
+
+      .cta-sub {
+        font-size: 12px;
       }
 
       .footer {
@@ -879,7 +1108,7 @@
     </p>
 
     <p class="hero-definition">
-      PACT는 같은 문제를 겪는 사람들이 모여 <span class="dim">공식적으로 요구하고, 협상하고, 합의할 수 있도록 돕는</span><br>집단 협상 플랫폼입니다.
+      PACT는 같은 문제를 겪는 사람들이 모여 <span class="dim">공식적으로 요구하고, 협상하고, 합의할 수 있도록 돕는</span> 집단 협상 플랫폼입니다.
     </p>
 
     <div class="examples-wrap">
@@ -902,7 +1131,10 @@
 
     <div class="start-card" id="start">
       <div class="start-q">어떤 문제를 해결하고 싶으신가요?</div>
-      <div class="start-hint">간단히 적어보세요. 아직 출시 전이지만,<br>초기 사용자 관점에서 어떤 이슈가 가장 필요한지 확인하고 있습니다.</div>
+      <div class="start-hint">
+        간단히 적어보세요. 아직 출시 전이지만,<br>
+        초기 사용자 관점에서 어떤 이슈가 가장 필요한지 확인하고 있습니다.
+      </div>
 
       <label for="issue-input" class="sr-only">이슈 입력</label>
       <div class="start-input-wrap">
@@ -919,7 +1151,9 @@
   <section class="how">
     <div class="section-kicker">Why Pact</div>
     <div class="section-title">청원에서 끝나지 않습니다</div>
-    <div class="section-desc">서명과 청원만으로는 실제로 바뀌는 게 없었어요. PACT는 요구를 모으는 것에서 끝나지 않고, 협상과 합의까지 이어지는 구조를 만들고 있습니다.</div>
+    <div class="section-desc">
+      서명과 청원만으로는 실제로 바뀌는 게 없었어요. PACT는 요구를 모으는 것에서 끝나지 않고, 협상과 합의까지 이어지는 구조를 만들고 있습니다.
+    </div>
 
     <div class="compare">
       <div class="compare-col before">
@@ -1051,4 +1285,3 @@
 
 </body>
 </html>
-
