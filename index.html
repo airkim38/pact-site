@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PACT | 목소리를 모아 실제 합의까지</title>
-  <meta name="description" content="PACT는 개인의 목소리를 집단의 힘으로 모아 실제 협상과 합의까지 이끌어내는 집단 협상 플랫폼입니다." />
+  <title>PACT | 집단 협상 플랫폼</title>
+  <meta name="description" content="PACT는 같은 문제를 겪는 사람들이 모여 공식적으로 요구하고, 협상하고, 합의할 수 있도록 돕는 집단 협상 플랫폼입니다." />
   <meta property="og:title" content="PACT | 집단 협상 플랫폼" />
-  <meta property="og:description" content="목소리를 모아 실제 합의까지. 청원에서 끝나지 않고 협상과 합의까지 이어지는 구조." />
+  <meta property="og:description" content="혼자서는 바꾸기 어려웠던 문제, 같은 생각을 가진 사람들과 함께 바꿔나가세요." />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#131A1C" />
 
@@ -15,1149 +15,1039 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --blue:#80B0F8;
-      --red:#F87888;
-      --bg:#131A1C;
-      --bg-2:#101617;
-      --surface:#1A2224;
-      --surface-2:#202A2D;
-      --line:rgba(255,255,255,.08);
-      --line-strong:rgba(255,255,255,.12);
-      --text:#FFFFFF;
-      --muted:rgba(255,255,255,.72);
-      --soft:rgba(255,255,255,.48);
-      --blue-dim:rgba(128,176,248,.14);
-      --red-dim:rgba(248,120,136,.14);
-      --shadow:0 24px 70px rgba(0,0,0,.30);
-      --shadow-soft:0 12px 32px rgba(0,0,0,.18);
-      --max:1180px;
-      --radius-xl:32px;
-      --radius-lg:24px;
-      --radius-md:18px;
-      --transition:.28s ease;
+    :root {
+      --blue: #80B0F8;
+      --red: #F87888;
+      --bg: #131A1C;
+      --bg2: #0E1618;
+      --surface: #1A2224;
+      --line: rgba(255,255,255,.07);
+      --line2: rgba(255,255,255,.13);
+      --text: #FFFFFF;
+      --muted: rgba(255,255,255,.68);
+      --soft: rgba(255,255,255,.38);
+      --blue-dim: rgba(128,176,248,.13);
+      --red-dim: rgba(248,120,136,.13);
+      --shadow: 0 24px 64px rgba(0,0,0,.28);
+      --shadow-blue: 0 12px 32px rgba(128,176,248,.28);
+      --max: 1080px;
     }
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:'Outfit','Noto Sans KR',system-ui,sans-serif;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      background: var(--bg2);
+      color: var(--text);
+      overflow-x: hidden;
+      word-break: keep-all;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(16px);
+      background: rgba(14,22,24,.84);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 28px;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .logo .pa { color: var(--blue); }
+    .logo .ct { color: var(--red); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-ghost {
+      padding: 9px 16px;
+      border-radius: 11px;
+      background: transparent;
+      border: 1px solid var(--line2);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+
+    .nav-ghost:hover {
+      background: rgba(255,255,255,.04);
+      color: #fff;
+    }
+
+    .nav-primary {
+      padding: 10px 20px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--blue), #6F9FF1);
+      color: #0E1618;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(128,176,248,.24);
+      transition: transform .18s, box-shadow .18s;
+      white-space: nowrap;
+    }
+
+    .nav-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(128,176,248,.32);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 96px 28px 80px;
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      left: -140px;
+      width: 640px;
+      height: 640px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(128,176,248,.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -120px;
+      width: 560px;
+      height: 560px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(248,120,136,.07), transparent 58%);
+      pointer-events: none;
+    }
+
+    .dict-card {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      margin-bottom: 18px;
+      white-space: nowrap;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .dict-word {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .dict-word .pa { color: #80B0F8; }
+    .dict-word .ct { color: #F87888; }
+    .dict-pron {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .dict-pos {
+      color: var(--soft);
+      font-size: 11px;
+      font-style: italic;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .dict-meaning {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .dict-divider {
+      color: rgba(255,255,255,.15);
+      font-size: 12px;
+      line-height: 1;
+    }
+    .dict-ex {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .launch-badge {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(128,176,248,.18);
+      background: rgba(128,176,248,.08);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      margin-bottom: 18px;
+      white-space: nowrap;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--blue), var(--red));
+      box-shadow: 0 0 10px rgba(128,176,248,.6);
+    }
+
+    .hero-title {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(38px, 6vw, 78px);
+      font-weight: 900;
+      line-height: 1.06;
+      letter-spacing: -2.5px;
+      margin-bottom: 28px;
+    }
+
+    .hero-title .line1 {
+      display: block;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .hero-title .line2 {
+      display: block;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .hero-title .line3 {
+      display: block;
+      background: linear-gradient(90deg, var(--blue) 0%, #C8DCFF 35%, #fff 52%, #FFD1D6 70%, var(--red) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto 18px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.9;
+    }
+
+    .hero-sub strong {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .hero-definition {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto 48px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 1.85;
+      font-weight: 600;
+    }
+
+    .hero-definition .dim {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── 공감 예시 태그 클라우드 ── */
+    .examples-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 760px;
+      margin-bottom: 40px;
+    }
+
+    .examples-label {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .examples-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .ex-tag {
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      cursor: default;
+      transition: all .2s;
+    }
+
+    .ex-tag:hover {
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      border-color: rgba(255,255,255,.18);
+    }
+
+    .ex-tag.b {
+      border-color: rgba(128,176,248,.2);
+      color: rgba(128,176,248,.86);
+      background: var(--blue-dim);
+    }
+
+    .ex-tag.r {
+      border-color: rgba(248,120,136,.2);
+      color: rgba(248,120,136,.86);
+      background: var(--red-dim);
+    }
+
+    /* ── 이슈 시작 카드 ── */
+    .start-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      padding: 32px 32px 28px;
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(128,176,248,.10) 0%, rgba(255,255,255,.03) 60%);
+      border: 1px solid rgba(128,176,248,.22);
+      box-shadow: 0 28px 70px rgba(0,0,0,.34), 0 0 0 1px rgba(128,176,248,.07) inset;
+    }
+
+    .start-q {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      margin-bottom: 6px;
+    }
+
+    .start-hint {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .start-input-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .start-input {
+      flex: 1;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.28);
+      color: #fff;
+      padding: 0 18px;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .start-input:focus {
+      border-color: rgba(128,176,248,.45);
+      box-shadow: 0 0 0 4px rgba(128,176,248,.10);
+    }
+
+    .start-input::placeholder {
+      color: rgba(255,255,255,.26);
+    }
+
+    .start-go {
+      height: 52px;
+      padding: 0 24px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), #6F9FF1);
+      color: #0E1618;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(128,176,248,.28);
+      transition: transform .18s, box-shadow .18s;
+    }
+
+    .start-go:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(128,176,248,.36);
+    }
+
+    .start-note {
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .start-note span {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    /* ── 어떻게 달라지나 ── */
+    .how {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 80px 28px;
+    }
+
+    .section-kicker {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 42px);
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 560px;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .compare-col {
+      padding: 28px 26px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+    }
+
+    .compare-col.before {
+      background: rgba(255,255,255,.02);
+    }
+
+    .compare-col.after {
+      background: linear-gradient(160deg, rgba(128,176,248,.09), rgba(248,120,136,.06));
+      border-color: rgba(128,176,248,.18);
+    }
+
+    .compare-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .compare-badge.b-badge {
+      background: rgba(255,255,255,.07);
+      color: var(--soft);
+    }
+
+    .compare-badge.a-badge {
+      background: var(--blue-dim);
+      color: var(--blue);
+      border: 1px solid rgba(128,176,248,.2);
+    }
+
+    .compare-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .compare-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .compare-item .mark {
+      flex: 0 0 18px;
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+
+    .compare-item .mark.x {
+      background: rgba(255,255,255,.06);
+      color: var(--soft);
+    }
+
+    .compare-item .mark.o {
+      background: var(--blue-dim);
+      color: var(--blue);
+    }
+
+    /* ── 프로세스 ── */
+    .process {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 28px 100px;
+    }
+
+    .steps-wrap {
+      display: grid;
+      grid-template-columns: repeat(6,1fr);
+      gap: 12px;
+    }
+
+    .step-card {
+      padding: 20px 16px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border: 1px solid var(--line);
+      transition: transform .2s, border-color .2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-card::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity .22s;
+    }
+
+    .step-card:nth-child(1)::after,
+    .step-card:nth-child(2)::after { background: var(--blue); }
+
+    .step-card:nth-child(3)::after,
+    .step-card:nth-child(4)::after { background: linear-gradient(90deg, var(--blue), var(--red)); }
+
+    .step-card:nth-child(5)::after,
+    .step-card:nth-child(6)::after { background: var(--red); }
+
+    .step-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--line2);
+    }
+
+    .step-card:hover::after {
+      opacity: 1;
+    }
+
+    .step-num {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 14px;
+    }
+
+    .step-name {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.4px;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .step-en {
+      font-size: 11px;
+      color: var(--soft);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ── 하단 CTA ── */
+    .bottom-cta {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 28px 100px;
+    }
+
+    .cta-box {
+      padding: 56px 40px;
+      border-radius: 32px;
       background:
-        radial-gradient(circle at 12% 12%, rgba(128,176,248,.10), transparent 24%),
-        radial-gradient(circle at 88% 16%, rgba(248,120,136,.10), transparent 22%),
-        linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 100%);
-      word-break:keep-all;
-      overflow-x:hidden;
-    }
-
-    a{text-decoration:none;color:inherit}
-    img{display:block;max-width:100%}
-
-    .wrap{
-      width:min(var(--max), calc(100% - 32px));
-      margin:0 auto;
-    }
-
-    .fade-up{
-      opacity:0;
-      transform:translateY(28px);
-      transition:opacity .8s ease, transform .8s ease;
-    }
-
-    .fade-up.show{
-      opacity:1;
-      transform:translateY(0);
-    }
-
-    .nav{
-      position:sticky;
-      top:0;
-      z-index:60;
-      backdrop-filter:blur(14px);
-      background:rgba(19,26,28,.76);
-      border-bottom:1px solid rgba(255,255,255,.04);
-    }
-
-    .nav-inner{
-      width:min(var(--max), calc(100% - 32px));
-      margin:0 auto;
-      min-height:76px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      min-width:0;
-    }
-
-    .brand-mark{
-      display:flex;
-      width:56px;
-      height:36px;
-      border-radius:12px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      background:var(--surface);
-      box-shadow:var(--shadow-soft);
-      flex:0 0 auto;
-    }
-
-    .brand-mark div{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      font-size:14px;
-      letter-spacing:-.5px;
-    }
-
-    .brand-mark .pa{
-      color:var(--blue);
-      background:var(--blue-dim);
-    }
-
-    .brand-mark .ct{
-      color:var(--red);
-      background:var(--red-dim);
-    }
-
-    .brand-text strong{
-      display:block;
-      font-size:18px;
-      font-weight:900;
-      line-height:1;
-      letter-spacing:-.6px;
-    }
-
-    .brand-text span{
-      display:block;
-      margin-top:5px;
-      color:var(--soft);
-      font-size:11px;
-      letter-spacing:1.4px;
-      text-transform:uppercase;
-    }
-
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    .nav-links a{
-      padding:10px 12px;
-      border-radius:12px;
-      color:var(--muted);
-      font-size:14px;
-      white-space:nowrap;
-      transition:background var(--transition), color var(--transition), transform var(--transition);
-    }
-
-    .nav-links a:hover{
-      background:rgba(255,255,255,.04);
-      color:#fff;
-    }
-
-    .nav-cta{
-      background:linear-gradient(135deg,var(--blue),#6F9FF1);
-      color:#101617 !important;
-      font-weight:800;
-      box-shadow:0 8px 22px rgba(128,176,248,.22);
-    }
-
-    .hero{
-      position:relative;
-      padding:86px 0 70px;
-      overflow:hidden;
-    }
-
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:auto auto 10% -10%;
-      width:480px;
-      height:480px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(128,176,248,.10), transparent 62%);
-      filter:blur(20px);
-      pointer-events:none;
-    }
-
-    .hero::after{
-      content:"";
-      position:absolute;
-      inset:0 -10% auto auto;
-      width:420px;
-      height:420px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(248,120,136,.10), transparent 60%);
-      filter:blur(20px);
-      pointer-events:none;
-    }
-
-    .hero-grid{
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:38px;
-      align-items:center;
-      position:relative;
-      z-index:1;
-    }
-
-    .eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:1.2px;
-      text-transform:uppercase;
-      box-shadow:var(--shadow-soft);
-    }
-
-    .dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:linear-gradient(90deg,var(--blue),var(--red));
-      box-shadow:0 0 18px rgba(128,176,248,.6);
-      flex:0 0 auto;
-    }
-
-    h1{
-      margin:24px 0 18px;
-      font-size:clamp(42px, 7vw, 86px);
-      line-height:1.02;
-      letter-spacing:-3px;
-      font-weight:900;
-    }
-
-    .sub-kr{
-      display:block;
-      margin-bottom:12px;
-      color:#fff;
-      font-size:clamp(22px, 2.4vw, 30px);
-      line-height:1.25;
-      letter-spacing:-.8px;
-    }
-
-    .grad{
-      display:block;
-      line-height:1;
-      background:linear-gradient(90deg,var(--blue) 0%, #C8DCFF 30%, #FFFFFF 52%, #FFD1D6 72%, var(--red) 100%);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    .hero-copy{
-      margin:0;
-      max-width:720px;
-    }
-
-    .hero-copy .ko{
-      display:block;
-      margin-bottom:10px;
-      color:#fff;
-      font-size:18px;
-      line-height:1.8;
-      font-weight:500;
-    }
-
-    .hero-copy .en{
-      display:block;
-      color:var(--soft);
-      font-size:15px;
-      line-height:1.7;
-    }
-
-    .hero-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:30px;
-    }
-
-    .btn{
-      min-height:54px;
-      padding:0 20px;
-      border-radius:14px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:15px;
-      font-weight:800;
-      white-space:nowrap;
-      border:1px solid transparent;
-      transition:transform var(--transition), opacity var(--transition), box-shadow var(--transition), background var(--transition);
-    }
-
-    .btn:hover{
-      transform:translateY(-2px);
-      opacity:.98;
-    }
-
-    .btn-primary{
-      background:linear-gradient(135deg,var(--blue),#6F9FF1);
-      color:#101617;
-      box-shadow:0 12px 30px rgba(128,176,248,.26);
-    }
-
-    .btn-secondary{
-      background:rgba(248,120,136,.08);
-      color:var(--red);
-      border-color:rgba(248,120,136,.28);
-    }
-
-    .hero-tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:26px;
-    }
-
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      padding:10px 14px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:700;
-      white-space:nowrap;
-      border:1px solid transparent;
-    }
-
-    .tag.blue{
-      background:var(--blue-dim);
-      color:var(--blue);
-      border-color:rgba(128,176,248,.18);
-    }
-
-    .tag.red{
-      background:var(--red-dim);
-      color:var(--red);
-      border-color:rgba(248,120,136,.18);
-    }
-
-    .hero-card{
-      position:relative;
-      overflow:hidden;
-      padding:24px;
-      border-radius:var(--radius-xl);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-    }
-
-    .hero-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at left top, rgba(128,176,248,.14), transparent 28%),
-        radial-gradient(circle at right bottom, rgba(248,120,136,.14), transparent 26%);
-      pointer-events:none;
-    }
-
-    .panel{
-      position:relative;
-      z-index:1;
-      padding:22px;
-      border-radius:24px;
-      background:rgba(10,14,15,.34);
-      border:1px solid rgba(255,255,255,.05);
-      backdrop-filter:blur(10px);
-    }
-
-    .panel-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:20px;
-    }
-
-    .panel-head .label{
-      color:var(--soft);
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:1.3px;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-
-    .status{
-      padding:8px 10px;
-      border-radius:999px;
-      background:var(--blue-dim);
-      border:1px solid rgba(128,176,248,.18);
-      color:var(--blue);
-      font-size:11px;
-      font-weight:800;
-      white-space:nowrap;
-    }
-
-    .logo-box{
-      margin-bottom:18px;
-      padding:22px 20px 18px;
-      border-radius:22px;
-      background:var(--surface);
-      border:1px solid var(--line);
-    }
-
-    .logo-word{
-      margin:0;
-      font-size:72px;
-      line-height:.95;
-      letter-spacing:-3px;
-      font-weight:900;
-    }
-
-    .logo-word .pa{color:var(--blue)}
-    .logo-word .ct{color:var(--red)}
-
-    .logo-line{
-      display:flex;
-      width:170px;
-      height:2px;
-      margin-top:14px;
-      overflow:hidden;
-      border-radius:4px;
-    }
-
-    .logo-line .l{
-      flex:1;
-      background:var(--blue);
-      opacity:.8;
-    }
-
-    .logo-line .r{
-      flex:1;
-      background:var(--red);
-      opacity:.8;
-    }
-
-    .logo-caption{
-      margin-top:11px;
-      color:var(--soft);
-      font-size:12px;
-      letter-spacing:2px;
-      text-transform:uppercase;
-    }
-
-    .mini-list{
-      display:grid;
-      gap:12px;
-    }
-
-    .mini{
-      display:flex;
-      gap:12px;
-      align-items:flex-start;
-      padding:14px;
-      border-radius:18px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.05);
-      transition:transform var(--transition), border-color var(--transition), background var(--transition);
-    }
-
-    .mini:hover{
-      transform:translateY(-3px);
-      border-color:rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-    }
-
-    .mini-no{
-      flex:0 0 36px;
-      width:36px;
-      height:36px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:12px;
-      font-size:13px;
-      font-weight:900;
-    }
-
-    .mini:nth-child(1) .mini-no{
-      background:var(--blue-dim);
-      color:var(--blue);
-    }
-
-    .mini:nth-child(2) .mini-no{
-      background:var(--red-dim);
-      color:var(--red);
-    }
-
-    .mini:nth-child(3) .mini-no{
-      background:rgba(255,255,255,.08);
-      color:#fff;
-    }
-
-    .mini strong{
-      display:block;
-      margin-bottom:4px;
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .mini span{
-      display:block;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.6;
-    }
-
-    section.block{
-      padding:36px 0 96px;
-    }
-
-    .section-head{
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) minmax(280px, 520px);
-      gap:28px;
-      align-items:start;
-      margin-bottom:24px;
-    }
-
-    .kicker{
-      margin-bottom:10px;
-      color:var(--soft);
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:2px;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-
-    h2{
-      margin:0;
-      font-size:clamp(28px, 4vw, 46px);
-      line-height:1.12;
-      letter-spacing:-1.5px;
-    }
-
-    .section-desc{
-      margin:0;
-      color:var(--muted);
-      font-size:16px;
-      line-height:1.8;
-    }
-
-    .problem-grid,
-    .value-grid,
-    .target-grid{
-      display:grid;
-      gap:18px;
-    }
-
-    .problem-grid{grid-template-columns:repeat(3,1fr)}
-    .value-grid{grid-template-columns:repeat(3,1fr)}
-    .target-grid{grid-template-columns:repeat(5,1fr)}
-
-    .card,
-    .target{
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border:1px solid var(--line);
-      box-shadow:var(--shadow-soft);
-    }
-
-    .card{
-      padding:24px;
-      border-radius:26px;
-      transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
-    }
-
-    .card:hover{
-      transform:translateY(-5px);
-      box-shadow:0 20px 50px rgba(0,0,0,.24);
-      border-color:var(--line-strong);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-    }
-
-    .icon-badge{
-      display:inline-flex;
-      min-width:44px;
-      height:44px;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:18px;
-      border-radius:14px;
-      font-weight:900;
-    }
-
-    .problem-grid .card:nth-child(1) .icon-badge,
-    .value-grid .card:nth-child(1) .icon-badge{
-      background:var(--blue-dim);
-      color:var(--blue);
-    }
-
-    .problem-grid .card:nth-child(2) .icon-badge,
-    .value-grid .card:nth-child(2) .icon-badge{
-      background:var(--red-dim);
-      color:var(--red);
-    }
-
-    .problem-grid .card:nth-child(3) .icon-badge,
-    .value-grid .card:nth-child(3) .icon-badge{
-      background:rgba(255,255,255,.08);
-      color:#fff;
-    }
-
-    .card h3{
-      margin:0 0 12px;
-      font-size:22px;
-      line-height:1.3;
-      letter-spacing:-.7px;
-    }
-
-    .card p{
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.75;
-    }
-
-    .flow{
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:14px;
-    }
-
-    .step{
-      min-height:196px;
-      padding:20px 16px;
-      border-radius:24px;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border:1px solid var(--line);
-      box-shadow:var(--shadow-soft);
-      transition:transform var(--transition), border-color var(--transition);
-    }
-
-    .step:hover{
-      transform:translateY(-4px);
-      border-color:var(--line-strong);
-    }
-
-    .step-no{
-      color:var(--soft);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:1.5px;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-
-    .step h4{
-      margin:14px 0 8px;
-      font-size:20px;
-      line-height:1.35;
-      letter-spacing:-.5px;
-    }
-
-    .step .en{
-      display:block;
-      margin-bottom:10px;
-      color:var(--soft);
-      font-size:12px;
-      letter-spacing:1.1px;
-      text-transform:uppercase;
-    }
-
-    .step p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.65;
-    }
-
-    .target{
-      padding:22px 16px;
-      border-radius:24px;
-      text-align:center;
-      transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-    }
-
-    .target:hover{
-      transform:translateY(-4px);
-      box-shadow:0 20px 50px rgba(0,0,0,.22);
-      border-color:var(--line-strong);
-    }
-
-    .target strong{
-      display:block;
-      margin-bottom:8px;
-      font-size:20px;
-      line-height:1.35;
-      letter-spacing:-.5px;
-    }
-
-    .target span{
-      display:block;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.7;
-    }
-
-    .cta{
-      width:min(var(--max), calc(100% - 32px));
-      margin:0 auto 100px;
-      padding:36px;
-      border-radius:32px;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(circle at left top, rgba(128,176,248,.10), transparent 26%),
-        radial-gradient(circle at right bottom, rgba(248,120,136,.10), transparent 24%),
+        radial-gradient(circle at 15% 50%, rgba(128,176,248,.12), transparent 40%),
+        radial-gradient(circle at 85% 50%, rgba(248,120,136,.12), transparent 38%),
         var(--surface);
-      box-shadow:var(--shadow);
-      display:grid;
-      grid-template-columns:minmax(0, 1fr) auto;
-      gap:22px;
-      align-items:center;
+      border: 1px solid var(--line2);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
     }
 
-    .cta h3{
-      margin:0 0 10px;
-      font-size:34px;
-      line-height:1.15;
-      letter-spacing:-1px;
+    .cta-title {
+      font-size: clamp(24px, 3vw, 38px);
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      line-height: 1.15;
     }
 
-    .cta p{
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.75;
+    .cta-title .grad {
+      background: linear-gradient(90deg, var(--blue), var(--red));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    .cta-form{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+    .cta-desc {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.85;
+      max-width: 520px;
     }
 
-    .cta-form input{
-      width:290px;
-      max-width:100%;
-      height:54px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      background:#111719;
-      color:#fff;
-      padding:0 16px;
-      font-family:inherit;
-      font-size:15px;
-      outline:none;
-      transition:border-color var(--transition), box-shadow var(--transition);
+    .cta-btn {
+      margin-top: 8px;
+      padding: 17px 40px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--blue), #6F9FF1);
+      color: #0E1618;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 12px 32px rgba(128,176,248,.28);
+      transition: transform .18s, box-shadow .18s;
     }
 
-    .cta-form input:focus{
-      border-color:rgba(128,176,248,.36);
-      box-shadow:0 0 0 4px rgba(128,176,248,.10);
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(128,176,248,.36);
     }
 
-    .cta-form button{
-      height:54px;
-      padding:0 20px;
-      border:none;
-      border-radius:14px;
-      background:linear-gradient(135deg,var(--blue),#6F9FF1);
-      color:#101617;
-      font-family:inherit;
-      font-size:15px;
-      font-weight:900;
-      cursor:pointer;
-      white-space:nowrap;
-      box-shadow:0 10px 26px rgba(128,176,248,.24);
-      transition:transform var(--transition), opacity var(--transition);
+    .cta-sub {
+      color: var(--soft);
+      font-size: 13px;
+      line-height: 1.7;
     }
 
-    .cta-form button:hover{
-      transform:translateY(-2px);
-      opacity:.98;
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 28px;
     }
 
-    .footer{
-      padding:0 0 34px;
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      color: var(--soft);
+      font-size: 13px;
     }
 
-    .footer-inner{
-      width:min(var(--max), calc(100% - 32px));
-      margin:0 auto;
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      color:var(--soft);
-      font-size:13px;
+    .footer-logo {
+      font-weight: 900;
+      letter-spacing: -.5px;
     }
 
-    .footer-mark{
-      font-weight:900;
-      letter-spacing:-.5px;
+    .footer-logo .pa { color: var(--blue); }
+    .footer-logo .ct { color: var(--red); }
+
+    @media (max-width: 860px) {
+      .compare { grid-template-columns: 1fr; }
+      .steps-wrap { grid-template-columns: repeat(3,1fr); }
     }
 
-    .footer-mark .pa{color:var(--blue)}
-    .footer-mark .ct{color:var(--red)}
+    @media (max-width: 600px) {
+      .nav-inner {
+        padding: 0 20px;
+      }
 
-    @media (max-width:1100px){
-      .hero-grid{grid-template-columns:1fr}
-      .problem-grid,.value-grid{grid-template-columns:1fr}
-      .flow{grid-template-columns:repeat(3,1fr)}
-      .target-grid{grid-template-columns:repeat(3,1fr)}
-      .cta{grid-template-columns:1fr}
-      .cta-form{justify-content:flex-start}
-      .section-head{grid-template-columns:1fr}
-    }
+      .hero {
+        padding: 56px 20px 60px;
+      }
 
-    @media (max-width:760px){
-      .nav-inner{min-height:68px}
-      .nav-links a:not(.nav-cta){display:none}
-      .hero{padding-top:42px}
-      h1{letter-spacing:-2px}
-      .hero-copy .ko{font-size:16px}
-      .hero-copy .en{font-size:14px}
-      .hero-actions{flex-direction:column;align-items:stretch}
-      .btn{width:100%}
-      .flow{grid-template-columns:1fr}
-      .target-grid{grid-template-columns:1fr 1fr}
-      .cta-form{flex-direction:column;align-items:stretch}
-      .cta-form input,.cta-form button{width:100%}
-      .footer-inner{flex-direction:column;align-items:flex-start}
-    }
+      .dict-card {
+        margin-bottom: 14px;
+      }
 
-    @media (max-width:520px){
-      .target-grid{grid-template-columns:1fr}
-      .logo-word{font-size:56px}
-      .cta h3{font-size:28px}
-      .sub-kr{font-size:22px}
+      .hero-title {
+        margin-bottom: 22px;
+      }
+
+      .hero-sub {
+        margin-bottom: 14px;
+      }
+
+      .hero-definition {
+        margin-bottom: 34px;
+      }
+
+      .start-card {
+        padding: 24px 20px;
+      }
+
+      .start-input-wrap {
+        flex-direction: column;
+      }
+
+      .start-go {
+        width: 100%;
+      }
+
+      .steps-wrap {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .how,
+      .process,
+      .bottom-cta {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .cta-box {
+        padding: 36px 24px;
+      }
+
+      .footer {
+        padding: 24px 20px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
+
   <nav class="nav">
     <div class="nav-inner">
-      <a href="#" class="brand" aria-label="PACT Home">
-        <div class="brand-mark" aria-hidden="true">
-          <div class="pa">pa</div>
-          <div class="ct">ct</div>
-        </div>
-        <div class="brand-text">
-          <strong>PACT</strong>
-          <span>Collective Negotiation Platform</span>
-        </div>
-      </a>
+      <a href="#" class="logo" aria-label="PACT 홈"><span class="pa">pa</span><span class="ct">ct</span></a>
 
-      <div class="nav-links">
-        <a href="#problem">문제</a>
-        <a href="#solution">해결</a>
-        <a href="#flow">진행 방식</a>
-        <a href="#waitlist" class="nav-cta">얼리 액세스 신청</a>
+      <div class="nav-right">
+        <a class="nav-ghost" href="#waitlist">출시 소식 받기</a>
+        <a class="nav-primary" href="#start">이슈 시작하기</a>
       </div>
     </div>
   </nav>
 
-  <main>
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="fade-up">
-          <div class="eyebrow">
-            <span class="dot"></span>
-            Launching Soon
+  <section class="hero">
+    <div class="dict-card">
+      <span class="dict-word"><span class="pa">pa</span><span class="ct">ct</span></span>
+      <span class="dict-pron">[pækt]</span>
+      <span class="dict-pos">n.</span>
+      <span class="dict-meaning">협약 · 합의 · 조약</span>
+      <span class="dict-divider">|</span>
+      <span class="dict-ex">"make a pact" — 합의를 맺다</span>
+    </div>
+
+    <div class="launch-badge">출시 준비 중 · 프리런치 페이지</div>
+
+    <div class="eyebrow">
+      <span class="eyebrow-dot"></span>
+      불합리함을 혼자 참지 않아도 됩니다
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line1">혼자서는 바꿀 수 없었던 것,</span>
+      <span class="line2">같은 생각을 가진 사람들과</span>
+      <span class="line3">함께 바꿔나가세요.</span>
+    </h1>
+
+    <p class="hero-sub">
+      크든 작든 상관없어요.<br>
+      <strong>불합리하다고 느끼지만 혼자서는 어떻게 할 수 없었던 것들.</strong><br>
+      이제는 같은 문제를 겪는 사람들과 함께 시작할 수 있습니다.
+    </p>
+
+    <p class="hero-definition">
+      PACT는 같은 문제를 겪는 사람들이 모여 <span class="dim">공식적으로 요구하고, 협상하고, 합의할 수 있도록 돕는</span> 집단 협상 플랫폼입니다.
+    </p>
+
+    <div class="examples-wrap">
+      <div class="examples-label">이런 것들도 시작할 수 있어요</div>
+      <div class="examples-cloud">
+        <span class="ex-tag r">상사한테 폭언을 들었는데 신고해도 아무것도 안 바뀌어요</span>
+        <span class="ex-tag b">포괄임금제로 야근을 공짜로 시켜요</span>
+        <span class="ex-tag r">윗집 층간소음이 1년째 해결이 안 돼요</span>
+        <span class="ex-tag b">월급을 매번 이유 없이 늦게 줘요</span>
+        <span class="ex-tag">관리비 세부 내역을 요청해도 공개를 거부해요</span>
+        <span class="ex-tag r">퇴근 후에도 카카오톡으로 업무 지시가 계속 와요</span>
+        <span class="ex-tag b">중고거래 사기를 당했는데 플랫폼이 나 몰라라 해요</span>
+        <span class="ex-tag">하자보수 요청을 수개월째 묵살해요</span>
+        <span class="ex-tag r">아파트 지하주차장을 특정 차량이 장기 점령해요</span>
+        <span class="ex-tag b">알바 근로계약서를 안 써줘요</span>
+        <span class="ex-tag">택시 기사가 불친절하고 일부러 돌아가요</span>
+        <span class="ex-tag r">입주민 동의도 없이 관리소가 공사를 강행해요</span>
+      </div>
+    </div>
+
+    <div class="start-card" id="start">
+      <div class="start-q">어떤 문제를 해결하고 싶으신가요?</div>
+      <div class="start-hint">간단히 적어보세요. 아직 출시 전이지만, 초기 사용자 관점에서 어떤 이슈가 가장 필요한지 확인하고 있습니다.</div>
+
+      <label for="issue-input" class="sr-only">이슈 입력</label>
+      <div class="start-input-wrap">
+        <input id="issue-input" class="start-input" type="text" placeholder="예: 포괄임금제 야근 강요, 층간소음 1년째 방치..." />
+        <button class="start-go" type="button">시작하기 →</button>
+      </div>
+
+      <div class="start-note">
+        정식 출시 전까지는 <span>초기 사용자 피드백을 수집</span>하고 있습니다. 남겨주신 이슈는 제품 방향을 다듬는 데 활용됩니다.
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <div class="section-kicker">Why Pact</div>
+    <div class="section-title">청원에서 끝나지 않습니다</div>
+    <div class="section-desc">서명과 청원만으로는 실제로 바뀌는 게 없었어요. PACT는 요구를 모으는 것에서 끝나지 않고, 협상과 합의까지 이어지는 구조를 만들고 있습니다.</div>
+
+    <div class="compare">
+      <div class="compare-col before">
+        <span class="compare-badge b-badge">지금까지</span>
+        <div class="compare-list">
+          <div class="compare-item">
+            <span class="mark x">✕</span>
+            <span>혼자 항의해봐야 "검토하겠다"는 말만 돌아와요</span>
           </div>
-
-          <h1>
-            <span class="sub-kr">목소리를 모아 실제 합의까지</span>
-            <span class="grad">From voices to<br>real agreements.</span>
-          </h1>
-
-          <p class="hero-copy">
-            <span class="ko">PACT는 개인의 목소리를 집단의 힘으로 모아<br>실제 협상과 합의까지 이끌어내는 집단 협상 플랫폼입니다.</span>
-            <span class="en">PACT is a collective negotiation platform built to move beyond petitions and scattered coordination, toward structured negotiation and real agreements.</span>
-          </p>
-
-          <div class="hero-actions">
-            <a href="#waitlist" class="btn btn-primary">얼리 액세스 신청</a>
-            <a href="#solution" class="btn btn-secondary">플랫폼 소개</a>
+          <div class="compare-item">
+            <span class="mark x">✕</span>
+            <span>같은 처지인데도 각자 따로 당하고 있어요</span>
           </div>
-
-          <div class="hero-tags">
-            <span class="tag blue">청원에서 끝나지 않는 구조</span>
-            <span class="tag red">협상과 합의까지 연결</span>
-            <span class="tag blue">집단 의사결정의 투명성</span>
+          <div class="compare-item">
+            <span class="mark x">✕</span>
+            <span>청원·서명까지 했는데 실제로 달라진 건 없어요</span>
           </div>
-        </div>
-
-        <div class="hero-card fade-up">
-          <div class="panel">
-            <div class="panel-head">
-              <div class="label">PACT Preview</div>
-              <div class="status">Beta 2026</div>
-            </div>
-
-            <div class="logo-box">
-              <p class="logo-word"><span class="pa">pa</span><span class="ct">ct</span></p>
-              <div class="logo-line">
-                <div class="l"></div>
-                <div class="r"></div>
-              </div>
-              <div class="logo-caption">집단 협상 플랫폼</div>
-            </div>
-
-            <div class="mini-list">
-              <div class="mini">
-                <div class="mini-no">01</div>
-                <div>
-                  <strong>같은 문제를 가진 사람들을 모읍니다</strong>
-                  <span>링크 공유와 서명 수집으로 집단 협상의 출발점을 만듭니다.</span>
-                </div>
-              </div>
-
-              <div class="mini">
-                <div class="mini-no">02</div>
-                <div>
-                  <strong>요구사항을 정리하고 우선순위를 정합니다</strong>
-                  <span>투표와 의견 수렴으로 집단의 공식 요구를 명확하게 정리합니다.</span>
-                </div>
-              </div>
-
-              <div class="mini">
-                <div class="mini-no">03</div>
-                <div>
-                  <strong>공식 전달부터 결과 공개까지 연결합니다</strong>
-                  <span>문서 생성, 전달, 피드백 공개를 하나의 흐름으로 관리합니다.</span>
-                </div>
-              </div>
-            </div>
+          <div class="compare-item">
+            <span class="mark x">✕</span>
+            <span>우리끼리 모였는데 대표가 멋대로 합의해버렸어요</span>
+          </div>
+          <div class="compare-item">
+            <span class="mark x">✕</span>
+            <span>어떻게 해야 할지 몰라서 그냥 포기했어요</span>
           </div>
         </div>
       </div>
-    </section>
 
-    <section class="block" id="problem">
-      <div class="wrap">
-        <div class="section-head fade-up">
-          <div>
-            <div class="kicker">Problem</div>
-            <h2>개인은 약하고,<br>집단은 있어도 프로세스가 없다.</h2>
+      <div class="compare-col after">
+        <span class="compare-badge a-badge">PACT와 함께라면</span>
+        <div class="compare-list">
+          <div class="compare-item">
+            <span class="mark o">✓</span>
+            <span>같은 문제를 겪는 사람들이 모여 무시할 수 없는 목소리가 됩니다</span>
           </div>
-
-          <p class="section-desc">
-            개인은 기업이나 기관 앞에서 협상력이 낮고, 사람들이 모여도 실제 협상과 합의로 이어지는 구조가 없는 경우가 많습니다.
-          </p>
-        </div>
-
-        <div class="problem-grid">
-          <div class="card fade-up">
-            <div class="icon-badge">01</div>
-            <h3>개인의 협상력 부족</h3>
-            <p>노동자, 세입자, 입주민, 소상공인, 시민은 개인 단위로 요구를 전달해도 영향력이 낮거나 불이익을 감수해야 하는 경우가 많습니다.</p>
+          <div class="compare-item">
+            <span class="mark o">✓</span>
+            <span>서명 수집부터 공식 문서 전달, 합의까지 하나의 흐름으로 이어질 수 있습니다</span>
           </div>
-
-          <div class="card fade-up">
-            <div class="icon-badge">02</div>
-            <h3>집단이 되어도 불투명</h3>
-            <p>사람들이 모여도 대표자의 독단, 과정 비공개, 외부 합의 같은 문제가 생기기 쉽습니다. 청원과 서명은 있어도 협상 프로세스는 부족합니다.</p>
+          <div class="compare-item">
+            <span class="mark o">✓</span>
+            <span>모든 과정이 참여자 전원에게 투명하게 공개되는 구조를 지향합니다</span>
           </div>
-
-          <div class="card fade-up">
-            <div class="icon-badge">03</div>
-            <h3>합의까지 이어지는 플랫폼 부재</h3>
-            <p>청원에서 끝나는 서비스는 있지만, 협상과 합의까지 이어지는 구조를 하나의 플랫폼으로 제공하는 사례는 드뭅니다.</p>
+          <div class="compare-item">
+            <span class="mark o">✓</span>
+            <span>참여자 과반수 동의 없이는 누구도 임의로 합의할 수 없게 설계됩니다</span>
+          </div>
+          <div class="compare-item">
+            <span class="mark o">✓</span>
+            <span>법 지식 없이도, 지금 당장, 누구나 시작할 수 있는 방식으로 준비 중입니다</span>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="block" id="solution">
-      <div class="wrap">
-        <div class="section-head fade-up">
-          <div>
-            <div class="kicker">Solution</div>
-            <h2>청원에서 끝나지 않고,<br>협상과 합의까지.</h2>
-          </div>
+  <section class="process">
+    <div class="section-kicker">How It Works</div>
+    <div class="section-title">PACT는 이렇게 진행됩니다</div>
 
-          <p class="section-desc">
-            PACT는 개인의 목소리를 집단의 힘으로 모아 실제 협상과 합의까지 이끌어내는 구조를 제공합니다.
-          </p>
-        </div>
-
-        <div class="value-grid">
-          <div class="card fade-up">
-            <div class="icon-badge">pa</div>
-            <h3>참여를 모으고</h3>
-            <p>같은 문제를 가진 사람들이 쉽게 참여하고, 링크 공유와 서명 수집으로 집단 협상력을 형성할 수 있습니다.</p>
-          </div>
-
-          <div class="card fade-up">
-            <div class="icon-badge">ct</div>
-            <h3>요구를 정리하고</h3>
-            <p>요구사항을 등록하고 투표로 우선순위를 정해 개인의 의견을 집단의 공식 요구로 정리합니다.</p>
-          </div>
-
-          <div class="card fade-up">
-            <div class="icon-badge">+1</div>
-            <h3>합의를 투명하게 만듭니다</h3>
-            <p>공식 문서 전달, 결과 공개, 참여자 동의 구조를 통해 협상 과정의 신뢰와 투명성을 높입니다.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block" id="flow">
-      <div class="wrap">
-        <div class="section-head fade-up">
-          <div>
-            <div class="kicker">How It Works</div>
-            <h2>PACT는 이렇게 진행됩니다.</h2>
-          </div>
-
-          <p class="section-desc">
-            이슈를 등록하고, 사람을 모으고, 요구사항을 정리한 뒤, 공식 전달과 결과 공개를 거쳐 합의에 도달하는 구조입니다.
-          </p>
-        </div>
-
-        <div class="flow">
-          <div class="step fade-up">
-            <div class="step-no">Step 1</div>
-            <h4>이슈 등록</h4>
-            <span class="en">Issue Setup</span>
-            <p>협상 주제, 상대방, 요구사항을 등록하고 시작합니다.</p>
-          </div>
-
-          <div class="step fade-up">
-            <div class="step-no">Step 2</div>
-            <h4>집단 구성</h4>
-            <span class="en">Recruit & Sign</span>
-            <p>공유 링크와 서명 수집으로 참여자를 모읍니다.</p>
-          </div>
-
-          <div class="step fade-up">
-            <div class="step-no">Step 3</div>
-            <h4>의견 수렴</h4>
-            <span class="en">Vote & Prioritize</span>
-            <p>요구사항 투표와 우선순위 정리로 집단의 의사를 모읍니다.</p>
-          </div>
-
-          <div class="step fade-up">
-            <div class="step-no">Step 4</div>
-            <h4>공식 전달</h4>
-            <span class="en">Formal Delivery</span>
-            <p>자동 문서를 생성하고 공식 채널로 전달합니다.</p>
-          </div>
-
-          <div class="step fade-up">
-            <div class="step-no">Step 5</div>
-            <h4>피드백 공개</h4>
-            <span class="en">Feedback & Update</span>
-            <p>응답 기한과 결과를 공개해 과정의 투명성을 유지합니다.</p>
-          </div>
-
-          <div class="step fade-up">
-            <div class="step-no">Step 6</div>
-            <h4>합의 도출</h4>
-            <span class="en">Agreement</span>
-            <p>합의문 작성과 참여자 동의를 통해 집단의 결정으로 마무리합니다.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="block">
-      <div class="wrap">
-        <div class="section-head fade-up">
-          <div>
-            <div class="kicker">Who It’s For</div>
-            <h2>PACT는 이런 집단을 위해<br>설계되었습니다.</h2>
-          </div>
-
-          <p class="section-desc">
-            협상력이 낮은 개인들이 집단을 이루어 더 명확하고 공식적인 방식으로 목소리를 낼 수 있도록 설계되었습니다.
-          </p>
-        </div>
-
-        <div class="target-grid">
-          <div class="target fade-up">
-            <strong>노동자 · 노조</strong>
-            <span>임금, 근로조건, 부당해고 등</span>
-          </div>
-
-          <div class="target fade-up">
-            <strong>입주민</strong>
-            <span>관리비, 하자보수, 재건축 등</span>
-          </div>
-
-          <div class="target fade-up">
-            <strong>재개발 조합원</strong>
-            <span>비리, 불투명 운영, 정보 비대칭</span>
-          </div>
-
-          <div class="target fade-up">
-            <strong>세입자</strong>
-            <span>임대료, 보증금, 계약 조건</span>
-          </div>
-
-          <div class="target fade-up">
-            <strong>소상공인 · 시민</strong>
-            <span>불공정 계약, 정책 민원, 공공 이슈</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta fade-up" id="waitlist">
-      <div>
-        <h3>PACT 얼리 액세스 신청</h3>
-        <p>
-          플랫폼 출시 소식을 가장 먼저 받아보세요.<br>
-          초기 사용자, 협업 제안, 파트너 문의도 함께 받을 수 있습니다.
-        </p>
+    <div class="steps-wrap">
+      <div class="step-card">
+        <div class="step-num">Step 01</div>
+        <div class="step-name">이슈 등록</div>
+        <div class="step-en">Issue Setup</div>
+        <div class="step-desc">어떤 문제인지, 상대방이 누구인지 등록하고 시작합니다.</div>
       </div>
 
-      <form class="cta-form" onsubmit="event.preventDefault(); alert('준비중입니다. 추후 실제 문의 수집 폼으로 연결해주세요.');">
-        <input type="email" placeholder="이메일 주소를 입력하세요" aria-label="Email address">
-        <button type="submit">대기열 등록</button>
-      </form>
-    </section>
-  </main>
+      <div class="step-card">
+        <div class="step-num">Step 02</div>
+        <div class="step-name">집단 구성</div>
+        <div class="step-en">Recruit & Sign</div>
+        <div class="step-desc">공유 링크로 같은 문제를 가진 사람들이 모이고 서명합니다.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">Step 03</div>
+        <div class="step-name">의견 수렴</div>
+        <div class="step-en">Vote & Prioritize</div>
+        <div class="step-desc">투표로 집단의 공식 요구사항과 우선순위를 정리합니다.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">Step 04</div>
+        <div class="step-name">공식 전달</div>
+        <div class="step-en">Formal Delivery</div>
+        <div class="step-desc">자동 생성된 공식 문서를 상대방에게 전달합니다.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">Step 05</div>
+        <div class="step-name">피드백 공개</div>
+        <div class="step-en">Feedback & Update</div>
+        <div class="step-desc">상대방 응답과 진행 결과를 참여자 전원에게 공개합니다.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">Step 06</div>
+        <div class="step-name">합의 도출</div>
+        <div class="step-en">Agreement</div>
+        <div class="step-desc">참여자 과반수 동의로 합의문을 확정하는 구조를 지향합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bottom-cta" id="waitlist">
+    <div class="cta-box">
+      <div class="cta-title">
+        출시되면 가장 먼저,<br>
+        <span class="grad">알려드리겠습니다.</span>
+      </div>
+
+      <div class="cta-desc">
+        PACT는 현재 출시를 준비하고 있습니다.<br>
+        얼리 액세스와 출시 소식을 가장 먼저 받아보고 싶다면 지금 관심을 남겨주세요.
+      </div>
+
+      <button class="cta-btn" type="button">출시 소식 먼저 받기</button>
+      <div class="cta-sub">정식 출시 전까지는 관심 사용자와 초기 피드백을 중심으로 준비 중입니다.</div>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-mark"><span class="pa">pa</span><span class="ct">ct</span></div>
+      <div class="footer-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
       <div>© 2026 PACT. All rights reserved.</div>
     </div>
   </footer>
 
-  <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.14
-    });
-
-    document.querySelectorAll('.fade-up').forEach((el) => {
-      observer.observe(el);
-    });
-  </script>
 </body>
 </html>
