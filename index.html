@@ -64,6 +64,14 @@
       letter-spacing: .4px; cursor: default; pointer-events: none;
     }
 
+    /* 데스크탑에서 히어로 타이틀 br 숨김 */
+    @media (min-width: 601px) {
+      .hero-title br { display: none; }
+    }
+
+    /* 모바일 전용 줄바꿈 */
+    .mo-br { display: none; }
+
     /* ── HERO 배경 SVG ── */
     .hero-bg {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -523,6 +531,9 @@
       .steps-wrap { grid-template-columns: repeat(3,1fr); }
     }
     @media (max-width: 600px) {
+      /* 모바일 줄바꿈 */
+      .mo-br { display: inline; }
+
       /* ANNOUNCE BAR */
       .announce-bar { font-size: 11px; gap: 6px; padding: 8px 16px; }
       .announce-link { display: block; width: 100%; text-align: center; margin-top: 2px; }
@@ -700,15 +711,15 @@
     </div>
 
     <h1 class="hero-title">
-      <span class="line1">혼자서는 바꿀 수 없었던 것,</span>
-      <span class="line2">같은 생각을 가진 사람들과</span>
+      <span class="line1">혼자서는 바꿀 수<br>없었던 것,</span>
+      <span class="line2">같은 생각을 가진<br>사람들과</span>
       <span class="line3">함께 바꿔나가세요.</span>
     </h1>
 
     <p class="hero-sub">
       크든 작든 상관없어요.<br>
-      <strong>불합리하다고 느끼지만 혼자서는 어떻게 할 수 없었던 것들.</strong><br>
-      동의하는 사람들이 모이면, PACT가 실제 합의까지 이끌어 드립니다.
+      <strong>불합리하다고 느끼지만<br class="mo-br"> 혼자서는 어떻게 할 수 없었던 것들.</strong><br>
+      동의하는 사람들이 모이면,<br class="mo-br"> PACT가 실제 합의까지 이끌어 드립니다.
     </p>
 
     <!-- 공감 예시 태그 -->
@@ -739,7 +750,8 @@
         <button class="start-go">시작하기 →</button>
       </div>
       <div class="start-note">
-        이슈를 등록하면 <span>공유 링크가 즉시 생성</span>됩니다. 링크를 공유해 같은 생각의 사람들을 모아보세요.
+        이슈를 등록하면 <span>공유 링크가 즉시 생성</span>됩니다.<br class="mo-br">
+        링크를 공유해 같은 생각의 사람들을 모아보세요.
       </div>
     </div>
   </section>
