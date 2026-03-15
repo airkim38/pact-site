@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PACT | AI 기반 집단 협상 플랫폼</title>
+  <title>PACT | AI 기반 집단 협상 에이전트 플랫폼</title>
+  <meta name="description" content="억울한 것을 털어놓으면, AI가 해결까지 끝냅니다. 힘의 불균형에 처한 개인들이 집단을 이루고, AI 에이전트가 협상의 전 과정을 자동 실행합니다." />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -32,6 +33,13 @@
       word-break: keep-all;
     }
 
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+    @keyframes fadeUp { from{ opacity:0; transform:translateY(24px); } to{ opacity:1; transform:translateY(0); } }
+    @keyframes float1 { 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-18px) rotate(8deg); } }
+    @keyframes float2 { 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(14px) rotate(-6deg); } }
+    @keyframes float3 { 0%,100%{ transform:translateY(0) scale(1); } 50%{ transform:translateY(-10px) scale(1.08); } }
+    @keyframes pulse-glow { 0%,100%{ opacity:.18; } 50%{ opacity:.28; } }
+
     /* ── ANNOUNCEMENT BAR ── */
     .announce-bar {
       width: 100%;
@@ -39,8 +47,7 @@
       border-bottom: 1px solid rgba(128,176,248,.18);
       padding: 10px 20px;
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      font-size: 13px; font-weight: 600;
-      text-align: center; flex-wrap: wrap;
+      font-size: 13px; font-weight: 600; text-align: center; flex-wrap: wrap;
     }
     .announce-dot {
       width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
@@ -48,59 +55,9 @@
       box-shadow: 0 0 8px rgba(128,176,248,.8);
       animation: blink 2s ease-in-out infinite;
     }
-    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
     .announce-text { color: var(--muted); }
-    .announce-link {
-      color: var(--blue); font-weight: 700; text-decoration: none;
-      border-bottom: 1px solid rgba(128,176,248,.3);
-      transition: color .18s, border-color .18s;
-    }
-    .announce-link:hover { color: #fff; border-color: rgba(255,255,255,.4); }
 
-    .nav-badge {
-      padding: 9px 14px; border-radius: 11px;
-      background: rgba(128,176,248,.08);
-      border: 1px solid rgba(128,176,248,.22);
-      color: var(--blue); font-family: inherit; font-size: 12px; font-weight: 700;
-      letter-spacing: .4px; cursor: default; pointer-events: none;
-    }
-
-    @media (min-width: 601px) { .hero-title br { display: none; } }
-    .mo-br { display: none; }
-    .pc-sep { display: inline; }
-
-    .hero-bg {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 0; overflow: hidden;
-    }
-    .hero-svg { width: 100%; height: 100%; }
-
-    @keyframes float1 { 0%,100%{ transform: translateY(0) rotate(0deg); } 50%{ transform: translateY(-18px) rotate(8deg); } }
-    @keyframes float2 { 0%,100%{ transform: translateY(0) rotate(0deg); } 50%{ transform: translateY(14px) rotate(-6deg); } }
-    @keyframes float3 { 0%,100%{ transform: translateY(0) scale(1); } 50%{ transform: translateY(-10px) scale(1.08); } }
-    @keyframes pulse-glow { 0%,100%{ opacity:.18; } 50%{ opacity:.28; } }
-
-    .shape.s1 { transform-origin: 860px 140px; animation: float1 7s ease-in-out infinite; }
-    .shape.s2 { transform-origin: 190px 380px; animation: float2 9s ease-in-out infinite; }
-    .shape.s3 { transform-origin: 960px 420px; animation: float3 6s ease-in-out infinite; }
-    .shape.s4 { transform-origin: 80px 100px; animation: float1 8s ease-in-out infinite 1s; }
-    .shape.s6 { animation: float2 11s ease-in-out infinite 2s; }
-    .shape.s7 { animation: float1 10s ease-in-out infinite 0.5s; }
-
-    @keyframes fadeUp { from{ opacity:0; transform:translateY(24px); } to{ opacity:1; transform:translateY(0); } }
-    .dict-card  { animation: fadeUp .7s ease both .1s; }
-    .eyebrow    { animation: fadeUp .7s ease both .25s; }
-    .hero-title { animation: fadeUp .7s ease both .4s; }
-    .hero-sub   { animation: fadeUp .7s ease both .55s; }
-    .examples-wrap { animation: fadeUp .7s ease both .7s; }
-    .start-card { animation: fadeUp .7s ease both .85s; }
-
-    .section-divider {
-      width: 100%; max-width: 1080px; margin: 0 auto;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(128,176,248,.15), rgba(248,120,136,.12), transparent);
-    }
-
+    /* ── NAV ── */
     .nav {
       position: sticky; top: 0; z-index: 60;
       backdrop-filter: blur(16px);
@@ -112,17 +69,15 @@
       padding: 0 28px; min-height: 72px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; cursor: pointer; }
+    .logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
     .logo .pa { color: var(--blue); }
     .logo .ct { color: var(--red); }
     .nav-right { display: flex; align-items: center; gap: 8px; }
-    .nav-ghost {
-      padding: 9px 16px; border-radius: 11px;
-      background: transparent; border: 1px solid var(--line2);
-      color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 700;
-      cursor: pointer; transition: all .18s;
+    .nav-badge {
+      padding: 9px 14px; border-radius: 11px;
+      background: rgba(128,176,248,.08); border: 1px solid rgba(128,176,248,.22);
+      color: var(--blue); font-family: inherit; font-size: 12px; font-weight: 700;
     }
-    .nav-ghost:hover { background: rgba(255,255,255,.04); color: #fff; }
     .nav-primary {
       padding: 10px 20px; border-radius: 11px;
       background: linear-gradient(135deg, var(--blue), #6F9FF1);
@@ -133,46 +88,49 @@
     }
     .nav-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(128,176,248,.32); }
 
+    /* ── UTILS ── */
+    .section-divider {
+      width: 100%; max-width: 1080px; margin: 0 auto; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(128,176,248,.15), rgba(248,120,136,.12), transparent);
+    }
+    .section-kicker { color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .section-title { font-size: clamp(26px, 3.5vw, 42px); font-weight: 900; letter-spacing: -1.2px; margin-bottom: 10px; }
+    .section-desc { color: var(--muted); font-size: 16px; line-height: 1.8; margin-bottom: 40px; max-width: 580px; }
+
     /* ── HERO ── */
+    .hero-wrap { position: relative; overflow: hidden; background: var(--bg2); }
+    .hero-bg { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+    .hero-svg { width:100%; height:100%; }
+    .shape.s1 { transform-origin: 860px 140px; animation: float1 7s ease-in-out infinite; }
+    .shape.s2 { transform-origin: 190px 380px; animation: float2 9s ease-in-out infinite; }
+    .shape.s3 { transform-origin: 960px 420px; animation: float3 6s ease-in-out infinite; }
+    .shape.s4 { transform-origin: 80px 100px; animation: float1 8s ease-in-out infinite 1s; }
+    .shape.s6 { animation: float2 11s ease-in-out infinite 2s; }
+    .shape.s7 { animation: float1 10s ease-in-out infinite 0.5s; }
+
     .hero {
       position: relative; overflow: hidden;
       padding: 96px 28px 80px;
       max-width: 1080px; margin: 0 auto;
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center;
-    }
-    .hero::before {
-      content: "";
-      position: absolute; top: -100px; left: -140px;
-      width: 640px; height: 640px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(128,176,248,.08), transparent 60%);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: "";
-      position: absolute; top: -80px; right: -120px;
-      width: 560px; height: 560px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(248,120,136,.07), transparent 58%);
-      pointer-events: none;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
 
     .dict-card {
       position: relative; z-index: 1;
       display: inline-flex; align-items: center; gap: 10px;
       padding: 9px 18px; border-radius: 12px;
-      border: 1px solid var(--line2);
-      background: rgba(255,255,255,.03);
-      margin-bottom: 36px;
-      white-space: nowrap;
+      border: 1px solid var(--line2); background: rgba(255,255,255,.03);
+      margin-bottom: 36px; white-space: nowrap;
+      animation: fadeUp .7s ease both .1s;
     }
-    .dict-word { font-size: 15px; font-weight: 900; letter-spacing: -0.5px; line-height: 1; }
+    .dict-word { font-size: 15px; font-weight: 900; letter-spacing: -0.5px; }
     .dict-word .pa { color: #80B0F8; }
     .dict-word .ct { color: #F87888; }
-    .dict-pron { color: var(--blue); font-size: 12px; font-weight: 600; line-height: 1; }
-    .dict-pos { color: var(--soft); font-size: 11px; font-style: italic; font-weight: 600; line-height: 1; }
-    .dict-meaning { color: var(--text); font-size: 13px; font-weight: 700; line-height: 1; }
-    .dict-divider { color: rgba(255,255,255,.15); font-size: 12px; line-height: 1; }
-    .dict-ex { color: var(--soft); font-size: 12px; font-weight: 500; line-height: 1; }
+    .dict-pron { color: var(--blue); font-size: 12px; font-weight: 600; }
+    .dict-pos { color: var(--soft); font-size: 11px; font-style: italic; font-weight: 600; }
+    .dict-meaning { color: var(--text); font-size: 13px; font-weight: 700; }
+    .dict-divider { color: rgba(255,255,255,.15); font-size: 12px; }
+    .dict-ex { color: var(--soft); font-size: 12px; font-weight: 500; }
 
     .eyebrow {
       position: relative; z-index: 1;
@@ -181,6 +139,7 @@
       border: 1px solid var(--line2); background: rgba(255,255,255,.03);
       color: var(--soft); font-size: 12px; font-weight: 700;
       letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 32px;
+      animation: fadeUp .7s ease both .25s;
     }
     .eyebrow-dot {
       width: 7px; height: 7px; border-radius: 50%;
@@ -188,30 +147,15 @@
       box-shadow: 0 0 10px rgba(128,176,248,.6);
     }
 
-    /* AI 배지 - 히어로 내 */
-    .ai-hero-badge {
-      position: relative; z-index: 1;
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 7px 16px; border-radius: 999px;
-      background: linear-gradient(135deg, rgba(94,255,160,.12), rgba(128,176,248,.10));
-      border: 1px solid rgba(94,255,160,.25);
-      color: var(--green); font-size: 12px; font-weight: 700;
-      letter-spacing: .6px; margin-bottom: 20px;
-    }
-    .ai-hero-badge::before {
-      content: "✦";
-      font-size: 10px;
-      animation: blink 2s ease-in-out infinite;
-    }
-
     .hero-title {
       position: relative; z-index: 1;
-      font-size: clamp(38px, 6vw, 78px);
-      font-weight: 900; line-height: 1.06; letter-spacing: -2.5px;
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 900; line-height: 1.08; letter-spacing: -2.5px;
       margin-bottom: 32px;
+      animation: fadeUp .7s ease both .4s;
     }
-    .hero-title .line1 { display: block; color: #fff; margin-bottom: 6px; }
-    .hero-title .line2 { display: block; color: #fff; margin-bottom: 6px; }
+    .hero-title .line1 { display: block; color: #fff; margin-bottom: 4px; }
+    .hero-title .line2 { display: block; color: #fff; margin-bottom: 4px; }
     .hero-title .line3 {
       display: block;
       background: linear-gradient(90deg, var(--blue) 0%, #C8DCFF 35%, #fff 52%, #FFD1D6 70%, var(--red) 100%);
@@ -220,65 +164,68 @@
 
     .hero-sub {
       position: relative; z-index: 1;
-      max-width: 620px; margin: 0 auto 50px;
+      max-width: 580px; margin: 0 auto 40px;
       color: var(--muted); font-size: 17px; line-height: 1.9;
+      animation: fadeUp .7s ease both .55s;
     }
     .hero-sub strong { color: #fff; font-weight: 700; }
-    .hero-sub .ai-highlight {
-      color: var(--green); font-weight: 700;
-    }
 
+    /* 3가지 행동 */
+    .three-steps {
+      position: relative; z-index: 1;
+      display: flex; gap: 12px; width: 100%; max-width: 680px;
+      margin-bottom: 44px;
+      animation: fadeUp .7s ease both .65s;
+    }
+    .three-step {
+      flex: 1; padding: 18px 16px; border-radius: 16px;
+      border: 1px solid var(--line2); background: rgba(255,255,255,.03);
+      text-align: center;
+    }
+    .three-step-num { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
+    .three-step-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 4px; }
+    .three-step-sub { font-size: 12px; color: var(--soft); line-height: 1.4; }
+
+    /* 예시 태그 */
     .examples-wrap {
       position: relative; z-index: 1;
-      width: 100%; max-width: 700px;
-      margin-bottom: 40px;
+      width: 100%; max-width: 700px; margin-bottom: 40px;
+      animation: fadeUp .7s ease both .7s;
     }
-    .examples-label {
-      color: var(--soft); font-size: 12px; font-weight: 700;
-      letter-spacing: 1.2px; text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    .examples-cloud {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-    }
+    .examples-label { color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px; }
+    .examples-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
     .ex-tag {
       padding: 10px 16px; border-radius: 999px;
       font-size: 13px; font-weight: 600; line-height: 1.4;
-      border: 1px solid var(--line2);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      cursor: default; transition: all .2s;
+      border: 1px solid var(--line2); background: rgba(255,255,255,.03);
+      color: var(--muted); cursor: default; transition: all .2s;
     }
     .ex-tag:hover { background: rgba(255,255,255,.05); color: #fff; border-color: rgba(255,255,255,.18); }
     .ex-tag.b { border-color: rgba(128,176,248,.2); color: rgba(128,176,248,.8); background: var(--blue-dim); }
     .ex-tag.r { border-color: rgba(248,120,136,.2); color: rgba(248,120,136,.8); background: var(--red-dim); }
 
-    /* ── 이슈 시작 카드 (AI 분석 추가) ── */
-    .start-card {
+    /* 사전 알림 카드 */
+    .notify-card {
       position: relative; z-index: 1;
-      width: 100%; max-width: 700px;
-      padding: 32px 32px 28px;
-      border-radius: 28px;
+      width: 100%; max-width: 680px;
+      padding: 32px 32px 28px; border-radius: 28px;
       background: linear-gradient(160deg, rgba(128,176,248,.10) 0%, rgba(255,255,255,.03) 60%);
       border: 1px solid rgba(128,176,248,.22);
       box-shadow: 0 28px 70px rgba(0,0,0,.34), 0 0 0 1px rgba(128,176,248,.07) inset;
+      animation: fadeUp .7s ease both .85s;
     }
-    .start-q { font-size: 19px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
-    .start-hint { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
-    .start-input-wrap { display: flex; gap: 10px; margin-bottom: 14px; }
-    .start-input {
+    .notify-title { font-size: 18px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
+    .notify-desc { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+    .notify-input-wrap { display: flex; gap: 10px; margin-bottom: 12px; }
+    .notify-input {
       flex: 1; height: 52px; border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.28); color: #fff;
+      border: 1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.28); color: #fff;
       padding: 0 18px; font-family: inherit; font-size: 15px;
       outline: none; transition: border-color .2s, box-shadow .2s;
     }
-    .start-input:focus {
-      border-color: rgba(128,176,248,.45);
-      box-shadow: 0 0 0 4px rgba(128,176,248,.10);
-    }
-    .start-input::placeholder { color: rgba(255,255,255,.26); }
-    .start-go {
+    .notify-input:focus { border-color: rgba(128,176,248,.45); box-shadow: 0 0 0 4px rgba(128,176,248,.10); }
+    .notify-input::placeholder { color: rgba(255,255,255,.26); }
+    .notify-btn {
       height: 52px; padding: 0 24px; border-radius: 14px;
       background: linear-gradient(135deg, var(--blue), #6F9FF1);
       color: #0E1618; font-family: inherit; font-size: 15px; font-weight: 900;
@@ -286,97 +233,23 @@
       box-shadow: 0 8px 24px rgba(128,176,248,.28);
       transition: transform .18s, box-shadow .18s;
     }
-    .start-go:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(128,176,248,.36); }
+    .notify-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(128,176,248,.36); }
+    .notify-note { color: var(--soft); font-size: 12px; line-height: 1.6; }
+    .notify-note span { color: var(--blue); font-weight: 700; }
 
-    /* AI 분석 미리보기 */
-    .ai-preview {
-      margin-top: 16px;
-      padding: 16px 18px;
-      border-radius: 14px;
-      background: rgba(94,255,160,.06);
-      border: 1px solid rgba(94,255,160,.18);
-    }
-    .ai-preview-label {
-      font-size: 11px; font-weight: 800; letter-spacing: 1px;
-      color: var(--green); text-transform: uppercase; margin-bottom: 10px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .ai-preview-label::before { content: "✦"; animation: blink 2s ease-in-out infinite; }
-    .ai-chips {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
-    .ai-chip {
-      padding: 5px 12px; border-radius: 999px;
-      font-size: 12px; font-weight: 600;
-      background: rgba(94,255,160,.08);
-      border: 1px solid rgba(94,255,160,.20);
-      color: rgba(94,255,160,.85);
-    }
-    .ai-chip.blue {
-      background: var(--blue-dim);
-      border-color: rgba(128,176,248,.22);
-      color: rgba(128,176,248,.9);
-    }
-    .start-note {
-      color: var(--soft); font-size: 12px; line-height: 1.6; margin-top: 14px;
-    }
-    .start-note span { color: var(--blue); font-weight: 700; }
-
-    /* ── Why Pact ── */
-    .how {
-      position: relative;
-      max-width: 1080px; margin: 0 auto;
-      padding: 80px 28px;
-    }
-    .how::before {
-      content: "";
-      position: absolute; top: 0; right: -80px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(248,120,136,.05) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .section-kicker {
-      color: var(--soft); font-size: 12px; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
-    }
-    .section-title {
-      font-size: clamp(26px, 3.5vw, 42px); font-weight: 900;
-      letter-spacing: -1.2px; margin-bottom: 10px;
-    }
-    .section-desc {
-      color: var(--muted); font-size: 16px; line-height: 1.8; margin-bottom: 40px;
-      max-width: 560px;
-    }
-
-    .compare {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-      margin-bottom: 40px;
-    }
-    .compare-col {
-      padding: 28px 26px; border-radius: 24px;
-      border: 1px solid var(--line);
-    }
-    .compare-col.before {
-      background: rgba(255,255,255,.02);
-      position: relative; overflow: hidden;
-    }
+    /* ── WHY PACT ── */
+    .how { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .compare-col { padding: 28px 26px; border-radius: 24px; border: 1px solid var(--line); }
+    .compare-col.before { background: rgba(255,255,255,.02); position: relative; overflow: hidden; }
     .compare-col.before::before {
-      content: "✕";
-      position: absolute; right: 20px; top: 20px;
-      font-size: 80px; font-weight: 900; opacity: .03; color: #fff;
-      pointer-events: none;
+      content: "✕"; position: absolute; right: 20px; top: 20px;
+      font-size: 80px; font-weight: 900; opacity: .03; color: #fff; pointer-events: none;
     }
     .compare-col.after {
       background: linear-gradient(160deg, rgba(128,176,248,.09), rgba(248,120,136,.06));
-      border-color: rgba(128,176,248,.22);
-      position: relative; overflow: hidden;
+      border-color: rgba(128,176,248,.22); position: relative; overflow: hidden;
       box-shadow: 0 4px 40px rgba(128,176,248,.08);
-    }
-    .compare-col.after::before {
-      content: "✓";
-      position: absolute; right: 20px; top: 16px;
-      font-size: 80px; font-weight: 900; opacity: .05; color: #80B0F8;
-      pointer-events: none;
     }
     .compare-badge {
       display: inline-block; padding: 5px 12px; border-radius: 999px;
@@ -386,210 +259,144 @@
     .compare-badge.b-badge { background: rgba(255,255,255,.07); color: var(--soft); }
     .compare-badge.a-badge { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(128,176,248,.2); }
     .compare-list { display: flex; flex-direction: column; gap: 12px; }
-    .compare-item {
-      display: flex; align-items: flex-start; gap: 10px;
-      color: var(--muted); font-size: 14px; line-height: 1.7;
-    }
+    .compare-item { display: flex; align-items: flex-start; gap: 10px; color: var(--muted); font-size: 14px; line-height: 1.7; }
     .compare-item .mark {
       flex: 0 0 18px; width: 18px; height: 18px; border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
       font-size: 10px; font-weight: 900; margin-top: 2px;
     }
-    .compare-item .mark.x { background: rgba(255,255,255,.06); color: var(--soft); }
-    .compare-item .mark.o { background: var(--blue-dim); color: var(--blue); }
-    .compare-item .mark.ai { background: var(--green-dim); color: var(--green); }
+    .mark.x { background: rgba(255,255,255,.06); color: var(--soft); }
+    .mark.o { background: var(--blue-dim); color: var(--blue); }
+    .mark.ai { background: var(--green-dim); color: var(--green); }
     .ai-tag-inline {
-      display: inline-block;
-      padding: 1px 7px; border-radius: 6px;
+      display: inline-block; padding: 1px 7px; border-radius: 6px;
       font-size: 10px; font-weight: 800;
-      background: var(--green-dim);
-      border: 1px solid rgba(94,255,160,.2);
-      color: var(--green); letter-spacing: .4px;
-      vertical-align: middle; margin-left: 4px;
+      background: var(--green-dim); border: 1px solid rgba(94,255,160,.2);
+      color: var(--green); letter-spacing: .4px; vertical-align: middle; margin-left: 4px;
     }
 
-    /* ── AI 기능 전용 섹션 ── */
-    .ai-section {
-      position: relative;
-      max-width: 1080px; margin: 0 auto;
-      padding: 80px 28px;
-    }
-    .ai-section::before {
-      content: "";
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 800px; height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(94,255,160,.2), transparent);
-      pointer-events: none;
-    }
-    .ai-section-header {
-      display: flex; align-items: center; gap: 14px; margin-bottom: 12px;
-    }
+    /* ── AI 엔진 ── */
+    .ai-section { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
     .ai-section-badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 6px 14px; border-radius: 999px;
-      background: var(--green-dim);
-      border: 1px solid rgba(94,255,160,.22);
+      background: var(--green-dim); border: 1px solid rgba(94,255,160,.22);
       color: var(--green); font-size: 11px; font-weight: 800;
-      letter-spacing: 1.2px; text-transform: uppercase;
+      letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px;
     }
-    .ai-engines {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
-      margin-top: 36px;
-    }
+    .ai-engines { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
     .ai-engine-card {
-      padding: 28px 26px; border-radius: 24px;
+      padding: 26px 24px; border-radius: 24px;
       background: linear-gradient(160deg, rgba(94,255,160,.05), rgba(128,176,248,.04));
       border: 1px solid rgba(94,255,160,.14);
       transition: transform .22s, border-color .22s, box-shadow .22s;
       position: relative; overflow: hidden;
     }
     .ai-engine-card::after {
-      content: "";
-      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--green), var(--blue));
       opacity: 0; transition: opacity .22s;
     }
-    .ai-engine-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(94,255,160,.28);
-      box-shadow: 0 12px 40px rgba(94,255,160,.08);
-    }
+    .ai-engine-card:hover { transform: translateY(-4px); border-color: rgba(94,255,160,.28); box-shadow: 0 12px 40px rgba(94,255,160,.08); }
     .ai-engine-card:hover::after { opacity: 1; }
-    .engine-num {
-      font-size: 11px; font-weight: 800; letter-spacing: 1.4px;
-      text-transform: uppercase; color: var(--green); margin-bottom: 12px;
-      display: flex; align-items: center; gap: 6px;
+    .engine-num { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+    .engine-num::before { content: "✦ "; font-size: 9px; }
+    .engine-status {
+      display: inline-block; margin-left: 6px;
+      padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700;
+      background: rgba(94,255,160,.10); border: 1px solid rgba(94,255,160,.2); color: var(--green);
     }
-    .engine-num::before { content: "✦"; font-size: 9px; }
-    .engine-name { font-size: 19px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 4px; }
-    .engine-en { font-size: 11px; color: var(--soft); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 14px; }
-    .engine-desc { color: var(--muted); font-size: 14px; line-height: 1.75; margin-bottom: 16px; }
-    .engine-example {
-      padding: 12px 14px; border-radius: 10px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.06);
-    }
-    .engine-example-label {
-      font-size: 10px; font-weight: 800; letter-spacing: .8px;
-      color: var(--soft); text-transform: uppercase; margin-bottom: 8px;
-    }
-    .engine-example-content {
-      font-size: 13px; color: var(--muted); line-height: 1.65;
-    }
+    .engine-status.soon { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.10); color: var(--soft); }
+    .engine-name { font-size: 18px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 4px; }
+    .engine-en { font-size: 11px; color: var(--soft); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 12px; }
+    .engine-desc { color: var(--muted); font-size: 13px; line-height: 1.75; margin-bottom: 14px; }
+    .engine-example { padding: 11px 13px; border-radius: 10px; background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.06); }
+    .engine-example-label { font-size: 10px; font-weight: 800; letter-spacing: .8px; color: var(--soft); text-transform: uppercase; margin-bottom: 7px; }
+    .engine-example-content { font-size: 12px; color: var(--muted); line-height: 1.65; }
     .engine-example-content .hi { color: var(--green); font-weight: 700; }
     .engine-example-content .hi-blue { color: var(--blue); font-weight: 700; }
-    .mvp-badge {
-      display: inline-block; margin-top: 14px;
-      padding: 4px 10px; border-radius: 7px;
-      font-size: 11px; font-weight: 700;
-      background: rgba(94,255,160,.10); border: 1px solid rgba(94,255,160,.2);
-      color: var(--green);
-    }
-    .mvp-badge.phase2 {
-      background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.10);
-      color: var(--soft);
-    }
 
-    /* ── 프로세스 ── */
-    .process {
-      position: relative;
-      max-width: 1080px; margin: 0 auto;
-      padding: 0 28px 100px;
+    /* ── 에스컬레이션 ── */
+    .escalation-section { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
+    .escalation-steps { display: flex; flex-direction: column; gap: 12px; margin-top: 36px; }
+    .esc-step {
+      display: flex; align-items: flex-start; gap: 20px;
+      padding: 24px 28px; border-radius: 20px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.02);
+      transition: border-color .2s;
     }
-    .process::before {
-      content: "";
-      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 400px;
-      background: radial-gradient(ellipse, rgba(128,176,248,.06) 0%, transparent 70%);
-      pointer-events: none;
+    .esc-step:hover { border-color: var(--line2); }
+    .esc-step.p1 { border-color: rgba(128,176,248,.22); background: rgba(128,176,248,.04); }
+    .esc-step.p2 { border-color: rgba(248,120,136,.22); background: rgba(248,120,136,.04); }
+    .esc-step.p3 { border-color: rgba(248,120,136,.14); background: rgba(248,120,136,.02); }
+    .esc-step.agree { border-color: rgba(94,255,160,.18); background: rgba(94,255,160,.03); }
+    .esc-badge {
+      flex-shrink: 0; padding: 6px 14px; border-radius: 10px;
+      font-size: 11px; font-weight: 800; letter-spacing: .6px;
+      text-transform: uppercase; white-space: nowrap; margin-top: 2px;
     }
-    .steps-wrap {
-      display: grid; grid-template-columns: repeat(6,1fr); gap: 12px;
+    .bd-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(128,176,248,.2); }
+    .bd-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,120,136,.2); }
+    .bd-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(94,255,160,.2); }
+    .esc-body { flex: 1; }
+    .esc-title { font-size: 18px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 6px; }
+    .esc-desc { color: var(--muted); font-size: 14px; line-height: 1.75; }
+    .esc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .esc-tag {
+      padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      background: rgba(255,255,255,.05); border: 1px solid var(--line2); color: var(--muted);
     }
-    .step-card {
-      padding: 20px 16px; border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border: 1px solid var(--line);
-      transition: transform .2s, border-color .2s;
-      position: relative; overflow: hidden;
-    }
-    .step-card::after {
-      content: "";
-      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-      opacity: 0; transition: opacity .22s;
-    }
-    .step-card:nth-child(1)::after,
-    .step-card:nth-child(2)::after { background: var(--blue); }
-    .step-card:nth-child(3)::after,
-    .step-card:nth-child(4)::after { background: linear-gradient(90deg, var(--blue), var(--red)); }
-    .step-card:nth-child(5)::after,
-    .step-card:nth-child(6)::after { background: var(--red); }
-    .step-card:hover { transform: translateY(-4px); border-color: var(--line2); }
-    .step-card:hover::after { opacity: 1; }
+    .esc-arrow { text-align: center; color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 4px 0; }
 
-    .step-icon { font-size: 24px; margin-bottom: 12px; display: block; filter: drop-shadow(0 0 8px rgba(128,176,248,.3)); }
-    .step-card:nth-child(4) .step-icon,
-    .step-card:nth-child(5) .step-icon,
-    .step-card:nth-child(6) .step-icon { filter: drop-shadow(0 0 8px rgba(248,120,136,.3)); }
-    .step-num { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--soft); margin-bottom: 14px; }
-    .step-name { font-size: 17px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 6px; }
-    .step-en { font-size: 11px; color: var(--soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-    .step-desc { color: var(--muted); font-size: 13px; line-height: 1.7; }
-    /* AI 연동 배지 on step card */
-    .step-ai {
-      display: inline-block; margin-top: 10px;
-      padding: 3px 8px; border-radius: 6px;
-      font-size: 10px; font-weight: 800; letter-spacing: .5px;
-      background: var(--green-dim); border: 1px solid rgba(94,255,160,.18);
-      color: var(--green);
+    /* ── 타깃 ── */
+    .target-section { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
+    .target-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
+    .target-card {
+      padding: 22px 20px; border-radius: 20px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.02);
+      transition: border-color .2s, transform .2s;
     }
+    .target-card:hover { border-color: var(--line2); transform: translateY(-3px); }
+    .target-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+    .target-name { font-size: 17px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 6px; }
+    .target-pop { font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+    .target-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
-    /* ── 하단 CTA ── */
-    .bottom-cta {
-      max-width: 1080px; margin: 0 auto;
-      padding: 0 28px 100px;
-    }
+    /* ── CTA ── */
+    .bottom-cta { max-width: 1080px; margin: 0 auto; padding: 0 28px 100px; }
     .cta-box {
-      position: relative; overflow: hidden;
-      padding: 56px 40px;
-      border-radius: 32px;
-      background:
-        radial-gradient(circle at 15% 50%, rgba(128,176,248,.12), transparent 40%),
-        radial-gradient(circle at 85% 50%, rgba(248,120,136,.12), transparent 38%),
-        var(--surface);
-      border: 1px solid var(--line2);
-      box-shadow: 0 24px 64px rgba(0,0,0,.28);
+      position: relative; overflow: hidden; padding: 56px 40px; border-radius: 32px;
+      background: radial-gradient(circle at 15% 50%, rgba(128,176,248,.12), transparent 40%),
+                  radial-gradient(circle at 85% 50%, rgba(248,120,136,.12), transparent 38%),
+                  var(--surface);
+      border: 1px solid var(--line2); box-shadow: 0 24px 64px rgba(0,0,0,.28);
       display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px;
     }
     .cta-box::before {
-      content: "";
-      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      content: ""; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
       width: 600px; height: 300px;
       background: radial-gradient(ellipse, rgba(128,176,248,.10) 0%, transparent 65%);
-      pointer-events: none;
-      animation: pulse-glow 4s ease-in-out infinite;
-    }
-    .cta-box::after {
-      content: "";
-      position: absolute; bottom: -30px; right: -30px;
-      width: 180px; height: 180px; border-radius: 50%;
-      border: 1px solid rgba(248,120,136,.10);
-      pointer-events: none;
+      pointer-events: none; animation: pulse-glow 4s ease-in-out infinite;
     }
     .cta-title { font-size: clamp(24px, 3vw, 38px); font-weight: 900; letter-spacing: -1.2px; line-height: 1.15; position: relative; z-index: 1; }
-    .cta-title .grad {
-      background: linear-gradient(90deg, var(--blue), var(--red));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
+    .cta-title .grad { background: linear-gradient(90deg, var(--blue), var(--red)); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .cta-desc { color: var(--muted); font-size: 16px; line-height: 1.85; max-width: 460px; position: relative; z-index: 1; }
+    .cta-input-wrap { display: flex; gap: 10px; max-width: 480px; width: 100%; position: relative; z-index: 1; }
+    .cta-input {
+      flex: 1; height: 52px; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.32); color: #fff;
+      padding: 0 18px; font-family: inherit; font-size: 15px;
+      outline: none; transition: border-color .2s;
+    }
+    .cta-input:focus { border-color: rgba(128,176,248,.45); }
+    .cta-input::placeholder { color: rgba(255,255,255,.26); }
     .cta-btn {
-      position: relative; z-index: 1;
-      margin-top: 8px; padding: 17px 40px; border-radius: 16px;
+      height: 52px; padding: 0 28px; border-radius: 14px;
       background: linear-gradient(135deg, var(--blue), #6F9FF1);
-      color: #0E1618; font-family: inherit; font-size: 16px; font-weight: 900;
-      border: none; cursor: pointer;
+      color: #0E1618; font-family: inherit; font-size: 15px; font-weight: 900;
+      border: none; cursor: pointer; white-space: nowrap;
       box-shadow: 0 12px 32px rgba(128,176,248,.28);
-      transition: transform .18s, box-shadow .18s;
+      transition: transform .18s, box-shadow .18s; position: relative; z-index: 1;
     }
     .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(128,176,248,.36); }
     .cta-sub { color: var(--soft); font-size: 13px; position: relative; z-index: 1; }
@@ -608,144 +415,32 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
       .compare { grid-template-columns: 1fr; }
-      .steps-wrap { grid-template-columns: repeat(3,1fr); }
-      .ai-engines { grid-template-columns: 1fr; }
+      .ai-engines { grid-template-columns: repeat(2, 1fr); }
+      .target-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-steps { flex-direction: column; max-width: 400px; }
     }
     @media (max-width: 600px) {
-      .mo-br { display: inline; }
-      .pc-sep { display: none; }
-
-      /* 공지 바 */
-      .announce-bar { font-size: 12px; gap: 6px; padding: 10px 16px; flex-direction: column; }
-      .announce-link { margin-top: 2px; }
-
-      /* 네비 */
       .nav-inner { padding: 0 16px; min-height: 60px; }
       .nav-badge { display: none; }
-      .nav-primary { padding: 11px 18px; font-size: 14px; border-radius: 12px; }
-
-      /* 히어로 전체 */
-      .hero { padding: 48px 20px 60px; gap: 0; }
-
-      /* 사전 카드 - 핵심 정보만 남기고 깔끔하게 */
-      .dict-card {
-        white-space: normal;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 6px 10px;
-        text-align: center;
-        padding: 12px 20px;
-        margin-bottom: 24px;
-        width: 100%;
-        max-width: 340px;
-      }
-      .dict-divider, .dict-ex, .dict-pos { display: none; }
-      .dict-word { font-size: 17px; }
-      .dict-pron { font-size: 13px; }
-      .dict-meaning { font-size: 14px; }
-
-      /* AI 배지 - 두 줄 방지 */
-      .ai-hero-badge {
-        font-size: 12px;
-        padding: 8px 16px;
-        text-align: center;
-        line-height: 1.5;
-        max-width: 320px;
-        margin-bottom: 16px;
-      }
-
-      /* Eyebrow */
-      .eyebrow {
-        font-size: 12px;
-        letter-spacing: 0.6px;
-        padding: 8px 16px;
-        margin-bottom: 20px;
-        text-align: center;
-      }
-
-      /* 히어로 타이틀 - 핵심 개선: 충분히 크게 */
-      .hero-title {
-        font-size: 36px;
-        letter-spacing: -1.5px;
-        line-height: 1.18;
-        margin-bottom: 24px;
-      }
-
-      /* 히어로 설명 */
-      .hero-sub {
-        font-size: 15px;
-        line-height: 1.9;
-        margin-bottom: 36px;
-      }
-
-      /* 예시 태그 */
-      .examples-wrap { margin-bottom: 28px; }
-      .examples-label { font-size: 12px; margin-bottom: 12px; }
-      .ex-tag { font-size: 13px; padding: 9px 14px; }
-
-      /* 이슈 시작 카드 */
-      .start-card { padding: 24px 20px; border-radius: 20px; }
-      .start-q { font-size: 17px; margin-bottom: 8px; }
-      .start-hint { font-size: 14px; margin-bottom: 16px; }
-      .start-input-wrap { flex-direction: column; gap: 10px; }
-      .start-go { width: 100%; height: 50px; font-size: 15px; border-radius: 13px; }
-      .start-input { height: 50px; font-size: 15px; border-radius: 13px; }
-      .ai-preview { padding: 14px 16px; }
-      .ai-preview-label { font-size: 12px; margin-bottom: 10px; }
-      .ai-chip { font-size: 12px; padding: 6px 12px; }
-      .start-note { font-size: 13px; line-height: 1.7; }
-
-      /* Why Pact 섹션 */
-      .how { padding: 60px 20px; }
-      .section-kicker { font-size: 12px; margin-bottom: 8px; }
-      .section-title { font-size: 28px; letter-spacing: -0.8px; margin-bottom: 10px; }
-      .section-desc { font-size: 15px; line-height: 1.75; margin-bottom: 32px; }
-      .compare { gap: 12px; }
-      .compare-col { padding: 22px 18px; border-radius: 18px; }
-      .compare-item { font-size: 14px; gap: 10px; }
-      .compare-badge { font-size: 11px; margin-bottom: 16px; }
-
-      /* AI 엔진 섹션 */
-      .ai-section { padding: 60px 20px; }
-      .ai-section-badge { font-size: 11px; }
-      .ai-engine-card { padding: 22px 20px; border-radius: 20px; }
-      .engine-num { font-size: 11px; }
-      .engine-name { font-size: 18px; }
-      .engine-en { font-size: 11px; margin-bottom: 12px; }
-      .engine-desc { font-size: 14px; line-height: 1.75; }
-      .engine-example { padding: 12px 14px; }
-      .engine-example-label { font-size: 11px; }
-      .engine-example-content { font-size: 13px; line-height: 1.7; }
-
-      /* 프로세스 섹션 */
-      .process { padding: 0 20px 80px; }
-      .steps-wrap { grid-template-columns: 1fr 1fr; gap: 12px; }
-      .step-card { padding: 18px 14px; border-radius: 18px; }
-      .step-icon { font-size: 22px; margin-bottom: 10px; }
-      .step-num { font-size: 10px; margin-bottom: 10px; }
-      .step-name { font-size: 15px; margin-bottom: 6px; }
-      .step-en { font-size: 10px; margin-bottom: 8px; }
-      .step-desc { font-size: 13px; line-height: 1.65; }
-      .step-desc { font-size: 12px; }
+      .nav-primary { padding: 9px 14px; font-size: 12px; }
+      .hero { padding: 52px 20px 56px; }
+      .dict-card { white-space: normal; flex-wrap: wrap; justify-content: center; gap: 6px 8px; }
+      .dict-divider, .dict-ex { display: none; }
+      .hero-title { font-size: clamp(28px, 8vw, 42px); letter-spacing: -1.5px; }
+      .hero-sub { font-size: 14px; }
+      .notify-card { padding: 22px 18px; }
+      .notify-input-wrap { flex-direction: column; }
+      .notify-btn { width: 100%; height: 48px; }
+      .how, .ai-section, .escalation-section, .target-section { padding: 60px 20px; }
+      .section-title { font-size: clamp(22px, 6vw, 32px); }
+      .ai-engines { grid-template-columns: 1fr; }
+      .target-grid { grid-template-columns: 1fr; }
+      .esc-step { flex-direction: column; gap: 12px; padding: 20px; }
       .bottom-cta { padding: 0 20px 80px; }
-      .cta-box { padding: 40px 24px; border-radius: 24px; gap: 14px; }
-      /* 하단 CTA */
-      .bottom-cta { padding: 0 20px 80px; }
-      .cta-box { padding: 40px 24px; border-radius: 24px; gap: 14px; }
-      .cta-title { font-size: 26px; letter-spacing: -0.8px; line-height: 1.3; }
-      .cta-desc { font-size: 15px; line-height: 1.8; }
-      .cta-btn { padding: 16px 32px; font-size: 16px; width: 100%; border-radius: 14px; }
-      .cta-sub { font-size: 13px; }
-
-      /* 푸터 */
+      .cta-box { padding: 40px 20px; }
+      .cta-input-wrap { flex-direction: column; }
+      .cta-btn { width: 100%; }
       .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
-    }
-
-    /* 아주 작은 폰 (iPhone SE 등 375px 이하) */
-    @media (max-width: 380px) {
-      .hero-title { font-size: 32px; }
-      .steps-wrap { grid-template-columns: 1fr; }
-      .ai-hero-badge { font-size: 11px; }
     }
   </style>
 </head>
@@ -754,8 +449,7 @@
   <!-- ANNOUNCEMENT BAR -->
   <div class="announce-bar">
     <span class="announce-dot"></span>
-    <span class="announce-text">PACT는 현재 출시 준비 중입니다 — 2026년 4월 출시 예정</span>
-    <a class="announce-link" href="#">사전 알림 신청하기 →</a>
+    <span class="announce-text">PACT 출시 준비 중 — 2026년 4월 정식 출시 예정</span>
   </div>
 
   <!-- NAV -->
@@ -764,176 +458,131 @@
       <div class="logo"><span class="pa">pa</span><span class="ct">ct</span></div>
       <div class="nav-right">
         <span class="nav-badge">🚀 2026년 4월 출시 예정</span>
-        <button class="nav-primary">알림 신청하기</button>
+        <button class="nav-primary" onclick="document.getElementById('notify').scrollIntoView({behavior:'smooth'})">사전 알림 신청</button>
       </div>
     </div>
   </nav>
 
-  <!-- HERO wrapper -->
-  <div style="position:relative; overflow:hidden; background: var(--bg2);">
-  <div class="hero-bg" aria-hidden="true">
-    <svg class="hero-svg" viewBox="0 0 1080 600" preserveAspectRatio="xMidYMid slice">
-      <circle cx="180" cy="200" r="320" fill="url(#glow-blue)" opacity="0.18"/>
-      <circle cx="900" cy="160" r="260" fill="url(#glow-red)" opacity="0.14"/>
-      <polygon class="shape s1" points="860,80 920,140 860,200 800,140" fill="none" stroke="rgba(128,176,248,0.18)" stroke-width="1.5"/>
-      <polygon class="shape s2" points="140,380 190,320 240,380 190,440" fill="none" stroke="rgba(248,120,136,0.16)" stroke-width="1.5"/>
-      <circle class="shape s3" cx="960" cy="420" r="40" fill="none" stroke="rgba(128,176,248,0.12)" stroke-width="1.5"/>
-      <circle class="shape s4" cx="80" cy="100" r="24" fill="none" stroke="rgba(248,120,136,0.14)" stroke-width="1.5"/>
-      <line class="shape s5" x1="700" y1="40" x2="760" y2="100" stroke="rgba(128,176,248,0.15)" stroke-width="1"/>
-      <line class="shape s5" x1="760" y1="40" x2="700" y2="100" stroke="rgba(128,176,248,0.15)" stroke-width="1"/>
-      <rect class="shape s6" x="50" y="300" width="30" height="30" rx="6" fill="none" stroke="rgba(128,176,248,0.10)" stroke-width="1.5" transform="rotate(20 65 315)"/>
-      <rect class="shape s7" x="1010" y="260" width="22" height="22" rx="4" fill="none" stroke="rgba(248,120,136,0.12)" stroke-width="1.5" transform="rotate(-15 1021 271)"/>
-      <circle cx="540" cy="300" r="380" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1" stroke-dasharray="6 14"/>
-      <circle cx="540" cy="300" r="260" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4 10"/>
-      <defs>
-        <radialGradient id="glow-blue" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#80B0F8"/>
-          <stop offset="100%" stop-color="#80B0F8" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="glow-red" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#F87888"/>
-          <stop offset="100%" stop-color="#F87888" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-    </svg>
+  <!-- HERO -->
+  <div class="hero-wrap">
+    <div class="hero-bg" aria-hidden="true">
+      <svg class="hero-svg" viewBox="0 0 1080 600" preserveAspectRatio="xMidYMid slice">
+        <circle cx="180" cy="200" r="320" fill="url(#gb)" opacity="0.18"/>
+        <circle cx="900" cy="160" r="260" fill="url(#gr)" opacity="0.14"/>
+        <polygon class="shape s1" points="860,80 920,140 860,200 800,140" fill="none" stroke="rgba(128,176,248,0.18)" stroke-width="1.5"/>
+        <polygon class="shape s2" points="140,380 190,320 240,380 190,440" fill="none" stroke="rgba(248,120,136,0.16)" stroke-width="1.5"/>
+        <circle class="shape s3" cx="960" cy="420" r="40" fill="none" stroke="rgba(128,176,248,0.12)" stroke-width="1.5"/>
+        <circle class="shape s4" cx="80" cy="100" r="24" fill="none" stroke="rgba(248,120,136,0.14)" stroke-width="1.5"/>
+        <rect class="shape s6" x="50" y="300" width="30" height="30" rx="6" fill="none" stroke="rgba(128,176,248,0.10)" stroke-width="1.5" transform="rotate(20 65 315)"/>
+        <rect class="shape s7" x="1010" y="260" width="22" height="22" rx="4" fill="none" stroke="rgba(248,120,136,0.12)" stroke-width="1.5" transform="rotate(-15 1021 271)"/>
+        <circle cx="540" cy="300" r="380" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1" stroke-dasharray="6 14"/>
+        <circle cx="540" cy="300" r="260" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4 10"/>
+        <defs>
+          <radialGradient id="gb" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#80B0F8"/><stop offset="100%" stop-color="#80B0F8" stop-opacity="0"/></radialGradient>
+          <radialGradient id="gr" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F87888"/><stop offset="100%" stop-color="#F87888" stop-opacity="0"/></radialGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <section class="hero">
+      <div class="dict-card">
+        <span class="dict-word"><span class="pa">pa</span><span class="ct">ct</span></span>
+        <span class="dict-pron">[pækt]</span>
+        <span class="dict-pos">n.</span>
+        <span class="dict-meaning">협약 · 합의 · 조약</span>
+        <span class="dict-divider">|</span>
+        <span class="dict-ex">"make a pact" — 합의를 맺다</span>
+      </div>
+
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        AI 기반 집단 협상 에이전트 플랫폼
+      </div>
+
+      <h1 class="hero-title">
+        <span class="line1">억울한 것을 털어놓으면,</span>
+        <span class="line2">AI가 분해하고, 전략 짜고,</span>
+        <span class="line3">해결까지 끝냅니다.</span>
+      </h1>
+
+      <p class="hero-sub">
+        법 지식도, 협상 경험도 없어도 괜찮아요.<br>
+        <strong>당신이 할 일은 딱 세 가지입니다.</strong>
+      </p>
+
+      <div class="three-steps">
+        <div class="three-step">
+          <div class="three-step-num">01</div>
+          <div class="three-step-text">억울한 것을 입력한다</div>
+          <div class="three-step-sub">AI가 즉시 분석합니다</div>
+        </div>
+        <div class="three-step">
+          <div class="three-step-num">02</div>
+          <div class="three-step-text">같은 처지의 사람들을 모은다</div>
+          <div class="three-step-sub">링크 하나로 집단이 됩니다</div>
+        </div>
+        <div class="three-step">
+          <div class="three-step-num">03</div>
+          <div class="three-step-text">합의에 동의하거나 거부한다</div>
+          <div class="three-step-sub">나머지는 AI가 실행합니다</div>
+        </div>
+      </div>
+
+      <div class="examples-wrap">
+        <div class="examples-label">이런 것들을 해결할 수 있어요</div>
+        <div class="examples-cloud">
+          <span class="ex-tag b">포괄임금제로 야근을 공짜로 시켜요</span>
+          <span class="ex-tag r">상사 폭언인데 신고해도 아무것도 안 바뀌어요</span>
+          <span class="ex-tag b">층간소음이 1년째 방치됩니다</span>
+          <span class="ex-tag r">월급을 이유 없이 늦게 줘요</span>
+          <span class="ex-tag">관리비 내역 공개를 거부해요</span>
+          <span class="ex-tag b">하자보수 요청을 수개월째 묵살해요</span>
+          <span class="ex-tag r">알바 근로계약서를 안 써줘요</span>
+          <span class="ex-tag">본사의 불공정 계약을 강요받아요</span>
+        </div>
+      </div>
+
+      <!-- 사전 알림 카드 -->
+      <div class="notify-card" id="notify">
+        <div class="notify-title">출시 알림 신청하기</div>
+        <div class="notify-desc">2026년 4월 정식 출시 예정입니다. 이메일을 남겨주시면 출시 소식을 가장 먼저 전달해 드립니다.</div>
+        <div class="notify-input-wrap">
+          <input class="notify-input" type="email" placeholder="이메일 주소를 입력하세요" />
+          <button class="notify-btn">알림 신청 →</button>
+        </div>
+        <div class="notify-note">
+          <span>공식 문서 전달 전까지는 완전 무료입니다.</span> 스팸 메일은 보내지 않아요.
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="dict-card">
-      <span class="dict-word"><span class="pa">pa</span><span class="ct">ct</span></span>
-      <span class="dict-pron">[pækt]</span>
-      <span class="dict-pos">n.</span>
-      <span class="dict-meaning">협약 · 합의 · 조약</span>
-      <span class="dict-divider">|</span>
-      <span class="dict-ex">"make a pact" — 합의를 맺다</span>
-    </div>
-
-    <!-- AI 배지 (신규) -->
-    <div class="ai-hero-badge">AI 기반 집단 협상 플랫폼<span class="mo-br"><br></span><span class="pc-sep"> · </span>AI-Powered Collective Negotiation</div>
-
-    <div class="eyebrow">
-      <span class="eyebrow-dot"></span>
-      불합리함을 혼자 참지 않아도 됩니다
-    </div>
-
-    <h1 class="hero-title">
-      <span class="line1">혼자서는 바꿀 수<br>없었던 것,</span>
-      <span class="line2">같은 생각을 가진<br>사람들과</span>
-      <span class="line3">함께 바꿔나가세요.</span>
-    </h1>
-
-    <p class="hero-sub">
-      크든 작든 상관없어요.<br>
-      <strong>불합리하다고 느끼지만 혼자서는 어떻게 할 수 없었던 것들.</strong><br>
-      동의하는 사람들이 모이면, PACT의 <span class="ai-highlight">AI가 이슈를 분석하고</span> 협상 문서를 만들어<br>
-      실제 합의까지 이끌어 드립니다.
-    </p>
-
-    <!-- 공감 예시 태그 -->
-    <div class="examples-wrap">
-      <div class="examples-label">이런 것들도 시작할 수 있어요</div>
-      <div class="examples-cloud">
-        <span class="ex-tag r">상사한테 폭언을 들었는데 신고해도 아무것도 안 바뀌어요</span>
-        <span class="ex-tag b">포괄임금제로 야근을 공짜로 시켜요</span>
-        <span class="ex-tag r">윗집 층간소음이 1년째 해결이 안 돼요</span>
-        <span class="ex-tag b">월급을 매번 이유 없이 늦게 줘요</span>
-        <span class="ex-tag">관리비 세부 내역을 요청해도 공개를 거부해요</span>
-        <span class="ex-tag r">퇴근 후에도 카카오톡으로 업무 지시가 계속 와요</span>
-        <span class="ex-tag b">중고거래 사기를 당했는데 플랫폼이 나 몰라라 해요</span>
-        <span class="ex-tag">하자보수 요청을 수개월째 묵살해요</span>
-        <span class="ex-tag r">아파트 지하주차장을 특정 차량이 장기 점령해요</span>
-        <span class="ex-tag b">알바 근로계약서를 안 써줘요</span>
-        <span class="ex-tag">택시 기사가 불친절하고 일부러 돌아가요</span>
-        <span class="ex-tag r">입주민 동의도 없이 관리소가 공사를 강행해요</span>
-      </div>
-    </div>
-
-    <!-- 이슈 시작 카드 (AI 분석 미리보기 추가) -->
-    <div class="start-card">
-      <div class="start-q">어떤 문제를 해결하고 싶으신가요?</div>
-      <div class="start-hint">간단히 입력하면 AI가 바로 분석해 드려요. 거창하지 않아도 괜찮습니다.</div>
-      <div class="start-input-wrap">
-        <input class="start-input" type="text" placeholder="예: 포괄임금제 야근 강요, 층간소음 1년째 방치..." />
-        <button class="start-go">AI 분석 시작 →</button>
-      </div>
-      <!-- AI 분석 결과 미리보기 (시각적 예시) -->
-      <div class="ai-preview">
-        <div class="ai-preview-label">AI 분석 결과 예시</div>
-        <div class="ai-chips">
-          <span class="ai-chip">📌 노동 문제</span>
-          <span class="ai-chip">⚖️ 근로기준법 제56조</span>
-          <span class="ai-chip blue">📄 협상 요청서 자동 생성</span>
-          <span class="ai-chip blue">🎯 포괄임금제 폐지 요구 추천</span>
-          <span class="ai-chip blue">📋 초과근로수당 지급 요구 추천</span>
-        </div>
-      </div>
-      <div class="start-note">
-        이슈를 등록하면 <span>AI가 자동 분석 후 공유 링크를 생성</span>합니다.<br class="mo-br">
-        링크를 공유해 같은 생각의 사람들을 모아보세요.
-      </div>
-    </div>
-  </section>
-  </div><!-- /hero wrapper -->
-
   <div class="section-divider"></div>
 
-  <!-- Why Pact -->
+  <!-- WHY PACT -->
   <section class="how">
     <div class="section-kicker">Why Pact</div>
-    <div class="section-title">청원에서 끝나지 않습니다</div>
-    <div class="section-desc">서명과 청원만으로는 실제로 바뀌는 게 없었어요. PACT는 AI로 협상 구조를 설계하고, 합의까지 이어지는 흐름을 만들었습니다.</div>
-
+    <div class="section-title">분석 도구가 아닌, 실행 에이전트입니다</div>
+    <div class="section-desc">기존 청원·서명 플랫폼은 목소리를 모으는 데서 끝납니다. PACT의 AI는 문제를 받아 전략을 세우고, 문서를 만들고, 채널에 발송하고, 무응답이면 다음 단계를 자동으로 실행합니다.</div>
     <div class="compare">
       <div class="compare-col before">
-        <span class="compare-badge b-badge">지금까지</span>
+        <span class="compare-badge b-badge">기존 방식</span>
         <div class="compare-list">
-          <div class="compare-item">
-            <span class="mark x">✕</span>
-            <span>혼자 항의해봐야 "검토하겠다"는 말만 돌아와요</span>
-          </div>
-          <div class="compare-item">
-            <span class="mark x">✕</span>
-            <span>같은 처지인데도 각자 따로 당하고 있어요</span>
-          </div>
-          <div class="compare-item">
-            <span class="mark x">✕</span>
-            <span>청원·서명까지 했는데 실제로 달라진 건 없어요</span>
-          </div>
-          <div class="compare-item">
-            <span class="mark x">✕</span>
-            <span>우리끼리 모였는데 대표가 멋대로 합의해버렸어요</span>
-          </div>
-          <div class="compare-item">
-            <span class="mark x">✕</span>
-            <span>법 지식이 없어서 어떻게 해야 할지 모르겠어요</span>
-          </div>
+          <div class="compare-item"><span class="mark x">✕</span><span>혼자 항의해봐야 "검토하겠다"는 말만 돌아옵니다</span></div>
+          <div class="compare-item"><span class="mark x">✕</span><span>청원·서명까지 해도 상대방은 그냥 무시합니다</span></div>
+          <div class="compare-item"><span class="mark x">✕</span><span>한 채널에 집중하면 상대방은 그 채널만 막으면 그만입니다</span></div>
+          <div class="compare-item"><span class="mark x">✕</span><span>법 지식이 없으면 어디에 어떻게 신고해야 할지 모릅니다</span></div>
+          <div class="compare-item"><span class="mark x">✕</span><span>대표자가 멋대로 합의해버리는 위험이 존재합니다</span></div>
         </div>
       </div>
-
       <div class="compare-col after">
-        <span class="compare-badge a-badge">PACT와 함께라면</span>
+        <span class="compare-badge a-badge">PACT AI 에이전트</span>
         <div class="compare-list">
-          <div class="compare-item">
-            <span class="mark o">✓</span>
-            <span>같은 문제를 겪는 사람들이 모여 무시할 수 없는 목소리가 됩니다</span>
-          </div>
-          <div class="compare-item">
-            <span class="mark ai">✦</span>
-            <span>AI가 문제를 분석하고 쟁점·관련 법령·요구사항 초안을 자동으로 정리해 드려요<span class="ai-tag-inline">AI</span></span>
-          </div>
-          <div class="compare-item">
-            <span class="mark ai">✦</span>
-            <span>집단 의견을 AI가 분석해 핵심 요구사항을 순위별로 도출합니다<span class="ai-tag-inline">AI</span></span>
-          </div>
-          <div class="compare-item">
-            <span class="mark ai">✦</span>
-            <span>협상 요청서·공식 문서를 AI가 자동 생성 — 법 지식 없어도 됩니다<span class="ai-tag-inline">AI</span></span>
-          </div>
-          <div class="compare-item">
-            <span class="mark o">✓</span>
-            <span>참여자 과반수 동의 없이는 누구도 임의로 합의할 수 없어요</span>
-          </div>
+          <div class="compare-item"><span class="mark ai">✦</span><span>복합 문제를 법령 레이어별로 분해 — 관할 기관·채널을 자동 설계<span class="ai-tag-inline">AI</span></span></div>
+          <div class="compare-item"><span class="mark ai">✦</span><span>1단계 공식 통보 → 무응답 시 전 채널 동시 압박 → 법적 조치 자동 실행<span class="ai-tag-inline">AI</span></span></div>
+          <div class="compare-item"><span class="mark ai">✦</span><span>기관 민원 + 국회의원 + 언론 + 공개 — 모든 방향이 동시에 터지는 구조<span class="ai-tag-inline">AI</span></span></div>
+          <div class="compare-item"><span class="mark o">✓</span><span>법 지식 없어도 됩니다. AI가 채널별 맞춤 문서를 자동 생성합니다</span></div>
+          <div class="compare-item"><span class="mark o">✓</span><span>참여자 과반수 동의 없이는 누구도 임의로 합의할 수 없습니다</span></div>
         </div>
       </div>
     </div>
@@ -941,78 +590,93 @@
 
   <div class="section-divider"></div>
 
-  <!-- ── AI 기능 전용 섹션 (신규) ── -->
+  <!-- AI 엔진 -->
   <section class="ai-section">
-    <div class="ai-section-header">
-      <span class="ai-section-badge">✦ AI Engine</span>
-    </div>
-    <div class="section-title">PACT의 AI, 이렇게 도와드립니다</div>
-    <div class="section-desc">법 지식도, 협상 경험도 없어도 괜찮아요. PACT의 AI 엔진 4종이 처음부터 끝까지 함께합니다.</div>
-
+    <div class="ai-section-badge">✦ AI Agent Engine</div>
+    <div class="section-title">PACT AI 에이전트, 6개 엔진으로 작동합니다</div>
+    <div class="section-desc">목표를 받으면 계획을 세우고, 문서를 만들고, 발송하고, 무응답이면 다음 단계를 자동 실행합니다.</div>
     <div class="ai-engines">
-      <!-- 엔진 1 -->
       <div class="ai-engine-card">
-        <div class="engine-num">Engine 01</div>
-        <div class="engine-name">AI 이슈 구조화</div>
-        <div class="engine-en">Issue Structuring Engine</div>
-        <div class="engine-desc">입력한 문제를 AI가 즉시 분석해 협상 가능한 구조로 변환합니다. 문제 유형 분류, 상대방 분석, 관련 법령 탐색, 요구사항 초안까지 자동으로 제안합니다.</div>
+        <div class="engine-num">Engine 01 <span class="engine-status">✅ MVP 구현</span></div>
+        <div class="engine-name">복합 이슈 분해</div>
+        <div class="engine-en">Issue Decomposition</div>
+        <div class="engine-desc">막연한 문제를 AI가 법령 레이어별로 자동 분해합니다. 단일·복합 이슈 모두 처리합니다.</div>
         <div class="engine-example">
-          <div class="engine-example-label">분석 예시</div>
+          <div class="engine-example-label">분해 예시</div>
           <div class="engine-example-content">
-            입력: "포괄임금제로 야근을 공짜로 시켜요"<br>
-            → <span class="hi">문제 유형:</span> 노동 문제<br>
-            → <span class="hi">관련 법령:</span> 근로기준법 제56조<br>
-            → <span class="hi-blue">추천 요구사항:</span> 포괄임금제 폐지 / 초과근로수당 지급
+            "포괄임금제 야근 + 폭언 + 안전장비 미지급"<br>
+            → <span class="hi">①</span> 근로기준법 제56조<br>
+            → <span class="hi">②</span> 직장내괴롭힘방지법<br>
+            → <span class="hi">③</span> 산업안전보건법
           </div>
         </div>
       </div>
-
-      <!-- 엔진 2 -->
       <div class="ai-engine-card">
-        <div class="engine-num">Engine 02</div>
-        <div class="engine-name">AI 집단 의견 분석</div>
-        <div class="engine-en">Collective Opinion Engine</div>
-        <div class="engine-desc">수백 명의 참여자 의견을 AI가 자동으로 분류하고 핵심 요구사항을 도출합니다. 집단의 목소리를 놓치지 않고 우선순위를 정확하게 정리합니다.</div>
+        <div class="engine-num">Engine 02 <span class="engine-status">✅ MVP 구현</span></div>
+        <div class="engine-name">동적 채널 매핑</div>
+        <div class="engine-en">Dynamic Channel Mapping</div>
+        <div class="engine-desc">이슈 분석 결과를 바탕으로 관할 기관·국회의원·언론사를 실시간으로 조합합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">채널 조합 예시</div>
+          <div class="engine-example-content">
+            → <span class="hi-blue">고용노동부</span> + <span class="hi-blue">산업안전보건공단</span><br>
+            → <span class="hi-blue">환경노동위 지역구 의원</span><br>
+            → <span class="hi-blue">노동 전문 언론 3곳</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 03 <span class="engine-status">✅ MVP 구현</span></div>
+        <div class="engine-name">채널별 문서 생성</div>
+        <div class="engine-en">Document Generation</div>
+        <div class="engine-desc">협상 요청서·민원서·보도자료·법적 서류를 각 채널 형식에 맞게 자동 생성합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">생성 문서</div>
+          <div class="engine-example-content">
+            <span class="hi-blue">협상 요청서</span> / <span class="hi-blue">기관 민원서</span><br>
+            <span class="hi-blue">언론 보도자료</span> / <span class="hi">내용증명 초안</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 04 <span class="engine-status soon">⚠️ 단계적 적용</span></div>
+        <div class="engine-name">에스컬레이션 자동화</div>
+        <div class="engine-en">Escalation Automation</div>
+        <div class="engine-desc">무응답 감지 시 다음 단계를 자동 트리거합니다. 1단계 → 2단계 → 3단계 자동 실행.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">자동 실행 흐름</div>
+          <div class="engine-example-content">
+            <span class="hi">1단계:</span> 협상 요청서 공식 전달<br>
+            <span class="hi">2단계:</span> 전 채널 동시 압박<br>
+            <span class="hi">3단계:</span> 법적 조치 자동 진행
+          </div>
+        </div>
+      </div>
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 05 <span class="engine-status soon">⚠️ 단계적 적용</span></div>
+        <div class="engine-name">집단 의견 분석</div>
+        <div class="engine-en">Collective Opinion Analysis</div>
+        <div class="engine-desc">수백 명 참여자의 의견을 자동 분류·집계해 핵심 요구사항 우선순위를 도출합니다.</div>
         <div class="engine-example">
           <div class="engine-example-label">분석 예시</div>
           <div class="engine-example-content">
-            참여자 500명 · 댓글 900개 분석 결과<br>
+            500명 참여 · 의견 900개 분석<br>
             → <span class="hi">1위:</span> 초과근로수당 지급 (68%)<br>
-            → <span class="hi">2위:</span> 포괄임금제 폐지 (52%)<br>
-            → <span class="hi">3위:</span> 근로시간 기록 시스템 (41%)
+            → <span class="hi">2위:</span> 포괄임금제 폐지 (52%)
           </div>
         </div>
       </div>
-
-      <!-- 엔진 3 -->
       <div class="ai-engine-card">
-        <div class="engine-num">Engine 03</div>
-        <div class="engine-name">AI 협상 문서 생성</div>
-        <div class="engine-en">Document Generation Engine</div>
-        <div class="engine-desc">집단의 요구사항을 바탕으로 공식 협상 문서를 자동 생성합니다. 협상 요청서, 공식 요구서, 합의문 초안까지 — 법적 형식에 맞게 바로 활용할 수 있어요.</div>
+        <div class="engine-num">Engine 06 <span class="engine-status soon">⚠️ 단계적 적용</span></div>
+        <div class="engine-name">합의문 자동 생성</div>
+        <div class="engine-en">Agreement Generation</div>
+        <div class="engine-desc">협상 경과와 요구사항을 바탕으로 합의문 초안을 자동 작성합니다. 과반수 동의로 확정.</div>
         <div class="engine-example">
-          <div class="engine-example-label">생성 가능 문서</div>
+          <div class="engine-example-label">확정 절차</div>
           <div class="engine-example-content">
-            <span class="hi-blue">협상 요청서</span> / <span class="hi-blue">공식 요구서</span><br>
-            <span class="hi-blue">협상 제안서</span> / <span class="hi-blue">합의문 초안</span><br>
-            <span class="hi">내용증명 초안</span> (전문가 검토 권장)
-          </div>
-        </div>
-      </div>
-
-      <!-- 엔진 4 -->
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 04</div>
-        <div class="engine-name">AI 협상 전략 추천</div>
-        <div class="engine-en">Strategy Recommendation Engine</div>
-        <div class="engine-desc">이슈 유형과 상황에 맞는 최적의 협상 전략을 단계별로 안내합니다. 어떤 순서로 어떻게 대응해야 할지 AI가 시나리오를 제시합니다.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">전략 추천 예시</div>
-          <div class="engine-example-content">
-            <span class="hi">1단계:</span> 공식 협상 요청서 전달<br>
-            <span class="hi">2단계:</span> 노동청 신고 병행<br>
-            <span class="hi">3단계:</span> 집단 공개 압박<br>
-            <span class="hi">4단계:</span> 집단 소송 준비
+            AI 합의문 초안 자동 생성<br>
+            → <span class="hi-blue">참여자 과반수 동의</span> 필수<br>
+            → <span class="hi">대표자 단독 합의 불가</span>
           </div>
         </div>
       </div>
@@ -1021,73 +685,145 @@
 
   <div class="section-divider"></div>
 
-  <!-- How It Works (AI 배지 추가) -->
-  <section class="process">
+  <!-- 에스컬레이션 구조 -->
+  <section class="escalation-section">
     <div class="section-kicker">How It Works</div>
-    <div class="section-title">PACT는 이렇게 진행됩니다</div>
-    <div class="steps-wrap">
-      <div class="step-card">
-        <div class="step-icon">📝</div>
-        <div class="step-num">Step 01</div>
-        <div class="step-name">이슈 등록</div>
-        <div class="step-en">Issue Setup</div>
-        <div class="step-desc">문제를 입력하면 AI가 즉시 분석해 협상 구조를 잡아드려요.</div>
-        <span class="step-ai">✦ AI 이슈 구조화</span>
+    <div class="section-title">상대방이 구조적으로 무시할 수 없습니다</div>
+    <div class="section-desc">단일 채널 순차 진행은 상대방이 하나씩 막으면 그만입니다. PACT는 처음부터 동시다발 구조로 설계되어 있습니다.</div>
+    <div class="escalation-steps">
+      <div class="esc-step p1">
+        <div class="esc-badge bd-blue">Phase 01</div>
+        <div class="esc-body">
+          <div class="esc-title">이슈 등록 & 집단 구성</div>
+          <div class="esc-desc">문제를 입력하면 AI가 즉시 분해·분석합니다. 공유 링크로 같은 처지의 사람들이 모이고 서명·의견을 수렴합니다. 공식 문서 전달 전까지는 완전 무료입니다.</div>
+          <div class="esc-tags">
+            <span class="esc-tag">✦ 복합 이슈 분해</span>
+            <span class="esc-tag">✦ 동적 채널 매핑</span>
+            <span class="esc-tag">✦ 집단 의견 분석</span>
+          </div>
+        </div>
       </div>
-      <div class="step-card">
-        <div class="step-icon">🔗</div>
-        <div class="step-num">Step 02</div>
-        <div class="step-name">집단 구성</div>
-        <div class="step-en">Recruit & Sign</div>
-        <div class="step-desc">공유 링크로 같은 문제를 가진 사람들이 모이고 서명합니다.</div>
+      <div class="esc-arrow">↓ 집단 구성 완료 후 공식 통보 시작</div>
+      <div class="esc-step p1">
+        <div class="esc-badge bd-blue">1단계</div>
+        <div class="esc-body">
+          <div class="esc-title">공식 통보</div>
+          <div class="esc-desc">AI가 생성한 협상 요청서를 상대방에게 직접 전달합니다. 응답 기한을 명시하고 전달 기록을 자동 보관합니다.</div>
+          <div class="esc-tags">
+            <span class="esc-tag">✦ 채널별 문서 자동 생성</span>
+            <span class="esc-tag">✦ 전달 기록 보관</span>
+          </div>
+        </div>
       </div>
-      <div class="step-card">
-        <div class="step-icon">🗳️</div>
-        <div class="step-num">Step 03</div>
-        <div class="step-name">의견 수렴</div>
-        <div class="step-en">Vote & Prioritize</div>
-        <div class="step-desc">AI가 집단 의견을 분석해 핵심 요구사항과 우선순위를 도출합니다.</div>
-        <span class="step-ai">✦ AI 의견 분석</span>
+      <div class="esc-arrow">↓ 무응답 시 자동 에스컬레이션</div>
+      <div class="esc-step p2">
+        <div class="esc-badge bd-red">2단계</div>
+        <div class="esc-body">
+          <div class="esc-title">동시다발 전 채널 압박</div>
+          <div class="esc-desc">원클릭으로 모든 채널이 동시에 실행됩니다. 기관 공식 민원 + 지역구 국회의원 SNS 멘션 + 대통령실 국민제안 + 언론 보도자료 배포 + 공개 페이지 활성화. 어떤 조직도 모든 방향을 동시에 감당하기 어렵습니다.</div>
+          <div class="esc-tags">
+            <span class="esc-tag">🏛 관할 기관 민원</span>
+            <span class="esc-tag">🏛 국회의원 멘션</span>
+            <span class="esc-tag">📰 언론 보도자료</span>
+            <span class="esc-tag">📢 공개 압박</span>
+            <span class="esc-tag">👨‍⚖️ 전문가 자동 매칭</span>
+          </div>
+        </div>
       </div>
-      <div class="step-card">
-        <div class="step-icon">📨</div>
-        <div class="step-num">Step 04</div>
-        <div class="step-name">공식 전달</div>
-        <div class="step-en">Formal Delivery</div>
-        <div class="step-desc">AI가 생성한 공식 문서를 상대방에게 전달합니다.</div>
-        <span class="step-ai">✦ AI 문서 생성</span>
+      <div class="esc-arrow">↓ 무응답 시 법적 조치</div>
+      <div class="esc-step p3">
+        <div class="esc-badge bd-red">3단계</div>
+        <div class="esc-body">
+          <div class="esc-title">법적 조치</div>
+          <div class="esc-desc">내용증명 발송(AI 초안 + 전문가 검토), 집단소송 준비 패키지 자동 생성, 법무·노무법인 연결 중개.</div>
+          <div class="esc-tags">
+            <span class="esc-tag">📋 내용증명 초안</span>
+            <span class="esc-tag">⚖️ 집단소송 준비</span>
+            <span class="esc-tag">👨‍⚖️ 법무·노무법인 연결</span>
+          </div>
+        </div>
       </div>
-      <div class="step-card">
-        <div class="step-icon">🎯</div>
-        <div class="step-num">Step 05</div>
-        <div class="step-name">전략 추천</div>
-        <div class="step-en">Strategy Guide</div>
-        <div class="step-desc">AI가 상황에 맞는 협상 전략과 대응 시나리오를 제안합니다.</div>
-        <span class="step-ai">✦ AI 전략 추천</span>
-      </div>
-      <div class="step-card">
-        <div class="step-icon">🤝</div>
-        <div class="step-num">Step 06</div>
-        <div class="step-name">합의 도출</div>
-        <div class="step-en">Agreement</div>
-        <div class="step-desc">참여자 과반수 동의로 합의문을 확정합니다.</div>
+      <div class="esc-arrow">↓ 어느 단계에서든 합의 시</div>
+      <div class="esc-step agree">
+        <div class="esc-badge bd-green">합의 도출</div>
+        <div class="esc-body">
+          <div class="esc-title">참여자 과반수 동의로 확정</div>
+          <div class="esc-desc">상대방이 협상에 응하면 AI가 합의문 초안을 자동 작성합니다. <strong>참여자 과반수 동의 없이는 어떤 합의도 확정될 수 없습니다.</strong> 대표자 단독 합의는 구조적으로 불가능합니다.</div>
+          <div class="esc-tags">
+            <span class="esc-tag">✦ 합의문 자동 생성</span>
+            <span class="esc-tag">✓ 과반수 동의 확정</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 타깃 -->
+  <section class="target-section">
+    <div class="section-kicker">Who It's For</div>
+    <div class="section-title">힘의 불균형이 있는 곳이라면 어디든</div>
+    <div class="section-desc">PACT는 특정 카테고리에 한정되지 않습니다. AI가 이슈 텍스트를 직접 분석해 동적으로 채널을 매핑하므로, 어떤 유형의 문제든 처리할 수 있습니다.</div>
+    <div class="target-grid">
+      <div class="target-card">
+        <span class="target-icon">👷</span>
+        <div class="target-name">직장인 · 노동자</div>
+        <div class="target-pop">취업자 2,500만명</div>
+        <div class="target-desc">임금 체불, 포괄임금제, 직장 내 괴롭힘, 부당 해고. 이슈 빈도가 가장 높습니다.</div>
+      </div>
+      <div class="target-card">
+        <span class="target-icon">🏢</span>
+        <div class="target-name">아파트 입주민</div>
+        <div class="target-pop">1,200만 세대</div>
+        <div class="target-desc">관리비 투명화, 하자보수, 층간소음. 집단 조직화가 용이합니다.</div>
+      </div>
+      <div class="target-card">
+        <span class="target-icon">🏠</span>
+        <div class="target-name">세입자 · 임차인</div>
+        <div class="target-pop">임차 가구 900만</div>
+        <div class="target-desc">임대료 인상, 보증금, 계약 조건. 반복 피해 구조에 놓여 있습니다.</div>
+      </div>
+      <div class="target-card">
+        <span class="target-icon">🏪</span>
+        <div class="target-name">소상공인 · 가맹점</div>
+        <div class="target-pop">가맹점 26만+</div>
+        <div class="target-desc">본사 갑질, 불공정 계약, 수수료 문제. 객단가가 높습니다.</div>
+      </div>
+      <div class="target-card">
+        <span class="target-icon">🏗️</span>
+        <div class="target-name">재개발 · 조합원</div>
+        <div class="target-pop">정비사업 700여곳</div>
+        <div class="target-desc">조합 비리, 불투명 운영. 고단가·전문가 연결 수요가 높습니다.</div>
+      </div>
+      <div class="target-card">
+        <span class="target-icon">🌐</span>
+        <div class="target-name">소비자 · 시민</div>
+        <div class="target-pop">전 국민</div>
+        <div class="target-desc">제품 불량, 서비스 불만. AI 채널 매핑으로 무한 확장 가능합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
 
   <!-- 하단 CTA -->
   <section class="bottom-cta">
     <div class="cta-box">
       <div class="cta-title">
-        불합리하다고 느꼈다면,<br>
-        <span class="grad">그게 시작입니다.</span>
+        억울한 것을 말하기만 하면,<br>
+        <span class="grad">AI가 해결까지 끝냅니다.</span>
       </div>
       <div class="cta-desc">
-        참는 것도, 혼자 싸우는 것도 이제 그만해도 됩니다.<br>
-        AI가 분석하고, 집단이 함께, 실제로 바꿔나가세요.
+        법 지식도, 협상 경험도 필요 없어요.<br>
+        입력하고, 사람을 모으고, 최종 동의만 하면 됩니다.<br>
+        2026년 4월 정식 출시 — 지금 사전 알림을 신청하세요.
       </div>
-      <button class="cta-btn">지금 AI 분석 시작하기 →</button>
-      <div class="cta-sub">무료로 시작할 수 있어요. 공식 문서 전달 전까지는 비용이 없습니다.</div>
+      <div class="cta-input-wrap">
+        <input class="cta-input" type="email" placeholder="이메일 주소" />
+        <button class="cta-btn">알림 신청하기 →</button>
+      </div>
+      <div class="cta-sub">스팸 메일은 보내지 않아요. 공식 문서 전달 전까지는 완전 무료입니다.</div>
     </div>
   </section>
 
@@ -1095,7 +831,7 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
-      <div>AI 기반 집단 협상 플랫폼 · © 2026 PACT. All rights reserved.</div>
+      <div>AI 기반 집단 협상 에이전트 플랫폼 · © 2026 PACT. All rights reserved.</div>
     </div>
   </footer>
 
