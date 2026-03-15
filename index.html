@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PACT | AI 기반 집단 협상 에이전트 플랫폼</title>
-  <meta name="description" content="억울한 것을 털어놓으면, AI가 해결까지 끝냅니다. 힘의 불균형에 처한 개인들이 집단을 이루고, AI 에이전트가 협상의 전 과정을 자동 실행합니다." />
+  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 뭉친 다음은 AI가 끝냅니다. 힘의 불균형에 처한 개인들이 집단을 이루고, AI 에이전트가 협상의 전 과정을 자동 실행합니다." />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -151,15 +151,23 @@
       position: relative; z-index: 1;
       font-size: clamp(36px, 6vw, 72px);
       font-weight: 900; line-height: 1.08; letter-spacing: -2.5px;
-      margin-bottom: 32px;
+      margin-bottom: 16px;
       animation: fadeUp .7s ease both .4s;
     }
     .hero-title .line1 { display: block; color: #fff; margin-bottom: 4px; }
-    .hero-title .line2 { display: block; color: #fff; margin-bottom: 4px; }
-    .hero-title .line3 {
+    .hero-title .line2 {
       display: block;
       background: linear-gradient(90deg, var(--blue) 0%, #C8DCFF 35%, #fff 52%, #FFD1D6 70%, var(--red) 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .hero-title2 {
+      position: relative; z-index: 1;
+      font-size: clamp(20px, 3vw, 34px);
+      font-weight: 800; line-height: 1.3; letter-spacing: -1px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      animation: fadeUp .7s ease both .5s;
     }
 
     .hero-sub {
@@ -315,6 +323,9 @@
     .engine-example-content { font-size: 12px; color: var(--muted); line-height: 1.65; }
     .engine-example-content .hi { color: var(--green); font-weight: 700; }
     .engine-example-content .hi-blue { color: var(--blue); font-weight: 700; }
+    .ai-engines-note {
+      margin-top: 16px; color: var(--soft); font-size: 12px; line-height: 1.6;
+    }
 
     /* ── 에스컬레이션 ── */
     .escalation-section { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
@@ -346,21 +357,15 @@
       padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
       background: rgba(255,255,255,.05); border: 1px solid var(--line2); color: var(--muted);
     }
-    .esc-arrow { text-align: center; color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 4px 0; }
-
-    /* ── 타깃 ── */
-    .target-section { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
-    .target-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
-    .target-card {
-      padding: 22px 20px; border-radius: 20px;
-      border: 1px solid var(--line); background: rgba(255,255,255,.02);
-      transition: border-color .2s, transform .2s;
+    .esc-pricing {
+      display: inline-block; padding: 3px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 800; letter-spacing: .3px;
+      margin-left: 8px; vertical-align: middle;
     }
-    .target-card:hover { border-color: var(--line2); transform: translateY(-3px); }
-    .target-icon { font-size: 28px; margin-bottom: 12px; display: block; }
-    .target-name { font-size: 17px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 6px; }
-    .target-pop { font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
-    .target-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    .esc-pricing.free { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(128,176,248,.2); }
+    .esc-pricing.paid { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,120,136,.2); }
+    .esc-pricing.cost { background: rgba(255,255,255,.05); color: var(--soft); border: 1px solid var(--line2); }
+    .esc-arrow { text-align: center; color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 4px 0; }
 
     /* ── CTA ── */
     .bottom-cta { max-width: 1080px; margin: 0 auto; padding: 0 28px 100px; }
@@ -416,7 +421,6 @@
     @media (max-width: 860px) {
       .compare { grid-template-columns: 1fr; }
       .ai-engines { grid-template-columns: repeat(2, 1fr); }
-      .target-grid { grid-template-columns: repeat(2, 1fr); }
       .three-steps { flex-direction: column; max-width: 400px; }
     }
     @media (max-width: 600px) {
@@ -427,14 +431,14 @@
       .dict-card { white-space: normal; flex-wrap: wrap; justify-content: center; gap: 6px 8px; }
       .dict-divider, .dict-ex { display: none; }
       .hero-title { font-size: clamp(28px, 8vw, 42px); letter-spacing: -1.5px; }
+      .hero-title2 { font-size: clamp(16px, 4.5vw, 24px); }
       .hero-sub { font-size: 14px; }
       .notify-card { padding: 22px 18px; }
       .notify-input-wrap { flex-direction: column; }
       .notify-btn { width: 100%; height: 48px; }
-      .how, .ai-section, .escalation-section, .target-section { padding: 60px 20px; }
+      .how, .ai-section, .escalation-section { padding: 60px 20px; }
       .section-title { font-size: clamp(22px, 6vw, 32px); }
       .ai-engines { grid-template-columns: 1fr; }
-      .target-grid { grid-template-columns: 1fr; }
       .esc-step { flex-direction: column; gap: 12px; padding: 20px; }
       .bottom-cta { padding: 0 20px 80px; }
       .cta-box { padding: 40px 20px; }
@@ -500,10 +504,13 @@
       </div>
 
       <h1 class="hero-title">
-        <span class="line1">억울한 것을 털어놓으면,</span>
-        <span class="line2">AI가 분해하고, 전략 짜고,</span>
-        <span class="line3">해결까지 끝냅니다.</span>
+        <span class="line1">혼자의 억울함은 묻힙니다.</span>
+        <span class="line2">함께 모이면 달라집니다.</span>
       </h1>
+
+      <p class="hero-title2">
+        뭉친 다음은 AI가 끝냅니다. 분석부터 해결까지.
+      </p>
 
       <p class="hero-sub">
         법 지식도, 협상 경험도 없어도 괜찮아요.<br>
@@ -551,7 +558,7 @@
           <button class="notify-btn">알림 신청 →</button>
         </div>
         <div class="notify-note">
-          <span>공식 문서 전달 전까지는 완전 무료입니다.</span> 스팸 메일은 보내지 않아요.
+          <span>1단계 공식 통보까지 완전 무료입니다.</span> 스팸 메일은 보내지 않아요.
         </div>
       </div>
     </section>
@@ -562,7 +569,7 @@
   <!-- WHY PACT -->
   <section class="how">
     <div class="section-kicker">Why Pact</div>
-    <div class="section-title">분석 도구가 아닌, 실행 에이전트입니다</div>
+    <div class="section-title">청원에서 끝나지 않습니다</div>
     <div class="section-desc">기존 청원·서명 플랫폼은 목소리를 모으는 데서 끝납니다. PACT의 AI는 문제를 받아 전략을 세우고, 문서를 만들고, 채널에 발송하고, 무응답이면 다음 단계를 자동으로 실행합니다.</div>
     <div class="compare">
       <div class="compare-col before">
@@ -590,112 +597,17 @@
 
   <div class="section-divider"></div>
 
-  <!-- AI 엔진 -->
-  <section class="ai-section">
-    <div class="ai-section-badge">✦ AI Agent Engine</div>
-    <div class="section-title">PACT AI 에이전트, 6개 엔진으로 작동합니다</div>
-    <div class="section-desc">목표를 받으면 계획을 세우고, 문서를 만들고, 발송하고, 무응답이면 다음 단계를 자동 실행합니다.</div>
-    <div class="ai-engines">
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 01 <span class="engine-status">✅ MVP 구현</span></div>
-        <div class="engine-name">복합 이슈 분해</div>
-        <div class="engine-en">Issue Decomposition</div>
-        <div class="engine-desc">막연한 문제를 AI가 법령 레이어별로 자동 분해합니다. 단일·복합 이슈 모두 처리합니다.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">분해 예시</div>
-          <div class="engine-example-content">
-            "포괄임금제 야근 + 폭언 + 안전장비 미지급"<br>
-            → <span class="hi">①</span> 근로기준법 제56조<br>
-            → <span class="hi">②</span> 직장내괴롭힘방지법<br>
-            → <span class="hi">③</span> 산업안전보건법
-          </div>
-        </div>
-      </div>
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 02 <span class="engine-status">✅ MVP 구현</span></div>
-        <div class="engine-name">동적 채널 매핑</div>
-        <div class="engine-en">Dynamic Channel Mapping</div>
-        <div class="engine-desc">이슈 분석 결과를 바탕으로 관할 기관·국회의원·언론사를 실시간으로 조합합니다.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">채널 조합 예시</div>
-          <div class="engine-example-content">
-            → <span class="hi-blue">고용노동부</span> + <span class="hi-blue">산업안전보건공단</span><br>
-            → <span class="hi-blue">환경노동위 지역구 의원</span><br>
-            → <span class="hi-blue">노동 전문 언론 3곳</span>
-          </div>
-        </div>
-      </div>
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 03 <span class="engine-status">✅ MVP 구현</span></div>
-        <div class="engine-name">채널별 문서 생성</div>
-        <div class="engine-en">Document Generation</div>
-        <div class="engine-desc">협상 요청서·민원서·보도자료·법적 서류를 각 채널 형식에 맞게 자동 생성합니다.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">생성 문서</div>
-          <div class="engine-example-content">
-            <span class="hi-blue">협상 요청서</span> / <span class="hi-blue">기관 민원서</span><br>
-            <span class="hi-blue">언론 보도자료</span> / <span class="hi">내용증명 초안</span>
-          </div>
-        </div>
-      </div>
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 04 <span class="engine-status soon">⚠️ 단계적 적용</span></div>
-        <div class="engine-name">에스컬레이션 자동화</div>
-        <div class="engine-en">Escalation Automation</div>
-        <div class="engine-desc">무응답 감지 시 다음 단계를 자동 트리거합니다. 1단계 → 2단계 → 3단계 자동 실행.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">자동 실행 흐름</div>
-          <div class="engine-example-content">
-            <span class="hi">1단계:</span> 협상 요청서 공식 전달<br>
-            <span class="hi">2단계:</span> 전 채널 동시 압박<br>
-            <span class="hi">3단계:</span> 법적 조치 자동 진행
-          </div>
-        </div>
-      </div>
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 05 <span class="engine-status soon">⚠️ 단계적 적용</span></div>
-        <div class="engine-name">집단 의견 분석</div>
-        <div class="engine-en">Collective Opinion Analysis</div>
-        <div class="engine-desc">수백 명 참여자의 의견을 자동 분류·집계해 핵심 요구사항 우선순위를 도출합니다.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">분석 예시</div>
-          <div class="engine-example-content">
-            500명 참여 · 의견 900개 분석<br>
-            → <span class="hi">1위:</span> 초과근로수당 지급 (68%)<br>
-            → <span class="hi">2위:</span> 포괄임금제 폐지 (52%)
-          </div>
-        </div>
-      </div>
-      <div class="ai-engine-card">
-        <div class="engine-num">Engine 06 <span class="engine-status soon">⚠️ 단계적 적용</span></div>
-        <div class="engine-name">합의문 자동 생성</div>
-        <div class="engine-en">Agreement Generation</div>
-        <div class="engine-desc">협상 경과와 요구사항을 바탕으로 합의문 초안을 자동 작성합니다. 과반수 동의로 확정.</div>
-        <div class="engine-example">
-          <div class="engine-example-label">확정 절차</div>
-          <div class="engine-example-content">
-            AI 합의문 초안 자동 생성<br>
-            → <span class="hi-blue">참여자 과반수 동의</span> 필수<br>
-            → <span class="hi">대표자 단독 합의 불가</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- 에스컬레이션 구조 -->
+  <!-- 에스컬레이션 구조 (How It Works) -->
   <section class="escalation-section">
     <div class="section-kicker">How It Works</div>
     <div class="section-title">상대방이 구조적으로 무시할 수 없습니다</div>
     <div class="section-desc">단일 채널 순차 진행은 상대방이 하나씩 막으면 그만입니다. PACT는 처음부터 동시다발 구조로 설계되어 있습니다.</div>
     <div class="escalation-steps">
       <div class="esc-step p1">
-        <div class="esc-badge bd-blue">Phase 01</div>
+        <div class="esc-badge bd-blue">Phase 1</div>
         <div class="esc-body">
-          <div class="esc-title">이슈 등록 & 집단 구성</div>
-          <div class="esc-desc">문제를 입력하면 AI가 즉시 분해·분석합니다. 공유 링크로 같은 처지의 사람들이 모이고 서명·의견을 수렴합니다. 공식 문서 전달 전까지는 완전 무료입니다.</div>
+          <div class="esc-title">이슈 등록 & 집단 구성 <span class="esc-pricing free">무료</span></div>
+          <div class="esc-desc">문제를 입력하면 AI가 즉시 분해·분석합니다. 공유 링크로 같은 처지의 사람들이 모이고 서명·의견을 수렴합니다.</div>
           <div class="esc-tags">
             <span class="esc-tag">✦ 복합 이슈 분해</span>
             <span class="esc-tag">✦ 동적 채널 매핑</span>
@@ -707,10 +619,11 @@
       <div class="esc-step p1">
         <div class="esc-badge bd-blue">1단계</div>
         <div class="esc-body">
-          <div class="esc-title">공식 통보</div>
-          <div class="esc-desc">AI가 생성한 협상 요청서를 상대방에게 직접 전달합니다. 응답 기한을 명시하고 전달 기록을 자동 보관합니다.</div>
+          <div class="esc-title">공식 통보 <span class="esc-pricing free">무료</span></div>
+          <div class="esc-desc">AI가 생성한 협상 요청서를 상대방 이메일로 발송합니다. 이메일에 해당 이슈의 Pact 페이지 링크가 포함되어, 상대방이 이슈 내용·참여자 수·요구사항을 직접 확인할 수 있습니다. 응답 기한을 명시하고 전달 기록을 자동 보관합니다.</div>
           <div class="esc-tags">
             <span class="esc-tag">✦ 채널별 문서 자동 생성</span>
+            <span class="esc-tag">✦ Pact 페이지 링크 포함</span>
             <span class="esc-tag">✦ 전달 기록 보관</span>
           </div>
         </div>
@@ -719,8 +632,8 @@
       <div class="esc-step p2">
         <div class="esc-badge bd-red">2단계</div>
         <div class="esc-body">
-          <div class="esc-title">동시다발 전 채널 압박</div>
-          <div class="esc-desc">원클릭으로 모든 채널이 동시에 실행됩니다. 기관 공식 민원 + 지역구 국회의원 SNS 멘션 + 대통령실 국민제안 + 언론 보도자료 배포 + 공개 페이지 활성화. 어떤 조직도 모든 방향을 동시에 감당하기 어렵습니다.</div>
+          <div class="esc-title">동시다발 전 채널 압박 <span class="esc-pricing paid">해결동참 · 소액 분담</span></div>
+          <div class="esc-desc">원클릭으로 모든 채널이 동시에 실행됩니다. 기관 공식 민원 + 지역구 국회의원 SNS 멘션 + 고위공무원·대통령실 국민제안 + 언론 보도자료 배포 + 공개 페이지 활성화. 참여자가 많을수록 1인당 부담은 줄어들고, 압박력은 강해집니다.</div>
           <div class="esc-tags">
             <span class="esc-tag">🏛 관할 기관 민원</span>
             <span class="esc-tag">🏛 국회의원 멘션</span>
@@ -734,8 +647,8 @@
       <div class="esc-step p3">
         <div class="esc-badge bd-red">3단계</div>
         <div class="esc-body">
-          <div class="esc-title">법적 조치</div>
-          <div class="esc-desc">내용증명 발송(AI 초안 + 전문가 검토), 집단소송 준비 패키지 자동 생성, 법무·노무법인 연결 중개.</div>
+          <div class="esc-title">법적 조치 <span class="esc-pricing cost">별도 과금 · 실비</span></div>
+          <div class="esc-desc">내용증명 발송(AI 초안 + 전문가 검토), 집단소송 준비 패키지 자동 생성, 법무·노무법인 연결 중개. 법적 해결을 원하는 참여자만 선택 진입합니다.</div>
           <div class="esc-tags">
             <span class="esc-tag">📋 내용증명 초안</span>
             <span class="esc-tag">⚖️ 집단소송 준비</span>
@@ -760,49 +673,119 @@
 
   <div class="section-divider"></div>
 
-  <!-- 타깃 -->
-  <section class="target-section">
-    <div class="section-kicker">Who It's For</div>
-    <div class="section-title">힘의 불균형이 있는 곳이라면 어디든</div>
-    <div class="section-desc">PACT는 특정 카테고리에 한정되지 않습니다. AI가 이슈 텍스트를 직접 분석해 동적으로 채널을 매핑하므로, 어떤 유형의 문제든 처리할 수 있습니다.</div>
-    <div class="target-grid">
-      <div class="target-card">
-        <span class="target-icon">👷</span>
-        <div class="target-name">직장인 · 노동자</div>
-        <div class="target-pop">취업자 2,500만명</div>
-        <div class="target-desc">임금 체불, 포괄임금제, 직장 내 괴롭힘, 부당 해고. 이슈 빈도가 가장 높습니다.</div>
+  <!-- AI 엔진 (7개) -->
+  <section class="ai-section">
+    <div class="ai-section-badge">✦ AI Agent Engine</div>
+    <div class="section-title">PACT AI 에이전트, 7개 엔진으로 작동합니다</div>
+    <div class="section-desc">목표를 받으면 계획을 세우고, 문서를 만들고, 발송하고, 무응답이면 다음 단계를 자동 실행합니다.</div>
+    <div class="ai-engines">
+      <!-- Engine 01: 복합 이슈 분해 -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 01 <span class="engine-status">✅ 구현 완료</span></div>
+        <div class="engine-name">복합 이슈 분해</div>
+        <div class="engine-en">Issue Decomposition</div>
+        <div class="engine-desc">막연한 문제를 AI가 법령 레이어별로 자동 분해합니다. 단일·복합 이슈 모두 처리합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">분해 예시</div>
+          <div class="engine-example-content">
+            "포괄임금제 야근 + 폭언 + 안전장비 미지급"<br>
+            → <span class="hi">①</span> 근로기준법 제56조<br>
+            → <span class="hi">②</span> 직장내괴롭힘방지법<br>
+            → <span class="hi">③</span> 산업안전보건법
+          </div>
+        </div>
       </div>
-      <div class="target-card">
-        <span class="target-icon">🏢</span>
-        <div class="target-name">아파트 입주민</div>
-        <div class="target-pop">1,200만 세대</div>
-        <div class="target-desc">관리비 투명화, 하자보수, 층간소음. 집단 조직화가 용이합니다.</div>
+      <!-- Engine 02: 동적 채널 매핑 -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 02 <span class="engine-status">✅ 구현 완료</span></div>
+        <div class="engine-name">동적 채널 매핑</div>
+        <div class="engine-en">Dynamic Channel Mapping</div>
+        <div class="engine-desc">이슈 분석 결과를 바탕으로 관할 기관·국회의원·언론사를 실시간으로 조합합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">채널 조합 예시</div>
+          <div class="engine-example-content">
+            → <span class="hi-blue">고용노동부</span> + <span class="hi-blue">산업안전보건공단</span><br>
+            → <span class="hi-blue">환경노동위 지역구 의원</span><br>
+            → <span class="hi-blue">노동 전문 언론 3곳</span>
+          </div>
+        </div>
       </div>
-      <div class="target-card">
-        <span class="target-icon">🏠</span>
-        <div class="target-name">세입자 · 임차인</div>
-        <div class="target-pop">임차 가구 900만</div>
-        <div class="target-desc">임대료 인상, 보증금, 계약 조건. 반복 피해 구조에 놓여 있습니다.</div>
+      <!-- Engine 03: 채널별 문서 생성 -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 03 <span class="engine-status">✅ 구현 완료</span></div>
+        <div class="engine-name">채널별 문서 생성</div>
+        <div class="engine-en">Document Generation</div>
+        <div class="engine-desc">협상 요청서·민원서·보도자료·법적 서류를 각 채널 형식에 맞게 자동 생성합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">생성 문서</div>
+          <div class="engine-example-content">
+            <span class="hi-blue">협상 요청서</span> / <span class="hi-blue">기관 민원서</span><br>
+            <span class="hi-blue">언론 보도자료</span> / <span class="hi">내용증명 초안</span>
+          </div>
+        </div>
       </div>
-      <div class="target-card">
-        <span class="target-icon">🏪</span>
-        <div class="target-name">소상공인 · 가맹점</div>
-        <div class="target-pop">가맹점 26만+</div>
-        <div class="target-desc">본사 갑질, 불공정 계약, 수수료 문제. 객단가가 높습니다.</div>
+      <!-- Engine 04: 집단 의견 분석 -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 04 <span class="engine-status soon">⚠️ 개발 예정</span></div>
+        <div class="engine-name">집단 의견 분석</div>
+        <div class="engine-en">Collective Opinion Analysis</div>
+        <div class="engine-desc">수백 명 참여자의 의견을 자동 분류·집계해 핵심 요구사항 우선순위를 도출합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">분석 예시</div>
+          <div class="engine-example-content">
+            500명 참여 · 의견 900개 분석<br>
+            → <span class="hi">1위:</span> 초과근로수당 지급 (68%)<br>
+            → <span class="hi">2위:</span> 포괄임금제 폐지 (52%)
+          </div>
+        </div>
       </div>
-      <div class="target-card">
-        <span class="target-icon">🏗️</span>
-        <div class="target-name">재개발 · 조합원</div>
-        <div class="target-pop">정비사업 700여곳</div>
-        <div class="target-desc">조합 비리, 불투명 운영. 고단가·전문가 연결 수요가 높습니다.</div>
+      <!-- Engine 05: 합의문 생성 -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 05 <span class="engine-status soon">⚠️ 개발 예정</span></div>
+        <div class="engine-name">합의문 자동 생성</div>
+        <div class="engine-en">Agreement Generation</div>
+        <div class="engine-desc">협상 경과와 요구사항을 바탕으로 합의문 초안을 자동 작성합니다. 과반수 동의로 확정.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">확정 절차</div>
+          <div class="engine-example-content">
+            AI 합의문 초안 자동 생성<br>
+            → <span class="hi-blue">참여자 과반수 동의</span> 필수<br>
+            → <span class="hi">대표자 단독 합의 불가</span>
+          </div>
+        </div>
       </div>
-      <div class="target-card">
-        <span class="target-icon">🌐</span>
-        <div class="target-name">소비자 · 시민</div>
-        <div class="target-pop">전 국민</div>
-        <div class="target-desc">제품 불량, 서비스 불만. AI 채널 매핑으로 무한 확장 가능합니다.</div>
+      <!-- Engine 06: 증빙 분석 (NEW) -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 06 <span class="engine-status soon">⚠️ 개발 예정</span></div>
+        <div class="engine-name">증빙 분석</div>
+        <div class="engine-en">Evidence Analysis</div>
+        <div class="engine-desc">업로드된 증빙자료(사진, 캡처, 문서)를 AI가 분석해 요약 텍스트를 생성합니다. 원본은 비공개, 요약만 공개하여 개인정보 노출 없이 신뢰도를 확보합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">처리 예시</div>
+          <div class="engine-example-content">
+            급여명세서 캡처 업로드<br>
+            → <span class="hi">원본 비공개</span> 저장<br>
+            → <span class="hi-blue">AI 요약:</span> "초과근무 40시간, 수당 미지급 확인"
+          </div>
+        </div>
+      </div>
+      <!-- Engine 07: 협상 전략 추천 (NEW) -->
+      <div class="ai-engine-card">
+        <div class="engine-num">Engine 07 <span class="engine-status soon">⚠️ 개발 예정</span></div>
+        <div class="engine-name">협상 전략 추천</div>
+        <div class="engine-en">Negotiation Strategy</div>
+        <div class="engine-desc">이슈 상황에 맞는 협상 전략과 대응 시나리오를 자동으로 제안합니다.</div>
+        <div class="engine-example">
+          <div class="engine-example-label">전략 예시</div>
+          <div class="engine-example-content">
+            <span class="hi">전략 A:</span> 고용노동부 진정 선행 → 협상력 확보<br>
+            <span class="hi">전략 B:</span> 언론 노출 우선 → 여론 압박<br>
+            → <span class="hi-blue">AI 추천:</span> 전략 A (성공률 높음)
+          </div>
+        </div>
       </div>
     </div>
+    <div class="ai-engines-note">※ 에스컬레이션 자동화(무응답 감지 → 다음 단계 자동 트리거)는 별도 자동화 시스템으로 운영됩니다.</div>
   </section>
 
   <div class="section-divider"></div>
@@ -811,8 +794,8 @@
   <section class="bottom-cta">
     <div class="cta-box">
       <div class="cta-title">
-        억울한 것을 말하기만 하면,<br>
-        <span class="grad">AI가 해결까지 끝냅니다.</span>
+        불합리하다고 느꼈다면,<br>
+        <span class="grad">그게 시작입니다.</span>
       </div>
       <div class="cta-desc">
         법 지식도, 협상 경험도 필요 없어요.<br>
@@ -823,7 +806,7 @@
         <input class="cta-input" type="email" placeholder="이메일 주소" />
         <button class="cta-btn">알림 신청하기 →</button>
       </div>
-      <div class="cta-sub">스팸 메일은 보내지 않아요. 공식 문서 전달 전까지는 완전 무료입니다.</div>
+      <div class="cta-sub">스팸 메일은 보내지 않아요. 1단계 공식 통보까지 완전 무료입니다.</div>
     </div>
   </section>
 
