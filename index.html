@@ -817,6 +817,56 @@
       <div>AI 기반 집단 협상 에이전트 플랫폼 · © 2026 PACT. All rights reserved.</div>
     </div>
   </footer>
+<script>
+    var SB_URL = 'https://lhejfeweaixiklodonbr.supabase.co';
+    var SB_KEY = 'sb_publishable_JZjDHDGupbjdzPC41qRifQ_YdPQJzm6';
 
+    async function saveEmail(email, btn, originalText) {
+      if (!email || !email.includes('@')) {
+        btn.textContent = '올바른 이메일을 입력하세요';
+        setTimeout(function() { btn.textContent = originalText; }, 2000);
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = '저장 중...';
+      try {
+        var res = await fetch(SB_URL + '/rest/v1/notify_emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SB_KEY,
+            'Authorization': 'Bearer ' + SB_KEY,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ email: email.trim().toLowerCase() })
+        });
+        if (res.ok) {
+          btn.textContent = '✓ 신청 완료!';
+          btn.style.background = 'linear-gradient(135deg, #5EFFA0, #3de085)';
+        } else if (res.status === 409) {
+          btn.textContent = '이미 신청된 이메일이에요!';
+        } else {
+          throw new Error('fail');
+        }
+      } catch (e) {
+        btn.textContent = '오류 발생. 다시 시도해주세요.';
+        setTimeout(function() { btn.textContent = originalText; btn.disabled = false; }, 2500);
+      }
+    }
+
+    document.querySelector('.notify-btn').addEventListener('click', function() {
+      saveEmail(document.querySelector('.notify-input').value, this, '알림 신청 →');
+    });
+    document.querySelector('.notify-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') document.querySelector('.notify-btn').click();
+    });
+
+    document.querySelector('.cta-btn').addEventListener('click', function() {
+      saveEmail(document.querySelector('.cta-input').value, this, '알림 신청하기 →');
+    });
+    document.querySelector('.cta-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') document.querySelector('.cta-btn').click();
+    });
+  </script>
 </body>
 </html>
