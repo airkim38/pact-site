@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PACT | AI 기반 집단 협상 에이전트 플랫폼</title>
-  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 뭉친 다음은 AI가 끝냅니다. 힘의 불균형에 처한 개인들이 집단을 이루고, AI 에이전트가 협상의 전 과정을 자동 실행합니다." />
+  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 뭉친 다음은 학습하는 AI가 끝냅니다. 힘의 불균형에 처한 개인들이 집단을 이루고, AI 에이전트가 협상의 전 과정을 자동 실행합니다." />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -122,6 +122,7 @@
     .engines { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
     .engine-card { padding: 24px 22px; border-radius: 22px; background: linear-gradient(160deg, rgba(94,255,160,.04), rgba(128,176,248,.03)); border: 1px solid rgba(94,255,160,.12); transition: transform .2s, border-color .2s; }
     .engine-card:hover { transform: translateY(-3px); border-color: rgba(94,255,160,.25); }
+    .engine-card.highlight { background: linear-gradient(160deg, rgba(128,176,248,.08), rgba(94,255,160,.04)); border-color: rgba(128,176,248,.25); }
     .engine-num { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
     .engine-status { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(94,255,160,.10); border: 1px solid rgba(94,255,160,.2); color: var(--green); }
     .engine-status.soon { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.10); color: var(--soft); }
@@ -175,8 +176,9 @@
       <span class="line2">함께 모이면 달라집니다.</span>
     </h1>
 
+    <!-- ① 수정: 학습하는 AI -->
     <div class="hero-sub">
-      뭉친 다음은 <span class="ai">AI가 끝냅니다.</span> 분석부터 해결까지.
+      뭉친 다음은 <span class="ai">학습하는 AI가 끝냅니다.</span> 분석부터 해결까지.
     </div>
 
     <p class="hero-desc">
@@ -188,7 +190,8 @@
       <div class="three-step">
         <div class="three-step-num">01</div>
         <div class="three-step-text">문제 상황을 입력한다</div>
-        <div class="three-step-sub">AI가 즉시 분석합니다</div>
+        <!-- ② 수정: 학습 기반 전략 추론 메시지 -->
+        <div class="three-step-sub">축적된 판례·언론 보도·성공·실패 데이터를 학습한 AI가, 왜 안 됐는지부터 분석하고 전략을 설계합니다</div>
       </div>
       <div class="three-step">
         <div class="three-step-num">02</div>
@@ -263,7 +266,7 @@
 
   <div class="section-divider"></div>
 
-  <!-- HOW IT WORKS — 5단계 에스컬레이션 -->
+  <!-- HOW IT WORKS -->
   <section class="section">
     <div class="section-kicker">How It Works</div>
     <div class="section-title">상대방이 구조적으로 무시할 수 없습니다</div>
@@ -318,10 +321,10 @@
 
   <div class="section-divider"></div>
 
-  <!-- AI 엔진 — 7개 -->
+  <!-- ③ 수정: AI 엔진 8개 -->
   <section class="section">
     <div class="ai-badge">✦ AI Agent Engine</div>
-    <div class="section-title">PACT AI 에이전트, 7개 엔진으로 작동합니다</div>
+    <div class="section-title">PACT AI 에이전트, 8개 엔진으로 작동합니다</div>
     <div class="section-desc">목표를 받으면 계획을 세우고, 문서를 만들고, 발송하고, 무응답이면 다음 단계를 자동 실행합니다.</div>
     <div class="engines">
       <div class="engine-card">
@@ -349,13 +352,13 @@
         <div class="engine-desc">수백 명 참여자의 의견을 자동 분류·집계해 핵심 요구사항 우선순위를 도출합니다.</div>
       </div>
       <div class="engine-card">
-        <div class="engine-num">Engine 05 <span class="engine-status soon">⚠️ 예정</span></div>
+        <div class="engine-num">Engine 05 <span class="engine-status">✅ 구현</span></div>
         <div class="engine-name">합의문 생성</div>
         <div class="engine-en">Agreement Generation</div>
         <div class="engine-desc">협상 경과와 요구사항을 바탕으로 합의문 초안을 자동 작성합니다.</div>
       </div>
       <div class="engine-card">
-        <div class="engine-num">Engine 06 <span class="engine-status soon">⚠️ 예정</span></div>
+        <div class="engine-num">Engine 06 <span class="engine-status">✅ 구현</span></div>
         <div class="engine-name">증빙 분석</div>
         <div class="engine-en">Evidence Analysis</div>
         <div class="engine-desc">증빙자료를 분석해 요약 텍스트를 생성합니다. 원본은 비공개 보관됩니다.</div>
@@ -365,6 +368,12 @@
         <div class="engine-name">협상 전략 추천</div>
         <div class="engine-en">Strategy Recommendation</div>
         <div class="engine-desc">상황에 맞는 협상 전략과 대응 시나리오를 제안합니다.</div>
+      </div>
+      <div class="engine-card highlight">
+        <div class="engine-num">Engine 08 <span class="engine-status soon">⚠️ 예정</span></div>
+        <div class="engine-name">학습 기반 전략 추론</div>
+        <div class="engine-en">Strategy Inference Engine</div>
+        <div class="engine-desc">축적된 판례·언론 보도·성공·실패 데이터를 학습한 AI가, 왜 안 됐는지부터 분석하고 실제로 통하는 전략을 설계합니다.</div>
       </div>
     </div>
   </section>
