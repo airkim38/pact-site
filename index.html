@@ -56,11 +56,45 @@
     .hero-desc strong { color: #fff; font-weight: 700; }
 
     /* 세 가지 행동 */
-    .three-steps { display: flex; gap: 12px; width: 100%; max-width: 680px; margin-bottom: 48px; }
+    .three-steps { display: flex; gap: 12px; width: 100%; max-width: 680px; margin-bottom: 48px; align-items: flex-start; }
+
+    /* 기본 카드 (02, 03) */
     .three-step { flex: 1; padding: 18px 16px; border-radius: 16px; border: 1px solid var(--line2); background: rgba(255,255,255,.03); text-align: center; }
+
+    /* ✅ 01번 카드 — 핵심 강조 */
+    .three-step.featured {
+      flex: 1;
+      padding: 22px 18px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(94,255,160,.08), rgba(128,176,248,.07));
+      border: 1.5px solid rgba(94,255,160,.40);
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 28px rgba(94,255,160,.10), 0 0 0 1px rgba(94,255,160,.10);
+    }
+
+    /* 핵심 차별점 뱃지 */
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(94,255,160,.15);
+      border: 1px solid rgba(94,255,160,.35);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
     .three-step-num { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
-    .three-step-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 4px; }
-    .three-step-sub { font-size: 12px; color: var(--soft); line-height: 1.4; }
+    .three-step-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
+    .three-step-sub { font-size: 13px; color: rgba(255,255,255,.60); line-height: 1.55; }
+    .three-step-sub .hi-blue { color: var(--blue); font-weight: 700; }
+    .three-step-sub .hi-green { color: var(--green); font-weight: 700; }
 
     /* 예시 태그 */
     .examples-wrap { width: 100%; max-width: 720px; margin-bottom: 48px; }
@@ -176,7 +210,6 @@
       <span class="line2">함께 모이면 달라집니다.</span>
     </h1>
 
-    <!-- ① 수정: 학습하는 AI -->
     <div class="hero-sub">
       뭉친 다음은 <span class="ai">학습하는 AI가 끝냅니다.</span> 분석부터 해결까지.
     </div>
@@ -187,21 +220,22 @@
     </p>
 
     <div class="three-steps">
-      <div class="three-step">
+      <!-- ✅ 01번 카드 — featured 강조 -->
+      <div class="three-step featured">
+        <div class="featured-badge">✦ 학습한 AI</div>
         <div class="three-step-num">01</div>
         <div class="three-step-text">문제 상황을 입력한다</div>
-        <!-- ② 수정: 학습 기반 전략 추론 메시지 -->
-        <div class="three-step-sub">축적된 판례·언론 보도·성공·실패 데이터를 학습한 AI가, 왜 안 됐는지부터 분석하고 전략을 설계합니다</div>
+        <div class="three-step-sub">판례·언론·성공·실패 데이터를 <span class="hi-green">학습한 AI가</span> <span class="hi-blue">왜 안 됐는지부터 분석</span>하고 전략을 설계합니다</div>
       </div>
       <div class="three-step">
         <div class="three-step-num">02</div>
         <div class="three-step-text">같은 처지의 사람들을 모은다</div>
-        <div class="three-step-sub">링크 하나로 집단이 됩니다</div>
+        <div class="three-step-sub">링크 하나로 <span class="hi-blue">집단이 됩니다</span></div>
       </div>
       <div class="three-step">
         <div class="three-step-num">03</div>
         <div class="three-step-text">최종 합의에 동의하거나 거부한다</div>
-        <div class="three-step-sub">나머지는 AI가 실행합니다</div>
+        <div class="three-step-sub">나머지는 <span class="hi-green">AI가 실행합니다</span></div>
       </div>
     </div>
 
@@ -211,11 +245,23 @@
         <span class="ex-tag b">포괄임금제로 야근을 공짜로 시켜요</span>
         <span class="ex-tag r">상사 폭언인데 신고해도 아무것도 안 바뀌어요</span>
         <span class="ex-tag b">층간소음이 1년째 방치됩니다</span>
+        <span class="ex-tag">버스가 매일 무정차로 그냥 지나쳐요</span>
         <span class="ex-tag r">월급을 이유 없이 늦게 줘요</span>
+        <span class="ex-tag b">헬스장 폐업인데 잔여 이용권 환불을 거부해요</span>
         <span class="ex-tag">관리비 내역 공개를 거부해요</span>
+        <span class="ex-tag r">학원비 환불을 끝까지 안 해줘요</span>
         <span class="ex-tag b">하자보수 요청을 수개월째 묵살해요</span>
+        <span class="ex-tag">배달앱 환불 요청을 계속 거부해요</span>
         <span class="ex-tag r">알바 근로계약서를 안 써줘요</span>
-        <span class="ex-tag">본사의 불공정 계약을 강요받아요</span>
+        <span class="ex-tag b">구독 취소가 안 되게 막아놨어요</span>
+        <span class="ex-tag">세탁소에서 옷을 망가뜨렸는데 배상을 거부해요</span>
+        <span class="ex-tag r">본사의 불공정 계약을 강요받아요</span>
+        <span class="ex-tag b">공사장 소음이 새벽에도 계속돼요</span>
+        <span class="ex-tag">인터넷 해지 신청했는데 위약금만 늘어나요</span>
+        <span class="ex-tag r">아파트 놀이터 시설이 위험한데 수리를 안 해요</span>
+        <span class="ex-tag b">불법주차 신고해도 계속 방치해요</span>
+        <span class="ex-tag">편의점 알바인데 쉬는 시간을 안 줘요</span>
+        <span class="ex-tag r">아파트 엘리베이터가 한 달째 고장났어요</span>
       </div>
     </div>
 
@@ -321,7 +367,7 @@
 
   <div class="section-divider"></div>
 
-  <!-- ③ 수정: AI 엔진 8개 -->
+  <!-- AI 엔진 8개 -->
   <section class="section">
     <div class="ai-badge">✦ AI Agent Engine</div>
     <div class="section-title">PACT AI 에이전트, 8개 엔진으로 작동합니다</div>
