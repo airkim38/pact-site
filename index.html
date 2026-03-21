@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PACT | AI 기반 집단 협상 에이전트 플랫폼</title>
-  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 뭉친 다음은 학습하는 AI가 끝냅니다. 힘의 불균형에 처한 개인들이 집단을 이루고, AI 에이전트가 협상의 전 과정을 자동 실행합니다." />
+  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 뭉친 다음은 학습하는 AI가 끝냅니다." />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -22,6 +22,7 @@
       --red-dim: rgba(248,120,136,.13);
       --green: #5EFFA0;
       --green-dim: rgba(94,255,160,.10);
+      --mono: 'Outfit', 'Noto Sans KR', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -39,57 +40,56 @@
 
     /* UTILS */
     .section-divider { width: 100%; max-width: 1080px; margin: 0 auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(128,176,248,.15), rgba(248,120,136,.12), transparent); }
-    .section-kicker { color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .section-kicker { color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 10px; }
     .section-title { font-size: clamp(24px, 3.5vw, 40px); font-weight: 900; letter-spacing: -1.2px; margin-bottom: 10px; }
     .section-desc { color: var(--muted); font-size: 16px; line-height: 1.8; margin-bottom: 40px; max-width: 560px; }
 
-    /* HERO */
+    /* ── HERO ── */
     .hero { max-width: 1080px; margin: 0 auto; padding: 80px 28px 64px; display: flex; flex-direction: column; align-items: center; text-align: center; }
     .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line2); background: rgba(255,255,255,.03); color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 32px; }
     .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(90deg, var(--blue), var(--red)); }
     .hero-title { font-size: clamp(32px, 5.5vw, 56px); font-weight: 900; line-height: 1.15; letter-spacing: -2px; margin-bottom: 16px; }
     .hero-title .line1 { display: block; color: rgba(255,255,255,.5); margin-bottom: 4px; }
     .hero-title .line2 { display: block; color: #fff; }
-    .hero-sub { font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -1px; margin-bottom: 32px; line-height: 1.3; }
+    .hero-sub { font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; line-height: 1.3; }
     .hero-sub .ai { color: var(--green); }
     .hero-desc { max-width: 580px; margin: 0 auto 48px; color: rgba(255,255,255,.6); font-size: 16px; line-height: 1.85; }
     .hero-desc strong { color: #fff; font-weight: 700; }
 
+    /* ── 학습 데이터 뱃지 (히어로 하단, 새로 추가) ── */
+    .learn-strip {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 40px; max-width: 720px;
+    }
+    .learn-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 700;
+    }
+    .learn-chip .num { font-size: 13px; font-weight: 800; }
+    .learn-chip.chip-blue {
+      background: rgba(128,176,248,.08);
+      border: 1px solid rgba(128,176,248,.25);
+      color: var(--blue);
+    }
+    .learn-chip.chip-red {
+      background: rgba(248,120,136,.08);
+      border: 1px solid rgba(248,120,136,.25);
+      color: var(--red);
+    }
+    .learn-chip.chip-soft {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.55);
+      font-style: italic;
+    }
+    .learn-chip-label { font-size: 12px; font-weight: 700; color: var(--soft); letter-spacing: .3px; text-transform: uppercase; margin-bottom: 10px; }
+
     /* 세 가지 행동 */
     .three-steps { display: flex; gap: 12px; width: 100%; max-width: 680px; margin-bottom: 48px; align-items: flex-start; }
-
-    /* 기본 카드 (02, 03) */
     .three-step { flex: 1; padding: 18px 16px; border-radius: 16px; border: 1px solid var(--line2); background: rgba(255,255,255,.03); text-align: center; }
-
-    /* ✅ 01번 카드 — 핵심 강조 */
-    .three-step.featured {
-      flex: 1;
-      padding: 22px 18px;
-      border-radius: 18px;
-      background: linear-gradient(160deg, rgba(94,255,160,.08), rgba(128,176,248,.07));
-      border: 1.5px solid rgba(94,255,160,.40);
-      text-align: center;
-      position: relative;
-      box-shadow: 0 0 28px rgba(94,255,160,.10), 0 0 0 1px rgba(94,255,160,.10);
-    }
-
-    /* 핵심 차별점 뱃지 */
-    .featured-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: rgba(94,255,160,.15);
-      border: 1px solid rgba(94,255,160,.35);
-      color: var(--green);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
+    .three-step.featured { flex: 1; padding: 22px 18px; border-radius: 18px; background: linear-gradient(160deg, rgba(128,176,248,.09), rgba(94,255,160,.04)); border: 1.5px solid rgba(128,176,248,.40); text-align: center; position: relative; box-shadow: 0 0 28px rgba(128,176,248,.08), 0 0 0 1px rgba(128,176,248,.08); }
+    .featured-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; background: rgba(128,176,248,.12); border: 1px solid rgba(128,176,248,.35); color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 10px; }
     .three-step-num { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
     .three-step-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
     .three-step-sub { font-size: 13px; color: rgba(255,255,255,.60); line-height: 1.55; }
@@ -151,18 +151,214 @@
     .esc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .esc-tag { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,.05); border: 1px solid var(--line2); color: var(--muted); }
 
-    /* AI 엔진 */
+    /* ══════════════════════════════════════════
+       신규: 학습된 AI 섹션
+    ══════════════════════════════════════════ */
+    .learned-ai-section {
+      background: var(--bg);
+      border-top: 1px solid rgba(94,255,160,.1);
+      border-bottom: 1px solid rgba(94,255,160,.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .learned-ai-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(94,255,160,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94,255,160,.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+    .learned-ai-inner {
+      max-width: 1080px; margin: 0 auto; padding: 80px 28px;
+      position: relative; z-index: 1;
+    }
+
+    /* 상단: 타이틀 + 서브 */
+    .lai-header { margin-bottom: 52px; }
+    .lai-kicker {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.3px;
+      text-transform: uppercase; color: rgba(94,255,160,.6);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .lai-kicker::before { content: ''; width: 20px; height: 1px; background: rgba(94,255,160,.5); }
+    .lai-title { font-size: clamp(24px, 3.5vw, 40px); font-weight: 900; letter-spacing: -1.2px; margin-bottom: 12px; }
+    .lai-title .green { color: var(--green); }
+    .lai-desc { color: var(--muted); font-size: 16px; line-height: 1.8; max-width: 600px; }
+
+    /* 2열 레이아웃 */
+    .lai-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    /* 좌: 일반 AI vs Pact AI 비교 */
+    .lai-compare {
+      display: flex; flex-direction: column; gap: 0;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 20px; overflow: hidden;
+    }
+    .lai-compare-header {
+      display: grid; grid-template-columns: 1fr 1fr;
+    }
+    .lai-col-head {
+      padding: 14px 20px;
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.3px; text-transform: uppercase;
+    }
+    .lai-col-head.generic {
+      background: rgba(255,255,255,.03); color: var(--soft);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      border-right: 1px solid rgba(255,255,255,.06);
+    }
+    .lai-col-head.pact {
+      background: rgba(94,255,160,.05); color: rgba(94,255,160,.7);
+      border-bottom: 1px solid rgba(94,255,160,.12);
+    }
+    .lai-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .lai-row:last-child { border-bottom: none; }
+    .lai-cell {
+      padding: 14px 20px;
+      font-size: 13px; line-height: 1.6;
+    }
+    .lai-cell.generic-cell {
+      color: rgba(255,255,255,.35);
+      border-right: 1px solid rgba(255,255,255,.04);
+      background: rgba(255,255,255,.01);
+    }
+    .lai-cell.pact-cell {
+      color: rgba(255,255,255,.75);
+      background: rgba(94,255,160,.02);
+    }
+    .lai-cell.pact-cell strong { color: var(--green); font-weight: 700; }
+    .lai-cell .x-mark { color: rgba(255,255,255,.2); margin-right: 6px; }
+    .lai-cell .check-mark { color: var(--green); margin-right: 6px; }
+
+    /* 우: 학습 데이터 시각화 */
+    .lai-data-panel {
+      border: 1px solid rgba(94,255,160,.15);
+      border-radius: 20px;
+      background: rgba(94,255,160,.02);
+      padding: 28px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .lai-panel-title {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.3px;
+      text-transform: uppercase; color: rgba(94,255,160,.5);
+      margin-bottom: 4px;
+    }
+
+    /* 학습 데이터 바 */
+    .lai-bar-list { display: flex; flex-direction: column; gap: 12px; }
+    .lai-bar-row { display: flex; flex-direction: column; gap: 5px; }
+    .lai-bar-meta { display: flex; justify-content: space-between; align-items: center; }
+    .lai-bar-name { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .lai-bar-val {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--green); font-weight: 700;
+    }
+    .lai-bar-track {
+      height: 4px; background: rgba(255,255,255,.05);
+      border-radius: 2px; overflow: hidden;
+    }
+    .lai-bar-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, rgba(94,255,160,.6), rgba(94,255,160,.9));
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    }
+
+    .lai-divider { height: 1px; background: rgba(94,255,160,.08); }
+
+    /* 서명자 수 기반 전략 강도 */
+    .lai-strength { display: flex; flex-direction: column; gap: 8px; }
+    .lai-strength-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.05);
+      background: rgba(255,255,255,.02);
+      border-radius: 10px;
+      transition: border-color .3s;
+    }
+    .lai-strength-row.active {
+      border-color: rgba(94,255,160,.25);
+      background: rgba(94,255,160,.04);
+    }
+    .lai-strength-range {
+      font-family: var(--mono); font-size: 11px; font-weight: 700;
+      color: var(--soft); width: 72px; flex-shrink: 0;
+    }
+    .lai-strength-row.active .lai-strength-range { color: var(--green); }
+    .lai-strength-bar { flex: 1; height: 3px; background: rgba(255,255,255,.05); border-radius: 2px; overflow: hidden; }
+    .lai-strength-fill { height: 100%; border-radius: 2px; background: var(--green); transition: width 1.6s ease; }
+    .lai-strength-label { font-size: 11px; color: var(--soft); white-space: nowrap; }
+    .lai-strength-row.active .lai-strength-label { color: rgba(255,255,255,.7); }
+
+    /* 하단: 학습 소스 태그 */
+    .lai-source-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .lai-source-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 8px;
+      border: 1px solid rgba(94,255,160,.15);
+      background: rgba(94,255,160,.04);
+      font-family: var(--mono); font-size: 11px; font-weight: 600;
+      color: rgba(94,255,160,.7); letter-spacing: .3px;
+    }
+    .lai-source-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); opacity: .7; }
+
+    /* ── AI 엔진 ── */
     .ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--green-dim); border: 1px solid rgba(94,255,160,.22); color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px; }
     .engines { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
     .engine-card { padding: 24px 22px; border-radius: 22px; background: linear-gradient(160deg, rgba(94,255,160,.04), rgba(128,176,248,.03)); border: 1px solid rgba(94,255,160,.12); transition: transform .2s, border-color .2s; }
     .engine-card:hover { transform: translateY(-3px); border-color: rgba(94,255,160,.25); }
-    .engine-card.highlight { background: linear-gradient(160deg, rgba(128,176,248,.08), rgba(94,255,160,.04)); border-color: rgba(128,176,248,.25); }
+
+    /* Engine 08 — 전체 너비 강조 카드 */
+    .engine-card.engine08 {
+      grid-column: 1 / -1;
+      padding: 36px 36px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(94,255,160,.07), rgba(128,176,248,.05), rgba(248,120,136,.04));
+      border: 1.5px solid rgba(94,255,160,.3);
+      box-shadow: 0 0 40px rgba(94,255,160,.08);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .engine-card.engine08:hover { transform: translateY(-3px); border-color: rgba(94,255,160,.45); }
+
     .engine-num { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
     .engine-status { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(94,255,160,.10); border: 1px solid rgba(94,255,160,.2); color: var(--green); }
-    .engine-status.soon { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.10); color: var(--soft); }
     .engine-name { font-size: 17px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 4px; }
+    .engine08 .engine-name { font-size: clamp(20px, 2.5vw, 28px); letter-spacing: -1px; }
     .engine-en { font-size: 11px; color: var(--soft); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 10px; }
     .engine-desc { color: rgba(255,255,255,.55); font-size: 13px; line-height: 1.75; }
+    .engine08 .engine-desc { font-size: 15px; line-height: 1.85; color: rgba(255,255,255,.65); }
+
+    /* Engine 08 우측 시각화 */
+    .e08-visual { display: flex; flex-direction: column; gap: 10px; }
+    .e08-vis-title {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.3px;
+      text-transform: uppercase; color: rgba(94,255,160,.5); margin-bottom: 4px;
+    }
+    .e08-flow { display: flex; flex-direction: column; gap: 6px; }
+    .e08-step {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid rgba(94,255,160,.1);
+      background: rgba(94,255,160,.03);
+      border-radius: 10px;
+      font-size: 13px; color: rgba(255,255,255,.65);
+    }
+    .e08-step-icon { font-size: 15px; flex-shrink: 0; }
+    .e08-step strong { color: var(--green); font-weight: 700; }
+    .e08-arrow { text-align: center; font-size: 11px; color: rgba(94,255,160,.3); letter-spacing: 0.3px; }
 
     /* 하단 CTA */
     .bottom-cta { max-width: 1080px; margin: 0 auto; padding: 0 28px 100px; }
@@ -181,8 +377,35 @@
     .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--soft); font-size: 13px; }
     .footer-logo { font-weight: 900; letter-spacing: -.5px; }
 
-    @media (max-width: 860px) { .compare { grid-template-columns: 1fr; } .engines { grid-template-columns: repeat(2, 1fr); } .three-steps { flex-direction: column; max-width: 400px; } }
-    @media (max-width: 600px) { .nav-inner { padding: 0 16px; min-height: 60px; } .nav-badge { display: none; } .hero { padding: 52px 20px 48px; } .hero-title { letter-spacing: -1.2px; } .notify-card { padding: 22px 18px; } .notify-input-wrap { flex-direction: column; } .notify-btn { width: 100%; height: 48px; } .section { padding: 60px 20px; } .engines { grid-template-columns: 1fr; } .esc-step { flex-direction: column; gap: 12px; padding: 20px; } .bottom-cta { padding: 0 20px 80px; } .cta-box { padding: 40px 20px; } .cta-input-wrap { flex-direction: column; } .cta-btn { width: 100%; } .footer-inner { flex-direction: column; gap: 8px; text-align: center; } }
+    /* 스크롤 인트로 애니메이션 */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 860px) {
+      .compare { grid-template-columns: 1fr; }
+      .engines { grid-template-columns: repeat(2, 1fr); }
+      .three-steps { flex-direction: column; max-width: 400px; }
+      .lai-grid { grid-template-columns: 1fr; }
+      .engine-card.engine08 { grid-template-columns: 1fr; gap: 24px; }
+    }
+    @media (max-width: 600px) {
+      .nav-inner { padding: 0 16px; min-height: 60px; }
+      .nav-badge { display: none; }
+      .hero { padding: 52px 20px 48px; }
+      .notify-card { padding: 22px 18px; }
+      .notify-input-wrap { flex-direction: column; }
+      .notify-btn { width: 100%; height: 48px; }
+      .section { padding: 60px 20px; }
+      .engines { grid-template-columns: 1fr; }
+      .esc-step { flex-direction: column; gap: 12px; padding: 20px; }
+      .bottom-cta { padding: 0 20px 80px; }
+      .cta-box { padding: 40px 20px; }
+      .cta-input-wrap { flex-direction: column; }
+      .cta-btn { width: 100%; }
+      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+      .engine-card.engine08 { padding: 24px 20px; }
+      .learned-ai-inner { padding: 60px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -198,7 +421,7 @@
     </div>
   </nav>
 
-  <!-- HERO -->
+  <!-- ══ HERO ══ -->
   <section class="hero">
     <div class="eyebrow">
       <span class="eyebrow-dot"></span>
@@ -210,8 +433,23 @@
       <span class="line2">함께 모이면 달라집니다.</span>
     </h1>
 
+    <!-- 학습하는 AI 강조 — 기존보다 크고 명확하게 -->
     <div class="hero-sub">
-      뭉친 다음은 <span class="ai">학습하는 AI가 끝냅니다.</span> 분석부터 해결까지.
+      뭉친 다음은 <span class="ai">판례·사례를 학습한 AI가 끝냅니다.</span>
+    </div>
+
+
+    <!-- 학습 데이터 칩 -->
+    <div style="margin-bottom:12px;">
+      <div class="learn-chip-label">이런 분들을 위합니다</div>
+    </div>
+    <div class="learn-strip">
+      <div class="learn-chip chip-blue"><span class="num">직장인</span></div>
+      <div class="learn-chip chip-blue"><span class="num">세입자</span></div>
+      <div class="learn-chip chip-blue"><span class="num">입주민</span></div>
+      <div class="learn-chip chip-red"><span class="num">소상공인</span></div>
+      <div class="learn-chip chip-red"><span class="num">일반 시민</span></div>
+      <div class="learn-chip chip-soft"><span class="num">불합리함을 겪은 누구든</span></div>
     </div>
 
     <p class="hero-desc">
@@ -220,7 +458,6 @@
     </p>
 
     <div class="three-steps">
-      <!-- ✅ 01번 카드 — featured 강조 -->
       <div class="three-step featured">
         <div class="featured-badge">✦ 학습한 AI</div>
         <div class="three-step-num">01</div>
@@ -251,21 +488,12 @@
         <span class="ex-tag">관리비 내역 공개를 거부해요</span>
         <span class="ex-tag r">학원비 환불을 끝까지 안 해줘요</span>
         <span class="ex-tag b">하자보수 요청을 수개월째 묵살해요</span>
-        <span class="ex-tag">배달앱 환불 요청을 계속 거부해요</span>
-        <span class="ex-tag r">알바 근로계약서를 안 써줘요</span>
-        <span class="ex-tag b">구독 취소가 안 되게 막아놨어요</span>
-        <span class="ex-tag">세탁소에서 옷을 망가뜨렸는데 배상을 거부해요</span>
         <span class="ex-tag r">본사의 불공정 계약을 강요받아요</span>
         <span class="ex-tag b">공사장 소음이 새벽에도 계속돼요</span>
-        <span class="ex-tag">인터넷 해지 신청했는데 위약금만 늘어나요</span>
-        <span class="ex-tag r">아파트 놀이터 시설이 위험한데 수리를 안 해요</span>
-        <span class="ex-tag b">불법주차 신고해도 계속 방치해요</span>
-        <span class="ex-tag">편의점 알바인데 쉬는 시간을 안 줘요</span>
-        <span class="ex-tag r">아파트 엘리베이터가 한 달째 고장났어요</span>
+        <span class="ex-tag">알바 근로계약서를 안 써줘요</span>
       </div>
     </div>
 
-    <!-- 사전 알림 카드 -->
     <div class="notify-card" id="notify">
       <div class="notify-title">출시 알림 신청하기</div>
       <div class="notify-desc">2026년 4월 정식 출시 예정입니다. 이메일을 남겨주시면 출시 소식을 가장 먼저 전달해 드립니다.</div>
@@ -281,7 +509,7 @@
 
   <div class="section-divider"></div>
 
-  <!-- WHY PACT -->
+  <!-- ══ WHY PACT ══ (기존 유지) -->
   <section class="section">
     <div class="section-kicker">Why Pact</div>
     <div class="section-title">분석 도구가 아닌, 실행 에이전트입니다</div>
@@ -312,7 +540,123 @@
 
   <div class="section-divider"></div>
 
-  <!-- HOW IT WORKS -->
+  <!-- ══ 신규: 학습된 AI 섹션 ══ -->
+  <div class="learned-ai-section">
+    <div class="learned-ai-inner">
+      <div class="lai-header fade-in">
+        <div class="lai-kicker">학습된 AI</div>
+        <h2 class="lai-title">범용 AI와 <span class="green">결정적으로 다릅니다</span></h2>
+        <p class="lai-desc">범용 AI는 모든 분야를 조금씩 압니다. Pact AI는 오직 하나만 파고들었습니다 — 한국에서 집단이 어떻게 싸워서 이겼는지, 그리고 왜 졌는지. 수년간 축적된 판례·언론·협상 데이터가 전략의 근거가 됩니다.</p>
+      </div>
+
+      <div class="lai-grid fade-in">
+        <!-- 좌: 비교표 -->
+        <div class="lai-compare">
+          <div class="lai-compare-header">
+            <div class="lai-col-head generic">범용 AI</div>
+            <div class="lai-col-head pact">Pact 학습 AI</div>
+          </div>
+          <div class="lai-row">
+            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>일반적인 법률 정보 안내</div>
+            <div class="lai-cell pact-cell"><span class="check-mark">✓</span><strong>이 상황에서 왜 실패했는지</strong> 먼저 분석</div>
+          </div>
+          <div class="lai-row">
+            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>채널 추천을 모름</div>
+            <div class="lai-cell pact-cell"><span class="check-mark">✓</span>관할 기관·국회의원·언론사 <strong>실시간 조합</strong></div>
+          </div>
+          <div class="lai-row">
+            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>서명자 수 무관 동일 답변</div>
+            <div class="lai-cell pact-cell"><span class="check-mark">✓</span><strong>서명자 수에 따라</strong> 전략 강도 자동 조정</div>
+          </div>
+          <div class="lai-row">
+            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>상대방 유형 분석 불가</div>
+            <div class="lai-cell pact-cell"><span class="check-mark">✓</span>상대방 규모·PR민감도로 <strong>채널 우선순위</strong> 조정</div>
+          </div>
+          <div class="lai-row">
+            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>문서 작성만 가능</div>
+            <div class="lai-cell pact-cell"><span class="check-mark">✓</span>문서 생성 → 발송 → 에스컬레이션 <strong>자동 실행</strong></div>
+          </div>
+        </div>
+
+        <!-- 우: 학습 데이터 시각화 -->
+        <div class="lai-data-panel">
+          <div>
+            <div class="lai-panel-title">학습 데이터 커버리지</div>
+            <div class="lai-bar-list">
+              <div class="lai-bar-row">
+                <div class="lai-bar-meta">
+                  <div class="lai-bar-name">직장인·세입자·입주민·소상공인·시민</div>
+                  <div class="lai-bar-val">지속 확장 중</div>
+                </div>
+                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="92"></div></div>
+              </div>
+              <div class="lai-bar-row">
+                <div class="lai-bar-meta">
+                  <div class="lai-bar-name">판례 기반 전략 패턴</div>
+                  <div class="lai-bar-val">수년간 축적</div>
+                </div>
+                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="78"></div></div>
+              </div>
+              <div class="lai-bar-row">
+                <div class="lai-bar-meta">
+                  <div class="lai-bar-name">언론 보도 성공 사례</div>
+                  <div class="lai-bar-val">실시간 학습</div>
+                </div>
+                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="85"></div></div>
+              </div>
+              <div class="lai-bar-row">
+                <div class="lai-bar-meta">
+                  <div class="lai-bar-name">실패 원인 패턴 분석</div>
+                  <div class="lai-bar-val">깊이 내장</div>
+                </div>
+                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="70"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lai-divider"></div>
+
+          <div>
+            <div class="lai-panel-title">서명자 수 → 전략 강도 자동 조정</div>
+            <div class="lai-strength">
+              <div class="lai-strength-row" id="sr0">
+                <div class="lai-strength-range">1~9명</div>
+                <div class="lai-strength-bar"><div class="lai-strength-fill" style="width:0" data-w="30"></div></div>
+                <div class="lai-strength-label">소규모 — 서면 중심</div>
+              </div>
+              <div class="lai-strength-row" id="sr1">
+                <div class="lai-strength-range">10~49명</div>
+                <div class="lai-strength-bar"><div class="lai-strength-fill" style="width:0" data-w="62"></div></div>
+                <div class="lai-strength-label">중규모 — 기관 압박 추가</div>
+              </div>
+              <div class="lai-strength-row active" id="sr2">
+                <div class="lai-strength-range">50명+</div>
+                <div class="lai-strength-bar"><div class="lai-strength-fill" style="width:0" data-w="100"></div></div>
+                <div class="lai-strength-label">대규모 — 언론·전 채널 동시</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lai-divider"></div>
+
+          <div>
+            <div class="lai-panel-title">학습 소스</div>
+            <div class="lai-source-row">
+              <div class="lai-source-tag"><span class="dot"></span>국내 판례 전 범위</div>
+              <div class="lai-source-tag"><span class="dot"></span>직장·임차·생활 분쟁 언론 보도</div>
+              <div class="lai-source-tag"><span class="dot"></span>집단 협상 성공 전략</div>
+              <div class="lai-source-tag"><span class="dot"></span>실패 원인 심층 분석</div>
+              <div class="lai-source-tag"><span class="dot"></span>채널별 압박 효과 데이터</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ══ HOW IT WORKS ══ (기존 유지) -->
   <section class="section">
     <div class="section-kicker">How It Works</div>
     <div class="section-title">상대방이 구조적으로 무시할 수 없습니다</div>
@@ -367,7 +711,7 @@
 
   <div class="section-divider"></div>
 
-  <!-- AI 엔진 8개 -->
+  <!-- ══ AI 엔진 8개 ══ (Engine 08 대폭 강조 + 상태 v1.4 수정) -->
   <section class="section">
     <div class="ai-badge">✦ AI Agent Engine</div>
     <div class="section-title">PACT AI 에이전트, 8개 엔진으로 작동합니다</div>
@@ -415,18 +759,41 @@
         <div class="engine-en">Strategy Recommendation</div>
         <div class="engine-desc">상황에 맞는 협상 전략과 대응 시나리오를 제안합니다.</div>
       </div>
-      <div class="engine-card highlight">
-        <div class="engine-num">Engine 08 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">학습 기반 전략 추론</div>
-        <div class="engine-en">Strategy Inference Engine</div>
-        <div class="engine-desc">축적된 판례·언론 보도·성공·실패 데이터를 학습한 AI가, 왜 안 됐는지부터 분석하고 실제로 통하는 전략을 설계합니다.</div>
+
+      <!-- Engine 08 — 전체 너비, 완전히 다른 레이아웃 -->
+      <div class="engine-card engine08">
+        <div class="e08-left">
+          <div class="engine-num">Engine 08 <span class="engine-status">✅ 구현</span></div>
+          <div class="engine-name">학습 기반 전략 추론</div>
+          <div class="engine-en">Strategy Inference Engine</div>
+          <div class="engine-desc">
+            범용 AI와 결정적으로 다른 엔진입니다.<br><br>
+            판례·언론 보도·38개+ 이슈 도메인의 성공·실패 데이터를 학습한 AI가,
+            <strong style="color:var(--green)">왜 안 됐는지부터 먼저 분석</strong>하고
+            실제로 통하는 전략을 설계합니다.<br><br>
+            서명자 수(1~9명 / 10~49명 / 50명+)에 따라 전략 강도가 자동으로 달라지고,
+            상대방 유형·규모·PR 민감도에 따라 채널 우선순위도 동적으로 조정됩니다.
+          </div>
+        </div>
+        <div class="e08-visual">
+          <div class="e08-vis-title">엔진 08 작동 흐름</div>
+          <div class="e08-flow">
+            <div class="e08-step"><span class="e08-step-icon">📥</span><span>이슈 텍스트 + 서명자 수 입력</span></div>
+            <div class="e08-arrow">↓</div>
+            <div class="e08-step"><span class="e08-step-icon">🔍</span><span><strong>왜 안 됐는가</strong> — 과거 실패 패턴 먼저 분석</span></div>
+            <div class="e08-arrow">↓</div>
+            <div class="e08-step"><span class="e08-step-icon">📊</span><span>서명자 수 × 상대방 유형으로 <strong>전략 강도 산출</strong></span></div>
+            <div class="e08-arrow">↓</div>
+            <div class="e08-step"><span class="e08-step-icon">🎯</span><span>채널 우선순위 + 실행 전략 + <strong>한 줄 요약</strong> 생성</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
-  <!-- 하단 CTA -->
+  <!-- ══ 하단 CTA ══ (기존 유지) -->
   <section class="bottom-cta">
     <div class="cta-box">
       <div class="cta-title">
@@ -436,7 +803,7 @@
       <div class="cta-desc">
         참는 것도, 혼자 싸우는 것도 이제 그만해도 됩니다.<br>
         문제를 입력하고, 사람을 모으고, 최종 동의만 하면 됩니다.<br>
-        나머지는 AI가 끝냅니다.
+        나머지는 <strong style="color:var(--green)">판례·사례를 학습한 AI</strong>가 끝냅니다.
       </div>
       <div class="cta-input-wrap">
         <input class="cta-input" type="email" placeholder="이메일 주소" />
@@ -454,7 +821,6 @@
     </div>
   </footer>
 
-  <!-- 이메일 저장 스크립트 -->
   <script>
     var SB_URL = 'https://lhejfeweaixiklodonbr.supabase.co';
     var SB_KEY = 'sb_publishable_JZjDHDGupbjdzPC41qRifQ_YdPQJzm6';
@@ -465,47 +831,53 @@
         setTimeout(function() { btn.textContent = originalText; }, 2000);
         return;
       }
-      btn.disabled = true;
-      btn.textContent = '저장 중...';
+      btn.disabled = true; btn.textContent = '저장 중...';
       try {
         var res = await fetch(SB_URL + '/rest/v1/notify_emails', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SB_KEY,
-            'Authorization': 'Bearer ' + SB_KEY,
-            'Prefer': 'return=minimal'
-          },
+          headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Prefer': 'return=minimal' },
           body: JSON.stringify({ email: email.trim().toLowerCase() })
         });
-        if (res.ok) {
-          btn.textContent = '✓ 신청 완료!';
-          btn.style.background = 'linear-gradient(135deg, #5EFFA0, #3de085)';
-        } else if (res.status === 409) {
-          btn.textContent = '이미 신청된 이메일이에요!';
-        } else {
-          throw new Error('fail');
-        }
-      } catch (e) {
+        if (res.ok) { btn.textContent = '✓ 신청 완료!'; btn.style.background = 'linear-gradient(135deg,#5EFFA0,#3de085)'; }
+        else if (res.status === 409) { btn.textContent = '이미 신청된 이메일이에요!'; }
+        else { throw new Error('fail'); }
+      } catch(e) {
         btn.textContent = '오류 발생. 다시 시도해주세요.';
         setTimeout(function() { btn.textContent = originalText; btn.disabled = false; }, 2500);
       }
     }
 
-    document.querySelector('.notify-btn').addEventListener('click', function() {
-      saveEmail(document.querySelector('.notify-input').value, this, '알림 신청 →');
-    });
-    document.querySelector('.notify-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') document.querySelector('.notify-btn').click();
-    });
+    document.querySelector('.notify-btn').addEventListener('click', function() { saveEmail(document.querySelector('.notify-input').value, this, '알림 신청 →'); });
+    document.querySelector('.notify-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.querySelector('.notify-btn').click(); });
+    document.querySelector('.cta-btn').addEventListener('click', function() { saveEmail(document.querySelector('.cta-input').value, this, '알림 신청하기 →'); });
+    document.querySelector('.cta-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.querySelector('.cta-btn').click(); });
 
-    document.querySelector('.cta-btn').addEventListener('click', function() {
-      saveEmail(document.querySelector('.cta-input').value, this, '알림 신청하기 →');
-    });
-    document.querySelector('.cta-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') document.querySelector('.cta-btn').click();
-    });
+    /* 스크롤 인터섹션 — 바 애니메이션 + fade-in */
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          e.target.querySelectorAll('.lai-bar-fill, .lai-strength-fill').forEach(function(el) {
+            el.style.width = el.dataset.w + '%';
+          });
+          /* 전략 강도 순차 하이라이트 */
+          var rows = e.target.querySelectorAll('.lai-strength-row');
+          if (rows.length) {
+            rows.forEach(function(r) { r.classList.remove('active'); });
+            var i = 0;
+            (function cycle() {
+              rows.forEach(function(r) { r.classList.remove('active'); });
+              rows[i].classList.add('active');
+              i = (i + 1) % rows.length;
+              setTimeout(cycle, 1400);
+            })();
+          }
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(function(el) { obs.observe(el); });
+    document.querySelector('.lai-data-panel') && obs.observe(document.querySelector('.lai-data-panel'));
   </script>
-
 </body>
 </html>
