@@ -4,884 +4,327 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PACT | AI 기반 집단 협상 에이전트 플랫폼</title>
-  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 뭉친 다음은 학습하는 AI가 끝냅니다." />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 방대한 판례, 언론 보도, 성공·실패 사례를 학습한 AI 에이전트가 끝냅니다." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --blue: #80B0F8;
       --red: #F87888;
-      --bg: #131A1C;
-      --bg2: #0E1618;
-      --surface: #1A2224;
-      --line: rgba(255,255,255,.07);
-      --line2: rgba(255,255,255,.13);
-      --text: #FFFFFF;
-      --muted: rgba(255,255,255,.68);
-      --soft: rgba(255,255,255,.38);
-      --blue-dim: rgba(128,176,248,.13);
-      --red-dim: rgba(248,120,136,.13);
+      --bg: #0A0E10;
       --green: #5EFFA0;
-      --green-dim: rgba(94,255,160,.10);
-      --mono: 'Outfit', 'Noto Sans KR', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Outfit', 'Noto Sans KR', sans-serif; background: var(--bg2); color: var(--text); overflow-x: hidden; word-break: keep-all; }
-
-    /* NAV */
-    .nav { position: sticky; top: 0; z-index: 60; backdrop-filter: blur(16px); background: rgba(14,22,24,.88); border-bottom: 1px solid var(--line); }
-    .nav-inner { max-width: 1080px; margin: 0 auto; padding: 0 28px; min-height: 72px; display: flex; align-items: center; justify-content: space-between; }
-    .logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
+    body {
+      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    .bg-glow {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .glow-blue {
+      position: absolute; top: -20%; left: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(128,176,248,.08) 0%, transparent 70%);
+      filter: blur(80px);
+      animation: drift1 12s ease-in-out infinite;
+    }
+    .glow-red {
+      position: absolute; bottom: -20%; right: -10%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(248,120,136,.06) 0%, transparent 70%);
+      filter: blur(80px);
+      animation: drift2 14s ease-in-out infinite;
+    }
+    @keyframes drift1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(60px, 40px); }
+    }
+    @keyframes drift2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-40px, -30px); }
+    }
+    .noise {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 1; opacity: .03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .main {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    .logo {
+      font-size: 38px; font-weight: 900; letter-spacing: -2px;
+      margin-bottom: 80px;
+      opacity: 0; animation: fadeUp .8s ease forwards;
+    }
     .pa { color: var(--blue); }
     .ct { color: var(--red); }
-    .nav-right { display: flex; align-items: center; gap: 8px; }
-    .nav-badge { padding: 9px 14px; border-radius: 11px; background: rgba(128,176,248,.08); border: 1px solid rgba(128,176,248,.22); color: var(--blue); font-family: inherit; font-size: 12px; font-weight: 700; }
-    .nav-primary { padding: 10px 20px; border-radius: 11px; background: linear-gradient(135deg, var(--blue), #6F9FF1); color: #0E1618; font-family: inherit; font-size: 13px; font-weight: 800; border: none; cursor: pointer; text-decoration: none; }
-
-    /* UTILS */
-    .section-divider { width: 100%; max-width: 1080px; margin: 0 auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(128,176,248,.15), rgba(248,120,136,.12), transparent); }
-    .section-kicker { color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 10px; }
-    .section-title { font-size: clamp(24px, 3.5vw, 40px); font-weight: 900; letter-spacing: -1.2px; margin-bottom: 10px; }
-    .section-desc { color: var(--muted); font-size: 16px; line-height: 1.8; margin-bottom: 40px; max-width: 560px; }
-
-    /* ── HERO ── */
-    .hero { max-width: 1080px; margin: 0 auto; padding: 80px 28px 64px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line2); background: rgba(255,255,255,.03); color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 32px; }
-    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(90deg, var(--blue), var(--red)); }
-    .hero-title { font-size: clamp(32px, 5.5vw, 56px); font-weight: 900; line-height: 1.15; letter-spacing: -2px; margin-bottom: 16px; }
-    .hero-title .line1 { display: block; color: rgba(255,255,255,.5); margin-bottom: 4px; }
-    .hero-title .line2 { display: block; color: #fff; }
-    .hero-sub { font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; line-height: 1.3; }
-    .hero-sub .ai { color: var(--green); }
-    .hero-desc { max-width: 580px; margin: 0 auto 48px; color: rgba(255,255,255,.6); font-size: 16px; line-height: 1.85; }
-    .hero-desc strong { color: #fff; font-weight: 700; }
-
-    /* ── 학습 데이터 뱃지 (히어로 하단, 새로 추가) ── */
-    .learn-strip {
-      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-      margin-bottom: 40px; max-width: 720px;
-    }
-    .learn-chip {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 16px; border-radius: 999px;
-      font-size: 13px; font-weight: 700;
-    }
-    .learn-chip .num { font-size: 13px; font-weight: 800; }
-    .learn-chip.chip-blue {
-      background: rgba(128,176,248,.08);
-      border: 1px solid rgba(128,176,248,.25);
-      color: var(--blue);
-    }
-    .learn-chip.chip-red {
-      background: rgba(248,120,136,.08);
-      border: 1px solid rgba(248,120,136,.25);
-      color: var(--red);
-    }
-    .learn-chip.chip-soft {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.12);
-      color: rgba(255,255,255,.55);
-      font-style: italic;
-    }
-    .learn-chip-label { font-size: 12px; font-weight: 700; color: var(--soft); letter-spacing: .3px; text-transform: uppercase; margin-bottom: 10px; }
-
-    /* 세 가지 행동 */
-    .three-steps { display: flex; gap: 12px; width: 100%; max-width: 680px; margin-bottom: 48px; align-items: flex-start; }
-    .three-step { flex: 1; padding: 18px 16px; border-radius: 16px; border: 1px solid var(--line2); background: rgba(255,255,255,.03); text-align: center; }
-    .three-step.featured { flex: 1; padding: 22px 18px; border-radius: 18px; background: linear-gradient(160deg, rgba(128,176,248,.09), rgba(94,255,160,.04)); border: 1.5px solid rgba(128,176,248,.40); text-align: center; position: relative; box-shadow: 0 0 28px rgba(128,176,248,.08), 0 0 0 1px rgba(128,176,248,.08); }
-    .featured-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; background: rgba(128,176,248,.12); border: 1px solid rgba(128,176,248,.35); color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 10px; }
-    .three-step-num { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--blue); text-transform: uppercase; margin-bottom: 6px; }
-    .three-step-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 6px; }
-    .three-step-sub { font-size: 13px; color: rgba(255,255,255,.60); line-height: 1.55; }
-    .three-step-sub .hi-blue { color: var(--blue); font-weight: 700; }
-    .three-step-sub .hi-green { color: var(--green); font-weight: 700; }
-
-    /* 예시 태그 */
-    .examples-wrap { width: 100%; max-width: 720px; margin-bottom: 48px; }
-    .examples-label { color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px; }
-    .examples-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .ex-tag { padding: 10px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; border: 1px solid var(--line2); background: rgba(255,255,255,.03); color: var(--muted); cursor: default; }
-    .ex-tag.b { border-color: rgba(128,176,248,.2); color: rgba(128,176,248,.8); background: var(--blue-dim); }
-    .ex-tag.r { border-color: rgba(248,120,136,.2); color: rgba(248,120,136,.8); background: var(--red-dim); }
-
-    /* 사전 알림 카드 */
-    .notify-card { width: 100%; max-width: 680px; padding: 32px; border-radius: 28px; background: linear-gradient(160deg, rgba(128,176,248,.10), rgba(255,255,255,.03)); border: 1px solid rgba(128,176,248,.22); }
-    .notify-title { font-size: 18px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
-    .notify-desc { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
-    .notify-input-wrap { display: flex; gap: 10px; margin-bottom: 12px; }
-    .notify-input { flex: 1; height: 52px; border-radius: 14px; border: 1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.28); color: #fff; padding: 0 18px; font-family: inherit; font-size: 15px; outline: none; }
-    .notify-input:focus { border-color: rgba(128,176,248,.45); }
-    .notify-input::placeholder { color: rgba(255,255,255,.26); }
-    .notify-btn { height: 52px; padding: 0 24px; border-radius: 14px; background: linear-gradient(135deg, var(--blue), #6F9FF1); color: #0E1618; font-family: inherit; font-size: 15px; font-weight: 900; border: none; cursor: pointer; white-space: nowrap; }
-    .notify-note { color: var(--soft); font-size: 12px; line-height: 1.6; }
-    .notify-note span { color: var(--blue); font-weight: 700; }
-
-    /* WHY PACT */
-    .section { max-width: 1080px; margin: 0 auto; padding: 80px 28px; }
-    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .compare-col { padding: 28px 26px; border-radius: 24px; border: 1px solid var(--line); }
-    .compare-col.before { background: rgba(255,255,255,.02); }
-    .compare-col.after { background: linear-gradient(160deg, rgba(128,176,248,.09), rgba(248,120,136,.06)); border-color: rgba(128,176,248,.22); }
-    .compare-badge { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; margin-bottom: 20px; }
-    .b-badge { background: rgba(255,255,255,.07); color: var(--soft); }
-    .a-badge { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(128,176,248,.2); }
-    .compare-list { display: flex; flex-direction: column; gap: 12px; }
-    .compare-item { display: flex; align-items: flex-start; gap: 10px; color: var(--muted); font-size: 14px; line-height: 1.7; }
-    .mark { flex: 0 0 18px; width: 18px; height: 18px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; margin-top: 2px; }
-    .mark.x { background: rgba(255,255,255,.06); color: var(--soft); }
-    .mark.o { background: var(--blue-dim); color: var(--blue); }
-    .mark.ai { background: var(--green-dim); color: var(--green); }
-    .ai-tag-inline { display: inline-block; padding: 1px 7px; border-radius: 6px; font-size: 10px; font-weight: 800; background: var(--green-dim); border: 1px solid rgba(94,255,160,.2); color: var(--green); letter-spacing: .4px; vertical-align: middle; margin-left: 4px; }
-
-    /* 에스컬레이션 */
-    .esc-steps { display: flex; flex-direction: column; gap: 12px; }
-    .esc-step { display: flex; align-items: flex-start; gap: 20px; padding: 24px 28px; border-radius: 20px; border: 1px solid var(--line); background: rgba(255,255,255,.02); }
-    .esc-step.p1 { border-color: rgba(128,176,248,.22); background: rgba(128,176,248,.04); }
-    .esc-step.p2 { border-color: rgba(248,120,136,.22); background: rgba(248,120,136,.04); }
-    .esc-step.p3 { border-color: rgba(248,120,136,.14); background: rgba(248,120,136,.02); }
-    .esc-step.agree { border-color: rgba(94,255,160,.18); background: rgba(94,255,160,.03); }
-    .esc-badge { flex-shrink: 0; padding: 6px 14px; border-radius: 10px; font-size: 11px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; white-space: nowrap; margin-top: 2px; }
-    .bd-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(128,176,248,.2); }
-    .bd-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,120,136,.2); }
-    .bd-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(94,255,160,.2); }
-    .esc-body { flex: 1; }
-    .esc-title { font-size: 17px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 6px; }
-    .esc-desc { color: var(--muted); font-size: 14px; line-height: 1.75; }
-    .esc-arrow { text-align: center; color: var(--soft); font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 4px 0; }
-    .esc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .esc-tag { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,.05); border: 1px solid var(--line2); color: var(--muted); }
-
-    /* ══════════════════════════════════════════
-       신규: 학습된 AI 섹션
-    ══════════════════════════════════════════ */
-    .learned-ai-section {
-      background: var(--bg);
-      border-top: 1px solid rgba(94,255,160,.1);
-      border-bottom: 1px solid rgba(94,255,160,.1);
-      position: relative;
-      overflow: hidden;
-    }
-    .learned-ai-section::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(94,255,160,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(94,255,160,.025) 1px, transparent 1px);
-      background-size: 44px 44px;
-      pointer-events: none;
-    }
-    .learned-ai-inner {
-      max-width: 1080px; margin: 0 auto; padding: 80px 28px;
-      position: relative; z-index: 1;
-    }
-
-    /* 상단: 타이틀 + 서브 */
-    .lai-header { margin-bottom: 52px; }
-    .lai-kicker {
-      font-family: var(--mono); font-size: 11px; letter-spacing: 0.3px;
-      text-transform: uppercase; color: rgba(94,255,160,.6);
-      margin-bottom: 14px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .lai-kicker::before { content: ''; width: 20px; height: 1px; background: rgba(94,255,160,.5); }
-    .lai-title { font-size: clamp(24px, 3.5vw, 40px); font-weight: 900; letter-spacing: -1.2px; margin-bottom: 12px; }
-    .lai-title .green { color: var(--green); }
-    .lai-desc { color: var(--muted); font-size: 16px; line-height: 1.8; max-width: 600px; }
-
-    /* 2열 레이아웃 */
-    .lai-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-      margin-bottom: 32px;
-    }
-
-    /* 좌: 일반 AI vs Pact AI 비교 */
-    .lai-compare {
-      display: flex; flex-direction: column; gap: 0;
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 20px; overflow: hidden;
-    }
-    .lai-compare-header {
-      display: grid; grid-template-columns: 1fr 1fr;
-    }
-    .lai-col-head {
-      padding: 14px 20px;
-      font-family: var(--mono); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.3px; text-transform: uppercase;
-    }
-    .lai-col-head.generic {
-      background: rgba(255,255,255,.03); color: var(--soft);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      border-right: 1px solid rgba(255,255,255,.06);
-    }
-    .lai-col-head.pact {
-      background: rgba(94,255,160,.05); color: rgba(94,255,160,.7);
-      border-bottom: 1px solid rgba(94,255,160,.12);
-    }
-    .lai-row {
-      display: grid; grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-    }
-    .lai-row:last-child { border-bottom: none; }
-    .lai-cell {
-      padding: 14px 20px;
-      font-size: 13px; line-height: 1.6;
-    }
-    .lai-cell.generic-cell {
+    .line1 {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(18px, 3.2vw, 26px);
+      font-weight: 400;
       color: rgba(255,255,255,.35);
-      border-right: 1px solid rgba(255,255,255,.04);
-      background: rgba(255,255,255,.01);
+      letter-spacing: -0.5px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      opacity: 0; animation: fadeUp .8s ease .3s forwards;
     }
-    .lai-cell.pact-cell {
-      color: rgba(255,255,255,.75);
-      background: rgba(94,255,160,.02);
+    .line2 {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(28px, 5.5vw, 52px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -2px;
+      line-height: 1.2;
+      margin-bottom: 48px;
+      opacity: 0; animation: fadeUp .8s ease .6s forwards;
     }
-    .lai-cell.pact-cell strong { color: var(--green); font-weight: 700; }
-    .lai-cell .x-mark { color: rgba(255,255,255,.2); margin-right: 6px; }
-    .lai-cell .check-mark { color: var(--green); margin-right: 6px; }
-
-    /* 우: 학습 데이터 시각화 */
-    .lai-data-panel {
-      border: 1px solid rgba(94,255,160,.15);
-      border-radius: 20px;
-      background: rgba(94,255,160,.02);
-      padding: 28px;
-      display: flex; flex-direction: column; gap: 20px;
+    .divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, var(--blue), var(--red));
+      margin-bottom: 48px;
+      opacity: 0; animation: fadeUp .8s ease .9s forwards;
     }
-    .lai-panel-title {
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.3px;
-      text-transform: uppercase; color: rgba(94,255,160,.5);
+    .ai-intro {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(14px, 2.2vw, 18px);
+      font-weight: 300;
+      color: rgba(255,255,255,.5);
+      line-height: 2;
+      max-width: 540px;
+      margin-bottom: 16px;
+      opacity: 0; animation: fadeUp .8s ease 1.2s forwards;
+    }
+    .ai-highlight {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.6;
+      max-width: 540px;
+      margin-bottom: 72px;
+      opacity: 0; animation: fadeUp .8s ease 1.5s forwards;
+    }
+    .ai-highlight .glow-text {
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .data-chips {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 80px;
+      opacity: 0; animation: fadeUp .8s ease 1.8s forwards;
+    }
+    .chip {
+      padding: 8px 18px; border-radius: 999px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+    }
+    .chip-b { background: rgba(128,176,248,.08); border: 1px solid rgba(128,176,248,.2); color: var(--blue); }
+    .chip-r { background: rgba(248,120,136,.08); border: 1px solid rgba(248,120,136,.2); color: var(--red); }
+    .chip-g { background: rgba(94,255,160,.06); border: 1px solid rgba(94,255,160,.15); color: var(--green); }
+    .pact-meaning {
+      margin-bottom: 72px;
+      padding: 28px 36px;
+      border-left: 2px solid rgba(128,176,248,.25);
+      text-align: left;
+      max-width: 420px;
+      opacity: 0; animation: fadeUp .8s ease 2.1s forwards;
+    }
+    .meaning-word {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px; font-weight: 900; letter-spacing: -1px;
       margin-bottom: 4px;
     }
-
-    /* 학습 데이터 바 */
-    .lai-bar-list { display: flex; flex-direction: column; gap: 12px; }
-    .lai-bar-row { display: flex; flex-direction: column; gap: 5px; }
-    .lai-bar-meta { display: flex; justify-content: space-between; align-items: center; }
-    .lai-bar-name { font-size: 12px; color: var(--muted); font-weight: 600; }
-    .lai-bar-val {
-      font-family: var(--mono); font-size: 11px;
-      color: var(--green); font-weight: 700;
+    .meaning-phonetic {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px; color: rgba(255,255,255,.3);
+      margin-bottom: 12px;
     }
-    .lai-bar-track {
-      height: 4px; background: rgba(255,255,255,.05);
-      border-radius: 2px; overflow: hidden;
+    .meaning-def {
+      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      font-size: 14px; color: rgba(255,255,255,.5);
+      line-height: 1.6;
+      margin-bottom: 6px;
     }
-    .lai-bar-fill {
-      height: 100%; border-radius: 2px;
-      background: linear-gradient(90deg, rgba(94,255,160,.6), rgba(94,255,160,.9));
-      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    .meaning-kr {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 13px; color: rgba(255,255,255,.4);
+      line-height: 1.6;
+      margin-bottom: 10px;
     }
-
-    .lai-divider { height: 1px; background: rgba(94,255,160,.08); }
-
-    /* 서명자 수 기반 전략 강도 */
-    .lai-strength { display: flex; flex-direction: column; gap: 8px; }
-    .lai-strength-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 14px;
-      border: 1px solid rgba(255,255,255,.05);
-      background: rgba(255,255,255,.02);
-      border-radius: 10px;
+    .meaning-ex {
+      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+      font-size: 13px; color: rgba(255,255,255,.3);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    .meaning-ex em { color: var(--blue); font-style: italic; }
+    .launch {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp .8s ease 2.4s forwards;
+    }
+    .email-form {
+      display: flex; gap: 0; max-width: 420px; width: 100%;
+      opacity: 0; animation: fadeUp .8s ease 2.7s forwards;
+    }
+    .email-input {
+      flex: 1; padding: 16px 20px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      color: #fff; font-family: inherit; font-size: 14px;
+      outline: none;
       transition: border-color .3s;
     }
-    .lai-strength-row.active {
-      border-color: rgba(94,255,160,.25);
-      background: rgba(94,255,160,.04);
+    .email-input::placeholder { color: rgba(255,255,255,.25); }
+    .email-input:focus { border-color: rgba(128,176,248,.4); }
+    .email-btn {
+      padding: 16px 28px;
+      background: linear-gradient(135deg, var(--blue), #6F9FF1);
+      border: none; border-radius: 0 12px 12px 0;
+      color: #0A0E10; font-family: inherit; font-size: 14px; font-weight: 800;
+      cursor: pointer;
+      transition: opacity .3s;
+      white-space: nowrap;
     }
-    .lai-strength-range {
-      font-family: var(--mono); font-size: 11px; font-weight: 700;
-      color: var(--soft); width: 72px; flex-shrink: 0;
+    .email-btn:hover { opacity: .85; }
+    .email-note {
+      margin-top: 14px;
+      font-size: 12px; color: rgba(255,255,255,.2);
+      opacity: 0; animation: fadeUp .8s ease 2.9s forwards;
     }
-    .lai-strength-row.active .lai-strength-range { color: var(--green); }
-    .lai-strength-bar { flex: 1; height: 3px; background: rgba(255,255,255,.05); border-radius: 2px; overflow: hidden; }
-    .lai-strength-fill { height: 100%; border-radius: 2px; background: var(--green); transition: width 1.6s ease; }
-    .lai-strength-label { font-size: 11px; color: var(--soft); white-space: nowrap; }
-    .lai-strength-row.active .lai-strength-label { color: rgba(255,255,255,.7); }
-
-    /* 하단: 학습 소스 태그 */
-    .lai-source-row {
-      display: flex; flex-wrap: wrap; gap: 8px;
+    .success-msg {
+      display: none;
+      font-size: 14px; color: var(--green); font-weight: 600;
+      margin-top: 16px;
     }
-    .lai-source-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px; border-radius: 8px;
-      border: 1px solid rgba(94,255,160,.15);
-      background: rgba(94,255,160,.04);
-      font-family: var(--mono); font-size: 11px; font-weight: 600;
-      color: rgba(94,255,160,.7); letter-spacing: .3px;
+    .success-msg.show { display: block; animation: fadeUp .5s ease forwards; }
+    .targets {
+      margin-top: 80px;
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp .8s ease 3.1s forwards;
     }
-    .lai-source-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); opacity: .7; }
-
-    /* ── AI 엔진 ── */
-    .ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--green-dim); border: 1px solid rgba(94,255,160,.22); color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 14px; }
-    .engines { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
-    .engine-card { padding: 24px 22px; border-radius: 22px; background: linear-gradient(160deg, rgba(94,255,160,.04), rgba(128,176,248,.03)); border: 1px solid rgba(94,255,160,.12); transition: transform .2s, border-color .2s; }
-    .engine-card:hover { transform: translateY(-3px); border-color: rgba(94,255,160,.25); }
-
-    /* Engine 08 — 전체 너비 강조 카드 */
-    .engine-card.engine08 {
-      grid-column: 1 / -1;
-      padding: 36px 36px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(94,255,160,.07), rgba(128,176,248,.05), rgba(248,120,136,.04));
-      border: 1.5px solid rgba(94,255,160,.3);
-      box-shadow: 0 0 40px rgba(94,255,160,.08);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
+    .target-chip {
+      padding: 6px 14px; border-radius: 8px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,.3);
+      border: 1px solid rgba(255,255,255,.06);
     }
-    .engine-card.engine08:hover { transform: translateY(-3px); border-color: rgba(94,255,160,.45); }
-
-    .engine-num { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
-    .engine-status { display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(94,255,160,.10); border: 1px solid rgba(94,255,160,.2); color: var(--green); }
-    .engine-name { font-size: 17px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 4px; }
-    .engine08 .engine-name { font-size: clamp(20px, 2.5vw, 28px); letter-spacing: -1px; }
-    .engine-en { font-size: 11px; color: var(--soft); letter-spacing: .8px; text-transform: uppercase; margin-bottom: 10px; }
-    .engine-desc { color: rgba(255,255,255,.55); font-size: 13px; line-height: 1.75; }
-    .engine08 .engine-desc { font-size: 15px; line-height: 1.85; color: rgba(255,255,255,.65); }
-
-    /* Engine 08 우측 시각화 */
-    .e08-visual { display: flex; flex-direction: column; gap: 10px; }
-    .e08-vis-title {
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.3px;
-      text-transform: uppercase; color: rgba(94,255,160,.5); margin-bottom: 4px;
+    .footer {
+      position: relative; z-index: 2;
+      text-align: center; padding: 40px 24px;
+      font-size: 11px; color: rgba(255,255,255,.15);
     }
-    .e08-flow { display: flex; flex-direction: column; gap: 6px; }
-    .e08-step {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px;
-      border: 1px solid rgba(94,255,160,.1);
-      background: rgba(94,255,160,.03);
-      border-radius: 10px;
-      font-size: 13px; color: rgba(255,255,255,.65);
+    .footer a { color: rgba(255,255,255,.2); text-decoration: none; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .e08-step-icon { font-size: 15px; flex-shrink: 0; }
-    .e08-step strong { color: var(--green); font-weight: 700; }
-    .e08-arrow { text-align: center; font-size: 11px; color: rgba(94,255,160,.3); letter-spacing: 0.3px; }
-
-    /* 하단 CTA */
-    .bottom-cta { max-width: 1080px; margin: 0 auto; padding: 0 28px 100px; }
-    .cta-box { padding: 56px 40px; border-radius: 32px; background: radial-gradient(circle at 15% 50%, rgba(128,176,248,.12), transparent 40%), radial-gradient(circle at 85% 50%, rgba(248,120,136,.12), transparent 38%), var(--surface); border: 1px solid var(--line2); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; }
-    .cta-title { font-size: clamp(22px, 3vw, 36px); font-weight: 900; letter-spacing: -1.2px; line-height: 1.15; }
-    .cta-title .grad { background: linear-gradient(90deg, var(--blue), var(--red)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .cta-desc { color: var(--muted); font-size: 16px; line-height: 1.85; max-width: 460px; }
-    .cta-input-wrap { display: flex; gap: 10px; max-width: 480px; width: 100%; }
-    .cta-input { flex: 1; height: 52px; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.32); color: #fff; padding: 0 18px; font-family: inherit; font-size: 15px; outline: none; }
-    .cta-input::placeholder { color: rgba(255,255,255,.26); }
-    .cta-btn { height: 52px; padding: 0 28px; border-radius: 14px; background: linear-gradient(135deg, var(--blue), #6F9FF1); color: #0E1618; font-family: inherit; font-size: 15px; font-weight: 900; border: none; cursor: pointer; white-space: nowrap; }
-    .cta-sub { color: var(--soft); font-size: 13px; }
-
-    /* FOOTER */
-    .footer { border-top: 1px solid var(--line); padding: 28px; }
-    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--soft); font-size: 13px; }
-    .footer-logo { font-weight: 900; letter-spacing: -.5px; }
-
-    /* 스크롤 인트로 애니메이션 */
-    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
-    .fade-in.visible { opacity: 1; transform: none; }
-
-    @media (max-width: 860px) {
-      .compare { grid-template-columns: 1fr; }
-      .engines { grid-template-columns: repeat(2, 1fr); }
-      .three-steps { flex-direction: column; max-width: 400px; }
-      .lai-grid { grid-template-columns: 1fr; }
-      .engine-card.engine08 { grid-template-columns: 1fr; gap: 24px; }
-    }
-    @media (max-width: 600px) {
-      .nav-inner { padding: 0 16px; min-height: 60px; }
-      .nav-badge { display: none; }
-      .hero { padding: 52px 20px 48px; }
-      .notify-card { padding: 22px 18px; }
-      .notify-input-wrap { flex-direction: column; }
-      .notify-btn { width: 100%; height: 48px; }
-      .section { padding: 60px 20px; }
-      .engines { grid-template-columns: 1fr; }
-      .esc-step { flex-direction: column; gap: 12px; padding: 20px; }
-      .bottom-cta { padding: 0 20px 80px; }
-      .cta-box { padding: 40px 20px; }
-      .cta-input-wrap { flex-direction: column; }
-      .cta-btn { width: 100%; }
-      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
-      .engine-card.engine08 { padding: 24px 20px; }
-      .learned-ai-inner { padding: 60px 20px; }
+    @media (max-width: 480px) {
+      .logo { font-size: 30px; margin-bottom: 60px; }
+      .line2 { margin-bottom: 36px; }
+      .divider { margin-bottom: 36px; }
+      .ai-highlight { margin-bottom: 56px; }
+      .data-chips { gap: 8px; margin-bottom: 60px; }
+      .email-form { flex-direction: column; gap: 10px; }
+      .email-input { border-right: 1px solid rgba(255,255,255,.1); border-radius: 12px; }
+      .email-btn { border-radius: 12px; }
+      .targets { margin-top: 60px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <div class="logo"><span class="pa">pa</span><span class="ct">ct</span></div>
-      <div class="nav-right">
-        <span class="nav-badge">2026년 4월 출시 예정</span>
-        <a class="nav-primary" href="#notify">사전 알림 신청</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ══ HERO ══ -->
-  <section class="hero">
-    <div class="eyebrow">
-      <span class="eyebrow-dot"></span>
-      AI 기반 집단 협상 에이전트 플랫폼
-    </div>
-
-    <h1 class="hero-title">
-      <span class="line1">혼자의 억울함은 묻힙니다.</span>
-      <span class="line2">함께 모이면 달라집니다.</span>
-    </h1>
-
-    <!-- 학습하는 AI 강조 — 기존보다 크고 명확하게 -->
-    <div class="hero-sub">
-      뭉친 다음은 <span class="ai">판례·사례를 학습한 AI가 끝냅니다.</span>
-    </div>
-
-
-    <!-- 학습 데이터 칩 -->
-    <div style="margin-bottom:12px;">
-      <div class="learn-chip-label">이런 분들을 위합니다</div>
-    </div>
-    <div class="learn-strip">
-      <div class="learn-chip chip-blue"><span class="num">직장인</span></div>
-      <div class="learn-chip chip-blue"><span class="num">세입자</span></div>
-      <div class="learn-chip chip-blue"><span class="num">입주민</span></div>
-      <div class="learn-chip chip-red"><span class="num">소상공인</span></div>
-      <div class="learn-chip chip-red"><span class="num">일반 시민</span></div>
-      <div class="learn-chip chip-soft"><span class="num">불합리함을 겪은 누구든</span></div>
-    </div>
-
-    <p class="hero-desc">
-      법 지식도, 협상 경험도 없어도 괜찮아요.<br>
-      <strong>당신이 할 일은 딱 세 가지입니다.</strong>
-    </p>
-
-    <div class="three-steps">
-      <div class="three-step featured">
-        <div class="featured-badge">✦ 학습한 AI</div>
-        <div class="three-step-num">01</div>
-        <div class="three-step-text">문제 상황을 입력한다</div>
-        <div class="three-step-sub">판례·언론·성공·실패 데이터를 <span class="hi-green">학습한 AI가</span> <span class="hi-blue">왜 안 됐는지부터 분석</span>하고 전략을 설계합니다</div>
-      </div>
-      <div class="three-step">
-        <div class="three-step-num">02</div>
-        <div class="three-step-text">같은 처지의 사람들을 모은다</div>
-        <div class="three-step-sub">링크 하나로 <span class="hi-blue">집단이 됩니다</span></div>
-      </div>
-      <div class="three-step">
-        <div class="three-step-num">03</div>
-        <div class="three-step-text">최종 합의에 동의하거나 거부한다</div>
-        <div class="three-step-sub">나머지는 <span class="hi-green">AI가 실행합니다</span></div>
-      </div>
-    </div>
-
-    <div class="examples-wrap">
-      <div class="examples-label">이런 것들을 해결할 수 있어요</div>
-      <div class="examples-cloud">
-        <span class="ex-tag b">포괄임금제로 야근을 공짜로 시켜요</span>
-        <span class="ex-tag r">상사 폭언인데 신고해도 아무것도 안 바뀌어요</span>
-        <span class="ex-tag b">층간소음이 1년째 방치됩니다</span>
-        <span class="ex-tag">버스가 매일 무정차로 그냥 지나쳐요</span>
-        <span class="ex-tag r">월급을 이유 없이 늦게 줘요</span>
-        <span class="ex-tag b">헬스장 폐업인데 잔여 이용권 환불을 거부해요</span>
-        <span class="ex-tag">관리비 내역 공개를 거부해요</span>
-        <span class="ex-tag r">학원비 환불을 끝까지 안 해줘요</span>
-        <span class="ex-tag b">하자보수 요청을 수개월째 묵살해요</span>
-        <span class="ex-tag r">본사의 불공정 계약을 강요받아요</span>
-        <span class="ex-tag b">공사장 소음이 새벽에도 계속돼요</span>
-        <span class="ex-tag">알바 근로계약서를 안 써줘요</span>
-      </div>
-    </div>
-
-    <div class="notify-card" id="notify">
-      <div class="notify-title">출시 알림 신청하기</div>
-      <div class="notify-desc">2026년 4월 정식 출시 예정입니다. 이메일을 남겨주시면 출시 소식을 가장 먼저 전달해 드립니다.</div>
-      <div class="notify-input-wrap">
-        <input class="notify-input" type="email" placeholder="이메일 주소를 입력하세요" />
-        <button class="notify-btn">알림 신청 →</button>
-      </div>
-      <div class="notify-note">
-        <span>공식 문서 전달 전까지는 완전 무료입니다.</span> 스팸 메일은 보내지 않아요.
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ══ WHY PACT ══ (기존 유지) -->
-  <section class="section">
-    <div class="section-kicker">Why Pact</div>
-    <div class="section-title">분석 도구가 아닌, 실행 에이전트입니다</div>
-    <div class="section-desc">기존 청원·서명 플랫폼은 목소리를 모으는 데서 끝납니다. PACT의 AI는 문제를 받아 전략을 세우고, 문서를 만들고, 채널에 발송하고, 무응답이면 다음 단계를 자동으로 실행합니다.</div>
-    <div class="compare">
-      <div class="compare-col before">
-        <span class="compare-badge b-badge">기존 방식</span>
-        <div class="compare-list">
-          <div class="compare-item"><span class="mark x">✕</span><span>혼자 항의해봐야 "검토하겠다"는 말만 돌아옵니다</span></div>
-          <div class="compare-item"><span class="mark x">✕</span><span>청원·서명까지 해도 상대방은 그냥 무시합니다</span></div>
-          <div class="compare-item"><span class="mark x">✕</span><span>한 채널에 집중하면 상대방은 그 채널만 막으면 그만입니다</span></div>
-          <div class="compare-item"><span class="mark x">✕</span><span>법 지식이 없으면 어디에 어떻게 신고해야 할지 모릅니다</span></div>
-          <div class="compare-item"><span class="mark x">✕</span><span>대표자가 멋대로 합의해버리는 위험이 존재합니다</span></div>
-        </div>
-      </div>
-      <div class="compare-col after">
-        <span class="compare-badge a-badge">PACT AI 에이전트</span>
-        <div class="compare-list">
-          <div class="compare-item"><span class="mark ai">✦</span><span>복합 문제를 법령 레이어별로 분해 — 관할 기관·채널을 자동 설계<span class="ai-tag-inline">AI</span></span></div>
-          <div class="compare-item"><span class="mark ai">✦</span><span>1단계 공식 통보 → 무응답 시 전 채널 동시 압박 → 법적 조치 자동 실행<span class="ai-tag-inline">AI</span></span></div>
-          <div class="compare-item"><span class="mark ai">✦</span><span>기관 민원 + 국회의원 + 언론 + 공개 — 모든 방향이 동시에 터지는 구조<span class="ai-tag-inline">AI</span></span></div>
-          <div class="compare-item"><span class="mark o">✓</span><span>법 지식 없어도 됩니다. AI가 채널별 맞춤 문서를 자동 생성합니다</span></div>
-          <div class="compare-item"><span class="mark o">✓</span><span>참여자 과반수 동의 없이는 누구도 임의로 합의할 수 없습니다</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ══ 신규: 학습된 AI 섹션 ══ -->
-  <div class="learned-ai-section">
-    <div class="learned-ai-inner">
-      <div class="lai-header fade-in">
-        <div class="lai-kicker">학습된 AI</div>
-        <h2 class="lai-title">범용 AI와 <span class="green">결정적으로 다릅니다</span></h2>
-        <p class="lai-desc">범용 AI는 모든 분야를 조금씩 압니다. Pact AI는 오직 하나만 파고들었습니다 — 한국에서 집단이 어떻게 싸워서 이겼는지, 그리고 왜 졌는지. 수년간 축적된 판례·언론·협상 데이터가 전략의 근거가 됩니다.</p>
-      </div>
-
-      <div class="lai-grid fade-in">
-        <!-- 좌: 비교표 -->
-        <div class="lai-compare">
-          <div class="lai-compare-header">
-            <div class="lai-col-head generic">범용 AI</div>
-            <div class="lai-col-head pact">Pact 학습 AI</div>
-          </div>
-          <div class="lai-row">
-            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>일반적인 법률 정보 안내</div>
-            <div class="lai-cell pact-cell"><span class="check-mark">✓</span><strong>이 상황에서 왜 실패했는지</strong> 먼저 분석</div>
-          </div>
-          <div class="lai-row">
-            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>채널 추천을 모름</div>
-            <div class="lai-cell pact-cell"><span class="check-mark">✓</span>관할 기관·국회의원·언론사 <strong>실시간 조합</strong></div>
-          </div>
-          <div class="lai-row">
-            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>서명자 수 무관 동일 답변</div>
-            <div class="lai-cell pact-cell"><span class="check-mark">✓</span><strong>서명자 수에 따라</strong> 전략 강도 자동 조정</div>
-          </div>
-          <div class="lai-row">
-            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>상대방 유형 분석 불가</div>
-            <div class="lai-cell pact-cell"><span class="check-mark">✓</span>상대방 규모·PR민감도로 <strong>채널 우선순위</strong> 조정</div>
-          </div>
-          <div class="lai-row">
-            <div class="lai-cell generic-cell"><span class="x-mark">✕</span>문서 작성만 가능</div>
-            <div class="lai-cell pact-cell"><span class="check-mark">✓</span>문서 생성 → 발송 → 에스컬레이션 <strong>자동 실행</strong></div>
-          </div>
-        </div>
-
-        <!-- 우: 학습 데이터 시각화 -->
-        <div class="lai-data-panel">
-          <div>
-            <div class="lai-panel-title">학습 데이터 커버리지</div>
-            <div class="lai-bar-list">
-              <div class="lai-bar-row">
-                <div class="lai-bar-meta">
-                  <div class="lai-bar-name">직장인·세입자·입주민·소상공인·시민</div>
-                  <div class="lai-bar-val">지속 확장 중</div>
-                </div>
-                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="65"></div></div>
-              </div>
-              <div class="lai-bar-row">
-                <div class="lai-bar-meta">
-                  <div class="lai-bar-name">판례 기반 전략 패턴</div>
-                  <div class="lai-bar-val">수년간 축적</div>
-                </div>
-                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="62"></div></div>
-              </div>
-              <div class="lai-bar-row">
-                <div class="lai-bar-meta">
-                  <div class="lai-bar-name">언론 보도 성공 사례</div>
-                  <div class="lai-bar-val">실시간 학습</div>
-                </div>
-                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="68"></div></div>
-              </div>
-              <div class="lai-bar-row">
-                <div class="lai-bar-meta">
-                  <div class="lai-bar-name">실패 원인 패턴 분석</div>
-                  <div class="lai-bar-val">깊이 내장</div>
-                </div>
-                <div class="lai-bar-track"><div class="lai-bar-fill" style="width:0" data-w="60"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="lai-divider"></div>
-
-          <div>
-            <div class="lai-panel-title">서명자 수 → 전략 강도 자동 조정</div>
-            <div class="lai-strength">
-              <div class="lai-strength-row" id="sr0">
-                <div class="lai-strength-range">1~9명</div>
-                <div class="lai-strength-bar"><div class="lai-strength-fill" style="width:0" data-w="30"></div></div>
-                <div class="lai-strength-label">소규모 — 서면 중심</div>
-              </div>
-              <div class="lai-strength-row" id="sr1">
-                <div class="lai-strength-range">10~49명</div>
-                <div class="lai-strength-bar"><div class="lai-strength-fill" style="width:0" data-w="62"></div></div>
-                <div class="lai-strength-label">중규모 — 기관 압박 추가</div>
-              </div>
-              <div class="lai-strength-row active" id="sr2">
-                <div class="lai-strength-range">50명+</div>
-                <div class="lai-strength-bar"><div class="lai-strength-fill" style="width:0" data-w="100"></div></div>
-                <div class="lai-strength-label">대규모 — 언론·전 채널 동시</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="lai-divider"></div>
-
-          <div>
-            <div class="lai-panel-title">학습 소스</div>
-            <div class="lai-source-row">
-              <div class="lai-source-tag"><span class="dot"></span>국내 판례 전 범위</div>
-              <div class="lai-source-tag"><span class="dot"></span>직장·임차·생활 분쟁 언론 보도</div>
-              <div class="lai-source-tag"><span class="dot"></span>집단 협상 성공 전략</div>
-              <div class="lai-source-tag"><span class="dot"></span>실패 원인 심층 분석</div>
-              <div class="lai-source-tag"><span class="dot"></span>채널별 압박 효과 데이터</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="bg-glow">
+  <div class="glow-blue"></div>
+  <div class="glow-red"></div>
+</div>
+<div class="noise"></div>
+<div class="main">
+  <div class="logo"><span class="pa">pa</span><span class="ct">ct</span></div>
+  <div class="line1">혼자의 억울함은 묻힙니다.</div>
+  <div class="line2">함께 모이면 달라집니다.</div>
+  <div class="divider"></div>
+  <div class="ai-intro">
+    판례, 언론 보도, 성공·실패 사례 —<br>
+    방대한 데이터를 학습한
   </div>
-
-  <div class="section-divider"></div>
-
-  <!-- ══ HOW IT WORKS ══ (기존 유지) -->
-  <section class="section">
-    <div class="section-kicker">How It Works</div>
-    <div class="section-title">상대방이 구조적으로 무시할 수 없습니다</div>
-    <div class="section-desc">단일 채널 순차 진행은 상대방이 하나씩 막으면 그만입니다. PACT는 처음부터 동시다발 구조로 설계되어 있습니다.</div>
-    <div class="esc-steps">
-      <div class="esc-step p1">
-        <div class="esc-badge bd-blue">Phase 01</div>
-        <div class="esc-body">
-          <div class="esc-title">이슈 등록 & 집단 구성</div>
-          <div class="esc-desc">문제를 입력하면 AI가 즉시 분해·분석합니다. 공유 링크로 같은 처지의 사람들이 모이고 서명·의견을 수렴합니다. 완전 무료입니다.</div>
-          <div class="esc-tags"><span class="esc-tag">✦ 복합 이슈 분해</span><span class="esc-tag">✦ 동적 채널 매핑</span><span class="esc-tag">✦ 집단 의견 분석</span></div>
-        </div>
-      </div>
-      <div class="esc-arrow">↓ 집단 구성 완료 후 공식 통보 시작</div>
-      <div class="esc-step p1">
-        <div class="esc-badge bd-blue">1단계</div>
-        <div class="esc-body">
-          <div class="esc-title">공식 통보 (무료)</div>
-          <div class="esc-desc">AI가 생성한 협상 요청서를 상대방에게 직접 전달합니다. 응답 기한을 명시하고 전달 기록을 자동 보관합니다.</div>
-          <div class="esc-tags"><span class="esc-tag">✦ 채널별 문서 자동 생성</span><span class="esc-tag">✦ 전달 기록 보관</span></div>
-        </div>
-      </div>
-      <div class="esc-arrow">↓ 무응답 시 해결동참 (소액 분담) → 자동 에스컬레이션<br><span style="font-size:12px;color:rgba(255,255,255,.4)">참여자가 소액으로 분담합니다. 50명이 참여하면 1인당 1,000원, 커피 한 잔 값입니다.</span></div>
-      <div class="esc-step p2">
-        <div class="esc-badge bd-red">2단계</div>
-        <div class="esc-body">
-          <div class="esc-title">동시다발 전 채널 압박</div>
-          <div class="esc-desc">원클릭으로 모든 채널이 동시에 실행됩니다. 기관 공식 민원 + 지역구 국회의원 + 대통령실 국민제안 + 언론 보도자료 + 공개 페이지. 어떤 조직도 모든 방향을 동시에 감당하기 어렵습니다.</div>
-          <div class="esc-tags"><span class="esc-tag">🏛 관할 기관 민원</span><span class="esc-tag">🏛 국회의원 멘션</span><span class="esc-tag">📰 언론 보도자료</span><span class="esc-tag">📢 공개 압박</span></div>
-        </div>
-      </div>
-      <div class="esc-arrow">↓ 무응답 시 법적 조치</div>
-      <div class="esc-step p3">
-        <div class="esc-badge bd-red">3단계</div>
-        <div class="esc-body">
-          <div class="esc-title">법적 조치</div>
-          <div class="esc-desc">내용증명 발송(AI 초안 + 전문가 검토), 집단소송 준비 패키지 자동 생성, 법무·노무법인 연결 중개. <span style="color:rgba(248,120,136,.8);font-weight:700">별도 과금 (실비 기반)</span></div>
-          <div class="esc-tags"><span class="esc-tag">📋 내용증명 초안</span><span class="esc-tag">⚖️ 집단소송 준비</span><span class="esc-tag">👨‍⚖️ 전문가 연결</span></div>
-        </div>
-      </div>
-      <div class="esc-arrow">↓ 어느 단계에서든 합의 시</div>
-      <div class="esc-step agree">
-        <div class="esc-badge bd-green">합의 도출</div>
-        <div class="esc-body">
-          <div class="esc-title">참여자 과반수 동의로 확정</div>
-          <div class="esc-desc">상대방이 협상에 응하면 AI가 합의문 초안을 자동 작성합니다. 참여자 과반수 동의 없이는 어떤 합의도 확정될 수 없습니다. 대표자 단독 합의는 구조적으로 불가능합니다.</div>
-          <div class="esc-tags"><span class="esc-tag">✦ 합의문 자동 생성</span><span class="esc-tag">✓ 과반수 동의 확정</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ══ AI 엔진 8개 ══ (Engine 08 대폭 강조 + 상태 v1.4 수정) -->
-  <section class="section">
-    <div class="ai-badge">✦ AI Agent Engine</div>
-    <div class="section-title">PACT AI 에이전트, 8개 엔진으로 작동합니다</div>
-    <div class="section-desc">목표를 받으면 계획을 세우고, 문서를 만들고, 발송하고, 무응답이면 다음 단계를 자동 실행합니다.</div>
-    <div class="engines">
-      <div class="engine-card">
-        <div class="engine-num">Engine 01 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">복합 이슈 분해</div>
-        <div class="engine-en">Issue Decomposition</div>
-        <div class="engine-desc">막연한 문제를 AI가 법령 레이어별로 자동 분해합니다.</div>
-      </div>
-      <div class="engine-card">
-        <div class="engine-num">Engine 02 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">동적 채널 매핑</div>
-        <div class="engine-en">Channel Mapping</div>
-        <div class="engine-desc">이슈 분석 결과를 바탕으로 관할 기관·국회의원·언론사를 실시간 조합합니다.</div>
-      </div>
-      <div class="engine-card">
-        <div class="engine-num">Engine 03 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">채널별 문서 생성</div>
-        <div class="engine-en">Document Generation</div>
-        <div class="engine-desc">협상 요청서·민원서·보도자료를 각 채널 형식에 맞게 자동 생성합니다.</div>
-      </div>
-      <div class="engine-card">
-        <div class="engine-num">Engine 04 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">집단 의견 분석</div>
-        <div class="engine-en">Opinion Analysis</div>
-        <div class="engine-desc">수백 명 참여자의 의견을 자동 분류·집계해 핵심 요구사항 우선순위를 도출합니다.</div>
-      </div>
-      <div class="engine-card">
-        <div class="engine-num">Engine 05 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">합의문 생성</div>
-        <div class="engine-en">Agreement Generation</div>
-        <div class="engine-desc">협상 경과와 요구사항을 바탕으로 합의문 초안을 자동 작성합니다.</div>
-      </div>
-      <div class="engine-card">
-        <div class="engine-num">Engine 06 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">증빙 분석</div>
-        <div class="engine-en">Evidence Analysis</div>
-        <div class="engine-desc">증빙자료를 분석해 요약 텍스트를 생성합니다. 원본은 비공개 보관됩니다.</div>
-      </div>
-      <div class="engine-card">
-        <div class="engine-num">Engine 07 <span class="engine-status">✅ 구현</span></div>
-        <div class="engine-name">협상 전략 추천</div>
-        <div class="engine-en">Strategy Recommendation</div>
-        <div class="engine-desc">상황에 맞는 협상 전략과 대응 시나리오를 제안합니다.</div>
-      </div>
-
-      <!-- Engine 08 — 전체 너비, 완전히 다른 레이아웃 -->
-      <div class="engine-card engine08">
-        <div class="e08-left">
-          <div class="engine-num">Engine 08 <span class="engine-status">✅ 구현</span></div>
-          <div class="engine-name">학습 기반 전략 추론</div>
-          <div class="engine-en">Strategy Inference Engine</div>
-          <div class="engine-desc">
-            범용 AI와 결정적으로 다른 엔진입니다.<br><br>
-            판례·언론 보도·38개+ 이슈 도메인의 성공·실패 데이터를 학습한 AI가,
-            <strong style="color:var(--green)">왜 안 됐는지부터 먼저 분석</strong>하고
-            실제로 통하는 전략을 설계합니다.<br><br>
-            서명자 수(1~9명 / 10~49명 / 50명+)에 따라 전략 강도가 자동으로 달라지고,
-            상대방 유형·규모·PR 민감도에 따라 채널 우선순위도 동적으로 조정됩니다.
-          </div>
-        </div>
-        <div class="e08-visual">
-          <div class="e08-vis-title">엔진 08 작동 흐름</div>
-          <div class="e08-flow">
-            <div class="e08-step"><span class="e08-step-icon">📥</span><span>이슈 텍스트 + 서명자 수 입력</span></div>
-            <div class="e08-arrow">↓</div>
-            <div class="e08-step"><span class="e08-step-icon">🔍</span><span><strong>왜 안 됐는가</strong> — 과거 실패 패턴 먼저 분석</span></div>
-            <div class="e08-arrow">↓</div>
-            <div class="e08-step"><span class="e08-step-icon">📊</span><span>서명자 수 × 상대방 유형으로 <strong>전략 강도 산출</strong></span></div>
-            <div class="e08-arrow">↓</div>
-            <div class="e08-step"><span class="e08-step-icon">🎯</span><span>채널 우선순위 + 실행 전략 + <strong>한 줄 요약</strong> 생성</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ══ 하단 CTA ══ (기존 유지) -->
-  <section class="bottom-cta">
-    <div class="cta-box">
-      <div class="cta-title">
-        불합리하다고 느꼈다면,<br>
-        <span class="grad">그게 시작입니다.</span>
-      </div>
-      <div class="cta-desc">
-        참는 것도, 혼자 싸우는 것도 이제 그만해도 됩니다.<br>
-        문제를 입력하고, 사람을 모으고, 최종 동의만 하면 됩니다.<br>
-        나머지는 <strong style="color:var(--green)">판례·사례를 학습한 AI</strong>가 끝냅니다.
-      </div>
-      <div class="cta-input-wrap">
-        <input class="cta-input" type="email" placeholder="이메일 주소" />
-        <button class="cta-btn">알림 신청하기 →</button>
-      </div>
-      <div class="cta-sub">공식 문서 전달 전까지는 완전 무료입니다. 스팸 메일은 보내지 않아요.</div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
-      <div>AI 기반 집단 협상 에이전트 플랫폼 · © 2026 PACT. All rights reserved.</div>
-      <div style="display:flex;gap:16px">
-        <a href="https://pact-mvp.vercel.app/terms" style="color:rgba(255,255,255,.38);text-decoration:none;transition:color .18s" onmouseover="this.style.color='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.38)'">이용약관</a>
-        <a href="https://pact-mvp.vercel.app/privacy" style="color:rgba(255,255,255,.38);text-decoration:none;transition:color .18s" onmouseover="this.style.color='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.38)'">개인정보처리방침</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    var SB_URL = 'https://lhejfeweaixiklodonbr.supabase.co';
-    var SB_KEY = 'sb_publishable_JZjDHDGupbjdzPC41qRifQ_YdPQJzm6';
-
-    async function saveEmail(email, btn, originalText) {
-      if (!email || !email.includes('@')) {
-        btn.textContent = '올바른 이메일을 입력하세요';
-        setTimeout(function() { btn.textContent = originalText; }, 2000);
-        return;
-      }
-      btn.disabled = true; btn.textContent = '저장 중...';
-      try {
-        var res = await fetch(SB_URL + '/rest/v1/notify_emails', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Prefer': 'return=minimal' },
-          body: JSON.stringify({ email: email.trim().toLowerCase() })
-        });
-        if (res.ok) { btn.textContent = '✓ 신청 완료!'; btn.style.background = 'linear-gradient(135deg,#5EFFA0,#3de085)'; }
-        else if (res.status === 409) { btn.textContent = '이미 신청된 이메일이에요!'; }
-        else { throw new Error('fail'); }
-      } catch(e) {
-        btn.textContent = '오류 발생. 다시 시도해주세요.';
-        setTimeout(function() { btn.textContent = originalText; btn.disabled = false; }, 2500);
-      }
-    }
-
-    document.querySelector('.notify-btn').addEventListener('click', function() { saveEmail(document.querySelector('.notify-input').value, this, '알림 신청 →'); });
-    document.querySelector('.notify-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.querySelector('.notify-btn').click(); });
-    document.querySelector('.cta-btn').addEventListener('click', function() { saveEmail(document.querySelector('.cta-input').value, this, '알림 신청하기 →'); });
-    document.querySelector('.cta-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.querySelector('.cta-btn').click(); });
-
-    /* 스크롤 인터섹션 — 바 애니메이션 + fade-in */
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          e.target.querySelectorAll('.lai-bar-fill, .lai-strength-fill').forEach(function(el) {
-            el.style.width = el.dataset.w + '%';
-          });
-          /* 전략 강도 순차 하이라이트 */
-          var rows = e.target.querySelectorAll('.lai-strength-row');
-          if (rows.length) {
-            rows.forEach(function(r) { r.classList.remove('active'); });
-            var i = 0;
-            (function cycle() {
-              rows.forEach(function(r) { r.classList.remove('active'); });
-              rows[i].classList.add('active');
-              i = (i + 1) % rows.length;
-              setTimeout(cycle, 1400);
-            })();
-          }
-        }
+  <div class="ai-highlight">
+    <span class="glow-text">AI 에이전트</span>가 분석부터 해결까지 끝냅니다.
+  </div>
+  <div class="data-chips">
+    <span class="chip chip-b">판례</span>
+    <span class="chip chip-b">언론 보도</span>
+    <span class="chip chip-r">성공·실패 사례</span>
+    <span class="chip chip-g">지속 학습</span>
+  </div>
+  <div class="pact-meaning">
+    <div class="meaning-word"><span class="pa">pa</span><span class="ct">ct</span></div>
+    <div class="meaning-phonetic">/pækt/</div>
+    <div class="meaning-def">noun — a formal agreement between individuals or parties</div>
+    <div class="meaning-kr">협약, 합의, 조약 — 개인 또는 집단 간의 공식적인 합의</div>
+    <div class="meaning-ex">"The workers made a <em>pact</em> to stand together."</div>
+  </div>
+  <div class="launch">coming soon — 2026</div>
+  <form class="email-form" id="emailForm">
+    <input type="email" class="email-input" id="emailInput" placeholder="이메일을 남겨주세요" required />
+    <button type="submit" class="email-btn">사전 알림</button>
+  </form>
+  <div class="email-note">출시 소식을 가장 먼저 전해드립니다. 스팸은 보내지 않습니다.</div>
+  <div class="success-msg" id="successMsg">등록 완료! 출시 소식을 가장 먼저 전해드리겠습니다.</div>
+  <div class="targets">
+    <span class="target-chip">직장인</span>
+    <span class="target-chip">세입자</span>
+    <span class="target-chip">입주민</span>
+    <span class="target-chip">소상공인</span>
+    <span class="target-chip">불합리함을 겪는 누구든</span>
+  </div>
+</div>
+<div class="footer">
+  <span>© 2026 Pact</span> · <a href="https://pact-mvp.vercel.app/terms">이용약관</a> · <a href="https://pact-mvp.vercel.app/privacy">개인정보처리방침</a>
+</div>
+<script>
+  const SUPABASE_URL = 'https://gqwfkaqdnblhxvsezmsm.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdxd2ZrYXFkbmJsaHh2c2V6bXNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MDk5MjMsImV4cCI6MjA1NzQ4NTkyM30.oGwCMevJvRq8VBfP8EmbV3hLi0r4bMdPxzSgkJxXhUk';
+  document.getElementById('emailForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value.trim();
+    if (!email) return;
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/notify_emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ email: email })
       });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.fade-in').forEach(function(el) { obs.observe(el); });
-    document.querySelector('.lai-data-panel') && obs.observe(document.querySelector('.lai-data-panel'));
-  </script>
+      if (res.ok || res.status === 201) {
+        document.getElementById('emailForm').style.display = 'none';
+        document.querySelector('.email-note').style.display = 'none';
+        document.getElementById('successMsg').classList.add('show');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+</script>
 </body>
 </html>
