@@ -21,8 +21,6 @@
   <!-- Phosphor Icons -->
   <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <style>
     /* ===== DESIGN TOKENS ===== */
@@ -1374,37 +1372,33 @@
     requestAnimationFrame(update);
   }
 
-  /* Hero stats — real-time fetch from Supabase */
-  var sb;
-  try {
-    sb = supabase.createClient(
-      'https://ticqpfxxbkyvhreywsax.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpY3FwZnh4Ymt5dmhyZXl3c2F4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2MjkwMTUsImV4cCI6MjA1ODIwNTAxNX0.dPalKkVn92OA0b-5rl5BoSXaYxwcFz3TGm12HJfMiEg'
-    );
-  } catch (e) {
-    console.error('Supabase init failed:', e);
-  }
+  /* Hero stats — real-time fetch from Supabase (PostgREST aggregate) */
+  var SB_REST = 'https://ticqpfxxbkyvhreywsax.supabase.co/rest/v1';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpY3FwZnh4Ymt5dmhyZXl3c2F4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2MjkwMTUsImV4cCI6MjA1ODIwNTAxNX0.dPalKkVn92OA0b-5rl5BoSXaYxwcFz3TGm12HJfMiEg';
 
   async function fetchCount(table) {
     try {
-      var result = await sb.from(table).select('*', { count: 'exact', head: true });
-      if (result.error) { console.warn('fetchCount ' + table + ':', result.error.message); return 0; }
-      return result.count || 0;
-    } catch (e) { console.warn('fetchCount ' + table + ' exception:', e); return 0; }
+      var res = await fetch(SB_REST + '/' + table + '?select=count', {
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+      });
+      if (!res.ok) { console.warn('fetchCount ' + table + ': HTTP ' + res.status); return 0; }
+      var data = await res.json();
+      return (data && data[0] && data[0].count) ? parseInt(data[0].count) : 0;
+    } catch (e) { console.warn('fetchCount ' + table + ':', e); return 0; }
   }
 
   async function loadHeroStats() {
     var channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
-    var results = await Promise.all([
-      fetchCount('legal_cases'),
-      ...channelTables.map(function(t) { return fetchCount(t); })
-    ]);
+    var promises = [fetchCount('legal_cases')];
+    for (var i = 0; i < channelTables.length; i++) promises.push(fetchCount(channelTables[i]));
+    var results = await Promise.all(promises);
+
     var caseCount = results[0];
     var totalChannels = 0;
-    for (var i = 1; i < results.length; i++) totalChannels += results[i];
+    for (var j = 1; j < results.length; j++) totalChannels += results[j];
     var issueTypes = 23;
 
-    console.log('Pact stats:', { cases: caseCount, channels: totalChannels, types: issueTypes });
+    console.log('Pact live stats:', { cases: caseCount, channels: totalChannels, types: issueTypes });
 
     if (caseCount > 0) animateCounter(document.getElementById('heroCount1'), caseCount, 2200, '');
     else document.getElementById('heroCount1').textContent = '—';
@@ -1420,10 +1414,12 @@
       if (entry.isIntersecting) {
         (async function() {
           var channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
-          var results = await Promise.all([fetchCount('legal_cases')].concat(channelTables.map(function(t) { return fetchCount(t); })));
+          var promises = [fetchCount('legal_cases')];
+          for (var i = 0; i < channelTables.length; i++) promises.push(fetchCount(channelTables[i]));
+          var results = await Promise.all(promises);
           var cc = results[0];
           var chTotal = 0;
-          for (var i = 1; i < results.length; i++) chTotal += results[i];
+          for (var j = 1; j < results.length; j++) chTotal += results[j];
           if (cc > 0) animateCounter(document.getElementById('kpiCases'), cc, 1800, '');
           if (chTotal > 0) animateCounter(document.getElementById('kpiChannels'), chTotal, 1600, '');
           animateCounter(document.getElementById('kpiTypes'), 23, 1200, '');
