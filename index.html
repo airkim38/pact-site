@@ -4,307 +4,936 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PACT | AI 기반 집단 협상 에이전트 플랫폼</title>
-  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 방대한 판례, 언론 보도, 성공·실패 사례를 학습한 AI 에이전트가 끝냅니다." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <meta name="description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다. 판례·사례를 학습한 AI 에이전트가 분석부터 해결까지 끝냅니다." />
+  <meta property="og:title" content="PACT — AI 기반 집단 협상 에이전트 플랫폼" />
+  <meta property="og:description" content="혼자의 억울함은 묻힙니다. 함께 모이면 달라집니다." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pact.kr" />
+  <link rel="canonical" href="https://pact.kr" />
+
+  <!-- Fonts: fontsource via jsdelivr (Google Fonts 금지) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/outfit@5.1.1/900.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-kr@5.1.1/400.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-kr@5.1.1/500.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-kr@5.1.1/700.min.css" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
   <style>
+    /* ===== DESIGN TOKENS ===== */
     :root {
       --blue: #80B0F8;
       --red: #F87888;
-      --bg: #0A0E10;
       --green: #5EFFA0;
+      --bg: #0E1618;
+      --card: #131A1C;
+      --card-border: #1A2328;
+      --text-primary: #E8ECF0;
+      --text-secondary: rgba(232, 236, 240, 0.55);
+      --text-muted: rgba(232, 236, 240, 0.3);
+      --blue-dim: rgba(128, 176, 248, 0.08);
+      --blue-border: rgba(128, 176, 248, 0.15);
+      --red-dim: rgba(248, 120, 136, 0.08);
+      --red-border: rgba(248, 120, 136, 0.15);
+      --section-gap: clamp(80px, 12vw, 140px);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
-      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: #fff;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-    .bg-glow {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 0;
-    }
-    .glow-blue {
-      position: absolute; top: -20%; left: -10%;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(128,176,248,.08) 0%, transparent 70%);
-      filter: blur(80px);
-      animation: drift1 12s ease-in-out infinite;
-    }
-    .glow-red {
-      position: absolute; bottom: -20%; right: -10%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(248,120,136,.06) 0%, transparent 70%);
-      filter: blur(80px);
-      animation: drift2 14s ease-in-out infinite;
-    }
-    @keyframes drift1 {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(60px, 40px); }
-    }
-    @keyframes drift2 {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(-40px, -30px); }
-    }
-    .noise {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 1; opacity: .03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
-    .main {
-      position: relative; z-index: 2;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh;
-      padding: 60px 24px;
-      text-align: center;
-    }
-    .logo {
-      font-size: 38px; font-weight: 900; letter-spacing: -2px;
-      margin-bottom: 80px;
-      opacity: 0; animation: fadeUp .8s ease forwards;
-    }
-    .pa { color: var(--blue); }
-    .ct { color: var(--red); }
-    .line1 {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: clamp(18px, 3.2vw, 26px);
       font-weight: 400;
-      color: rgba(255,255,255,.35);
-      letter-spacing: -0.5px;
+      background: var(--bg);
+      color: var(--text-primary);
+      overflow-x: hidden;
       line-height: 1.6;
-      margin-bottom: 12px;
-      opacity: 0; animation: fadeUp .8s ease .3s forwards;
+      -webkit-font-smoothing: antialiased;
     }
-    .line2 {
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ===== UTILITIES ===== */
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .num { font-family: 'Outfit', sans-serif; font-weight: 900; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== AMBIENT BACKGROUND ===== */
+    .ambient {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .ambient-orb {
+      position: absolute; border-radius: 50%; filter: blur(100px);
+    }
+    .ambient-orb.blue {
+      width: 500px; height: 500px;
+      top: -15%; left: -8%;
+      background: radial-gradient(circle, rgba(128,176,248,0.06) 0%, transparent 70%);
+      animation: orbit1 20s ease-in-out infinite;
+    }
+    .ambient-orb.red {
+      width: 400px; height: 400px;
+      bottom: -10%; right: -5%;
+      background: radial-gradient(circle, rgba(248,120,136,0.04) 0%, transparent 70%);
+      animation: orbit2 24s ease-in-out infinite;
+    }
+    @keyframes orbit1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(40px, 30px); }
+    }
+    @keyframes orbit2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, -20px); }
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 0;
+      background: rgba(14, 22, 24, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .nav .container {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900; font-size: 24px; letter-spacing: -1px;
+    }
+    .nav-logo .pa { color: var(--blue); }
+    .nav-logo .ct { color: var(--red); }
+    .nav-cta {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: clamp(28px, 5.5vw, 52px);
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -2px;
-      line-height: 1.2;
-      margin-bottom: 48px;
-      opacity: 0; animation: fadeUp .8s ease .6s forwards;
+      font-weight: 700; font-size: 13px;
+      padding: 10px 20px; border-radius: 8px;
+      background: var(--blue); color: var(--bg);
+      transition: opacity 0.2s;
     }
-    .divider {
-      width: 60px; height: 1px;
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ===== SECTION: HERO ===== */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+    }
+    .hero-logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900; font-size: 44px; letter-spacing: -2px;
+      margin-bottom: 48px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 0.2s;
+    }
+    .hero-logo .pa { color: var(--blue); }
+    .hero-logo .ct { color: var(--red); }
+    .hero-position {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+      margin-bottom: 40px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 0.4s;
+    }
+    .hero-slogan-1 {
+      font-size: clamp(16px, 3vw, 22px); font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.7; margin-bottom: 12px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 0.6s;
+    }
+    .hero-slogan-2 {
+      font-size: clamp(26px, 5.5vw, 46px); font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25; letter-spacing: -1px;
+      max-width: 640px;
+      margin-bottom: 48px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 0.8s;
+    }
+    .hero-divider {
+      width: 48px; height: 2px;
       background: linear-gradient(90deg, var(--blue), var(--red));
       margin-bottom: 48px;
-      opacity: 0; animation: fadeUp .8s ease .9s forwards;
+      opacity: 0; animation: heroIn 0.8s ease forwards 1.0s;
     }
-    .ai-intro {
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: clamp(14px, 2.2vw, 18px);
-      font-weight: 300;
-      color: rgba(255,255,255,.5);
-      line-height: 2;
-      max-width: 540px;
-      margin-bottom: 16px;
-      opacity: 0; animation: fadeUp .8s ease 1.2s forwards;
+    .hero-ai-desc {
+      font-size: clamp(14px, 2.2vw, 17px); font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.9; max-width: 480px;
+      margin-bottom: 56px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 1.2s;
     }
-    .ai-highlight {
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: clamp(16px, 2.5vw, 22px);
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.6;
-      max-width: 540px;
-      margin-bottom: 72px;
-      opacity: 0; animation: fadeUp .8s ease 1.5s forwards;
+    .hero-ai-desc strong {
+      font-weight: 700; color: var(--blue);
     }
-    .ai-highlight .glow-text {
-      background: linear-gradient(135deg, var(--blue), var(--green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .hero-counter {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 64px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 1.4s;
     }
-    .data-chips {
-      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
-      margin-bottom: 80px;
-      opacity: 0; animation: fadeUp .8s ease 1.8s forwards;
-    }
-    .chip {
-      padding: 8px 18px; border-radius: 999px;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
-    }
-    .chip-b { background: rgba(128,176,248,.08); border: 1px solid rgba(128,176,248,.2); color: var(--blue); }
-    .chip-r { background: rgba(248,120,136,.08); border: 1px solid rgba(248,120,136,.2); color: var(--red); }
-    .chip-g { background: rgba(94,255,160,.06); border: 1px solid rgba(94,255,160,.15); color: var(--green); }
-    .pact-meaning {
-      margin-bottom: 72px;
-      padding: 28px 36px;
-      border-left: 2px solid rgba(128,176,248,.25);
-      text-align: left;
-      max-width: 420px;
-      opacity: 0; animation: fadeUp .8s ease 2.1s forwards;
-    }
-    .meaning-word {
+    .hero-counter-num {
       font-family: 'Outfit', sans-serif;
-      font-size: 28px; font-weight: 900; letter-spacing: -1px;
+      font-weight: 900;
+      font-size: clamp(48px, 10vw, 72px);
+      color: var(--blue);
+      line-height: 1;
+    }
+    .hero-counter-label {
+      font-size: 16px; font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .hero-counter-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--blue);
+      animation: pulse 2s ease-in-out infinite;
+      margin-right: 4px;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 32px;
+      font-size: 12px; color: var(--text-muted);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; animation: heroIn 0.8s ease forwards 1.8s;
+    }
+    .hero-scroll-hint i { font-size: 20px; animation: bobDown 2s ease-in-out infinite; }
+    @keyframes bobDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== SECTION: DICTIONARY ===== */
+    .dict-section {
+      position: relative; z-index: 1;
+      padding: var(--section-gap) 0;
+    }
+    .dict-block {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 32px 36px;
+      border-left: 2px solid var(--blue-border);
+      background: linear-gradient(135deg, var(--blue-dim), transparent 60%);
+      border-radius: 0 12px 12px 0;
+    }
+    .dict-word {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900; font-size: 32px; letter-spacing: -1px;
       margin-bottom: 4px;
     }
-    .meaning-phonetic {
+    .dict-word .pa { color: var(--blue); }
+    .dict-word .ct { color: var(--red); }
+    .dict-phonetic {
       font-family: 'Outfit', sans-serif;
-      font-size: 14px; color: rgba(255,255,255,.3);
+      font-size: 14px; color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .dict-def {
+      font-size: 15px; color: var(--text-secondary);
+      margin-bottom: 6px; line-height: 1.7;
+    }
+    .dict-kr {
+      font-size: 14px; color: var(--text-muted);
+      margin-bottom: 14px; line-height: 1.7;
+    }
+    .dict-example {
+      font-size: 14px; color: var(--text-muted);
+      font-style: italic; line-height: 1.7;
+    }
+    .dict-example em { color: var(--blue); font-style: italic; }
+
+    /* ===== SECTION: HOW IT WORKS ===== */
+    .how-section {
+      position: relative; z-index: 1;
+      padding: var(--section-gap) 0;
+    }
+    .section-label {
+      font-size: 12px; font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.5px;
       margin-bottom: 12px;
+      text-align: center;
     }
-    .meaning-def {
-      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
-      font-size: 14px; color: rgba(255,255,255,.5);
-      line-height: 1.6;
-      margin-bottom: 6px;
+    .section-title {
+      font-size: clamp(22px, 4vw, 32px); font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      line-height: 1.35;
     }
-    .meaning-kr {
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 13px; color: rgba(255,255,255,.4);
-      line-height: 1.6;
+    .section-desc {
+      font-size: 15px; font-weight: 400;
+      color: var(--text-secondary);
+      text-align: center;
+      max-width: 480px; margin: 0 auto 56px;
+      line-height: 1.7;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .step-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      transition: border-color 0.3s;
+    }
+    .step-card:hover { border-color: rgba(128, 176, 248, 0.2); }
+    .step-card.step-red:hover { border-color: rgba(248, 120, 136, 0.2); }
+    .step-num {
+      font-family: 'Outfit', sans-serif; font-weight: 900;
+      font-size: 48px; line-height: 1;
+      color: rgba(128, 176, 248, 0.1);
+      position: absolute; top: 20px; right: 24px;
+    }
+    .step-card.step-red .step-num { color: rgba(248, 120, 136, 0.1); }
+    .step-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .step-icon.blue-bg { background: var(--blue-dim); color: var(--blue); }
+    .step-icon.red-bg { background: var(--red-dim); color: var(--red); }
+    .step-title {
+      font-size: 17px; font-weight: 700;
       margin-bottom: 10px;
     }
-    .meaning-ex {
-      font-family: 'Outfit', 'Noto Sans KR', sans-serif;
-      font-size: 13px; color: rgba(255,255,255,.3);
-      font-style: italic;
+    .step-desc {
+      font-size: 14px; font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .step-connector {
+      display: flex; justify-content: center;
+      padding: 4px 0;
+    }
+    .step-connector i {
+      font-size: 20px; color: var(--text-muted);
+    }
+
+    /* ===== SECTION: AI ENGINE ===== */
+    .ai-section {
+      position: relative; z-index: 1;
+      padding: var(--section-gap) 0;
+    }
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .ai-stat {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .ai-stat-num {
+      font-family: 'Outfit', sans-serif; font-weight: 900;
+      font-size: clamp(28px, 5vw, 38px);
+      color: var(--blue);
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+    .ai-stat-label {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .ai-chips {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 32px;
+    }
+    .ai-chip {
+      padding: 8px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 500;
+    }
+    .ai-chip.blue {
+      background: var(--blue-dim);
+      border: 1px solid var(--blue-border);
+      color: var(--blue);
+    }
+    .ai-chip.red {
+      background: var(--red-dim);
+      border: 1px solid var(--red-border);
+      color: var(--red);
+    }
+
+    /* ===== SECTION: CATEGORIES ===== */
+    .cat-section {
+      position: relative; z-index: 1;
+      padding: var(--section-gap) 0;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .cat-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px 20px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .cat-card:hover {
+      border-color: rgba(128, 176, 248, 0.2);
+      transform: translateY(-2px);
+    }
+    .cat-card:last-child {
+      grid-column: 1 / -1;
+    }
+    .cat-icon {
+      font-size: 24px;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .cat-name {
+      font-size: 15px; font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .cat-examples {
+      font-size: 12px; font-weight: 400;
+      color: var(--text-muted);
       line-height: 1.6;
     }
-    .meaning-ex em { color: var(--blue); font-style: italic; }
-    .launch {
-      font-family: 'Outfit', sans-serif;
+
+    /* ===== SECTION: SOCIAL PROOF ===== */
+    .proof-section {
+      position: relative; z-index: 1;
+      padding: var(--section-gap) 0;
+      text-align: center;
+    }
+    .proof-box {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 48px 24px;
+    }
+    .proof-label {
+      font-size: 14px; font-weight: 400;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .proof-number {
+      font-family: 'Outfit', sans-serif; font-weight: 900;
+      font-size: clamp(52px, 12vw, 80px);
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .proof-number .unit {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 700; font-size: 0.4em;
+      color: var(--text-secondary);
+    }
+    .proof-sub {
+      font-size: 16px; font-weight: 500;
+      color: var(--blue);
+      margin-bottom: 32px;
+    }
+    .proof-targets {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .target-chip {
+      padding: 8px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .target-chip:hover {
+      color: var(--text-secondary);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    /* ===== SECTION: CTA ===== */
+    .cta-section {
+      position: relative; z-index: 1;
+      padding: var(--section-gap) 0 80px;
+      text-align: center;
+    }
+    .cta-headline {
+      font-size: clamp(20px, 4vw, 30px); font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .cta-headline .highlight { color: var(--red); }
+    .cta-sub {
+      font-size: 15px; font-weight: 400;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+    .cta-badge {
+      display: inline-block;
       font-size: 12px; font-weight: 700;
-      letter-spacing: 3px; text-transform: uppercase;
-      color: rgba(255,255,255,.3);
-      margin-bottom: 28px;
-      opacity: 0; animation: fadeUp .8s ease 2.4s forwards;
+      color: var(--blue);
+      padding: 6px 14px; border-radius: 999px;
+      background: var(--blue-dim);
+      border: 1px solid var(--blue-border);
+      margin-bottom: 32px;
     }
     .email-form {
-      display: flex; gap: 0; max-width: 420px; width: 100%;
-      opacity: 0; animation: fadeUp .8s ease 2.7s forwards;
+      display: flex; gap: 0;
+      max-width: 440px; width: 100%;
+      margin: 0 auto 14px;
     }
     .email-input {
-      flex: 1; padding: 16px 20px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1);
+      flex: 1;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
       border-right: none;
-      border-radius: 12px 0 0 12px;
-      color: #fff; font-family: inherit; font-size: 14px;
+      border-radius: 10px 0 0 10px;
+      color: #fff;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px;
       outline: none;
-      transition: border-color .3s;
+      transition: border-color 0.3s;
     }
-    .email-input::placeholder { color: rgba(255,255,255,.25); }
-    .email-input:focus { border-color: rgba(128,176,248,.4); }
+    .email-input::placeholder { color: rgba(255,255,255,0.25); }
+    .email-input:focus { border-color: rgba(128,176,248,0.4); }
     .email-btn {
       padding: 16px 28px;
-      background: linear-gradient(135deg, var(--blue), #6F9FF1);
-      border: none; border-radius: 0 12px 12px 0;
-      color: #0A0E10; font-family: inherit; font-size: 14px; font-weight: 800;
-      cursor: pointer;
-      transition: opacity .3s;
+      background: var(--blue);
+      border-radius: 0 10px 10px 0;
+      color: var(--bg);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px; font-weight: 700;
+      transition: opacity 0.2s;
       white-space: nowrap;
     }
-    .email-btn:hover { opacity: .85; }
+    .email-btn:hover { opacity: 0.85; }
+    .email-btn:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
     .email-note {
-      margin-top: 14px;
-      font-size: 12px; color: rgba(255,255,255,.2);
-      opacity: 0; animation: fadeUp .8s ease 2.9s forwards;
+      font-size: 12px;
+      color: var(--text-muted);
     }
     .success-msg {
       display: none;
-      font-size: 14px; color: var(--green); font-weight: 600;
+      font-size: 15px; font-weight: 700;
+      color: var(--green);
       margin-top: 16px;
     }
-    .success-msg.show { display: block; animation: fadeUp .5s ease forwards; }
-    .targets {
-      margin-top: 80px;
-      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-      opacity: 0; animation: fadeUp .8s ease 3.1s forwards;
+    .success-msg.show {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      animation: heroIn 0.5s ease forwards;
     }
-    .target-chip {
-      padding: 6px 14px; border-radius: 8px;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 12px; font-weight: 500;
-      color: rgba(255,255,255,.3);
-      border: 1px solid rgba(255,255,255,.06);
-    }
+
+    /* ===== FOOTER ===== */
     .footer {
-      position: relative; z-index: 2;
-      text-align: center; padding: 40px 24px;
-      font-size: 11px; color: rgba(255,255,255,.15);
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 40px 24px;
+      text-align: center;
     }
-    .footer a { color: rgba(255,255,255,.2); text-decoration: none; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
+    .footer-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
     }
+    .footer-logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900; font-size: 18px; letter-spacing: -1px;
+    }
+    .footer-logo .pa { color: var(--blue); }
+    .footer-logo .ct { color: var(--red); }
+    .footer-links {
+      display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+      font-size: 12px;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-secondary); }
+    .footer-copy {
+      font-size: 11px; color: var(--text-muted);
+    }
+
+    /* ===== RESPONSIVE: TABLET+ ===== */
+    @media (min-width: 640px) {
+      .steps {
+        grid-template-columns: 1fr;
+      }
+      .step-connector { display: flex; }
+      .ai-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .cat-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .cat-card:nth-child(4) { grid-column: auto; }
+      .cat-card:last-child { grid-column: auto; }
+    }
+
+    @media (min-width: 768px) {
+      .steps {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .step-connector { display: none; }
+      .cat-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .cat-card:last-child { grid-column: auto; }
+    }
+
+    /* ===== RESPONSIVE: MOBILE ===== */
     @media (max-width: 480px) {
-      .logo { font-size: 30px; margin-bottom: 60px; }
-      .line2 { margin-bottom: 36px; }
-      .divider { margin-bottom: 36px; }
-      .ai-highlight { margin-bottom: 56px; }
-      .data-chips { gap: 8px; margin-bottom: 60px; }
+      .hero { padding: 80px 20px 48px; }
+      .hero-logo { font-size: 36px; margin-bottom: 36px; }
+      .hero-counter { flex-direction: column; align-items: center; gap: 4px; }
       .email-form { flex-direction: column; gap: 10px; }
-      .email-input { border-right: 1px solid rgba(255,255,255,.1); border-radius: 12px; }
-      .email-btn { border-radius: 12px; }
-      .targets { margin-top: 60px; }
+      .email-input {
+        border-right: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+      }
+      .email-btn { border-radius: 10px; padding: 16px; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .cat-card:last-child { grid-column: auto; }
+      .proof-box { padding: 36px 20px; }
+    }
+
+    /* ===== REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+      .ambient-orb { animation: none; }
+      .hero-logo, .hero-position, .hero-slogan-1, .hero-slogan-2,
+      .hero-divider, .hero-ai-desc, .hero-counter, .hero-scroll-hint {
+        animation: none; opacity: 1; transform: none;
+      }
+      .hero-counter-dot { animation: none; }
+      .hero-scroll-hint i { animation: none; }
     }
   </style>
 </head>
 <body>
-<div class="bg-glow">
-  <div class="glow-blue"></div>
-  <div class="glow-red"></div>
+
+<!-- Ambient Background -->
+<div class="ambient" aria-hidden="true">
+  <div class="ambient-orb blue"></div>
+  <div class="ambient-orb red"></div>
 </div>
-<div class="noise"></div>
-<div class="main">
-  <div class="logo"><span class="pa">pa</span><span class="ct">ct</span></div>
-  <div class="line1">혼자의 억울함은 묻힙니다.</div>
-  <div class="line2">함께 모이면 달라집니다.</div>
-  <div class="divider"></div>
-  <div class="ai-intro">
-    판례, 언론 보도, 성공·실패 사례 —<br>
-    방대한 데이터를 학습한
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
+    <a href="#cta" class="nav-cta">사전 알림 신청</a>
   </div>
-  <div class="ai-highlight">
-    <span class="glow-text">AI 에이전트</span>가 분석부터 해결까지 끝냅니다.
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-position">AI 기반 집단 협상 에이전트 플랫폼</div>
+  <div class="hero-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
+  <p class="hero-slogan-1">혼자의 억울함은 묻힙니다.</p>
+  <h1 class="hero-slogan-2">함께 모이면 달라집니다.</h1>
+  <div class="hero-divider" aria-hidden="true"></div>
+  <p class="hero-ai-desc">
+    축적된 판례와 사례를 학습한<br>
+    <strong>AI 에이전트</strong>가 분석부터 해결까지 끝냅니다.
+  </p>
+  <div class="hero-counter">
+    <span class="hero-counter-dot" aria-hidden="true"></span>
+    <span class="hero-counter-num" id="heroCount">0</span>
+    <span class="hero-counter-label">명이 함께하고 있습니다</span>
   </div>
-  <div class="data-chips">
-    <span class="chip chip-b">판례</span>
-    <span class="chip chip-b">언론 보도</span>
-    <span class="chip chip-r">성공·실패 사례</span>
-    <span class="chip chip-g">지속 학습</span>
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>아래로 스크롤</span>
+    <i class="ph ph-caret-down"></i>
   </div>
-  <div class="pact-meaning">
-    <div class="meaning-word"><span class="pa">pa</span><span class="ct">ct</span></div>
-    <div class="meaning-phonetic">/pækt/</div>
-    <div class="meaning-def">noun — a formal agreement between individuals or parties</div>
-    <div class="meaning-kr">협약, 합의, 조약 — 개인 또는 집단 간의 공식적인 합의</div>
-    <div class="meaning-ex">"The workers made a <em>pact</em> to stand together."</div>
+</section>
+
+<!-- DICTIONARY -->
+<section class="dict-section">
+  <div class="container">
+    <div class="dict-block reveal">
+      <div class="dict-word"><span class="pa">pa</span><span class="ct">ct</span></div>
+      <div class="dict-phonetic">/pækt/</div>
+      <div class="dict-def">noun — a formal agreement between individuals or parties</div>
+      <div class="dict-kr">협약, 합의, 조약 — 개인 또는 집단 간의 공식적인 합의</div>
+      <div class="dict-example">"The workers made a <em>pact</em> to stand together."</div>
+    </div>
   </div>
-  <div class="launch">coming soon — 2026</div>
-  <form class="email-form" id="emailForm">
-    <input type="email" class="email-input" id="emailInput" placeholder="이메일을 남겨주세요" required />
-    <button type="submit" class="email-btn">사전 알림</button>
-  </form>
-  <div class="email-note">출시 소식을 가장 먼저 전해드립니다. 스팸은 보내지 않습니다.</div>
-  <div class="success-msg" id="successMsg">등록 완료! 출시 소식을 가장 먼저 전해드리겠습니다.</div>
-  <div class="targets">
-    <span class="target-chip">직장인</span>
-    <span class="target-chip">세입자</span>
-    <span class="target-chip">입주민</span>
-    <span class="target-chip">소상공인</span>
-    <span class="target-chip">불합리함을 겪는 누구든</span>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-label reveal">HOW IT WORKS</div>
+    <h2 class="section-title reveal">뭉치면 달라지는 3단계</h2>
+    <p class="section-desc reveal">
+      이슈를 등록하면 AI가 분석하고,<br>
+      사람이 모이면 압박이 시작됩니다.
+    </p>
+    <div class="steps">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon blue-bg"><i class="ph ph-megaphone"></i></div>
+        <div class="step-title">이슈 등록</div>
+        <div class="step-desc">억울한 상황을 등록하면 판례·사례를 학습한 AI가 즉시 분석합니다. 관련 법령, 유사 사례, 최적 채널을 자동으로 파악합니다.</div>
+      </div>
+      <div class="step-connector" aria-hidden="true"><i class="ph ph-arrow-down"></i></div>
+      <div class="step-card reveal">
+        <div class="step-num">02</div>
+        <div class="step-icon blue-bg"><i class="ph ph-users-three"></i></div>
+        <div class="step-title">서명 모집 &amp; 공식 통보</div>
+        <div class="step-desc">같은 처지의 사람들이 모입니다. 충분한 서명이 모이면 AI가 생성한 공식 문서를 상대방에게 발송합니다.</div>
+      </div>
+      <div class="step-connector" aria-hidden="true"><i class="ph ph-arrow-down"></i></div>
+      <div class="step-card step-red reveal">
+        <div class="step-num">03</div>
+        <div class="step-icon red-bg"><i class="ph ph-lightning"></i></div>
+        <div class="step-title">동시 압박 실행</div>
+        <div class="step-desc">응답이 없으면 관할 기관, 국회의원, 언론사 등 다수 채널에 동시 발송합니다. 집단의 힘으로 압박합니다.</div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="footer">
-  <span>© 2026 Pact</span> · <a href="https://pact-mvp.vercel.app/terms">이용약관</a> · <a href="https://pact-mvp.vercel.app/privacy">개인정보처리방침</a>
-</div>
+</section>
+
+<!-- AI ENGINE -->
+<section class="ai-section">
+  <div class="container">
+    <div class="section-label reveal">AI ENGINE</div>
+    <h2 class="section-title reveal">판례·사례를 학습한 AI</h2>
+    <p class="section-desc reveal">
+      누적된 판례와 전략 패턴, 실행 채널 데이터를 기반으로<br>
+      AI 에이전트가 최적의 해결 경로를 설계합니다.
+    </p>
+    <div class="ai-grid">
+      <div class="ai-stat reveal">
+        <div class="ai-stat-num" id="caseCount">0</div>
+        <div class="ai-stat-label">축적된 판례</div>
+      </div>
+      <div class="ai-stat reveal">
+        <div class="ai-stat-num" id="channelCount">0</div>
+        <div class="ai-stat-label">실행 채널 DB</div>
+      </div>
+      <div class="ai-stat reveal">
+        <div class="ai-stat-num" id="patternCount">0</div>
+        <div class="ai-stat-label">누적 전략 패턴</div>
+      </div>
+    </div>
+    <div class="ai-chips reveal">
+      <span class="ai-chip blue"><i class="ph ph-scales" style="margin-right:6px"></i>법령 분석</span>
+      <span class="ai-chip blue"><i class="ph ph-file-text" style="margin-right:6px"></i>문서 자동 생성</span>
+      <span class="ai-chip blue"><i class="ph ph-map-trifold" style="margin-right:6px"></i>채널 자동 매핑</span>
+      <span class="ai-chip red"><i class="ph ph-strategy" style="margin-right:6px"></i>전략 추론</span>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="cat-section">
+  <div class="container">
+    <div class="section-label reveal">CATEGORIES</div>
+    <h2 class="section-title reveal">어떤 억울함이든</h2>
+    <p class="section-desc reveal">
+      직장, 주거, 소비, 자영업, 공공 —<br>
+      불합리하다고 느꼈다면, 그게 시작입니다.
+    </p>
+    <div class="cat-grid">
+      <div class="cat-card reveal">
+        <div class="cat-icon"><i class="ph ph-briefcase"></i></div>
+        <div class="cat-name">직장</div>
+        <div class="cat-examples">임금체불 · 부당해고 · 괴롭힘</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon"><i class="ph ph-house-line"></i></div>
+        <div class="cat-name">주거</div>
+        <div class="cat-examples">전세사기 · 보증금 · 층간소음</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon"><i class="ph ph-shopping-cart"></i></div>
+        <div class="cat-name">소비자</div>
+        <div class="cat-examples">제품 하자 · 개인정보 유출 · 환불 거부</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon"><i class="ph ph-storefront"></i></div>
+        <div class="cat-name">자영업</div>
+        <div class="cat-examples">프랜차이즈 · 임대료 · 플랫폼 수수료</div>
+      </div>
+      <div class="cat-card reveal">
+        <div class="cat-icon"><i class="ph ph-buildings"></i></div>
+        <div class="cat-name">공공</div>
+        <div class="cat-examples">환경오염 · 공공기관 · 의료 사고</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="proof-section">
+  <div class="container">
+    <div class="proof-box reveal">
+      <p class="proof-label">지금 이 순간에도</p>
+      <div class="proof-number"><span id="proofCount">0</span><span class="unit"> 명</span></div>
+      <p class="proof-sub">함께하고 있습니다</p>
+      <div class="proof-targets">
+        <span class="target-chip">직장인</span>
+        <span class="target-chip">세입자</span>
+        <span class="target-chip">입주민</span>
+        <span class="target-chip">소상공인</span>
+        <span class="target-chip">불합리함을 겪는 누구든</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <div class="cta-badge reveal">COMING SOON — 2026</div>
+    <h2 class="cta-headline reveal">
+      <span class="highlight">불합리하다고 느꼈다면,</span><br>
+      그게 시작입니다.
+    </h2>
+    <p class="cta-sub reveal">출시 소식을 가장 먼저 전해드립니다.</p>
+    <form class="email-form reveal" id="emailForm">
+      <input
+        type="email"
+        class="email-input"
+        id="emailInput"
+        placeholder="이메일을 남겨주세요"
+        required
+        autocomplete="email"
+        aria-label="이메일 주소"
+      />
+      <button type="submit" class="email-btn" id="emailBtn">사전 알림</button>
+    </form>
+    <p class="email-note reveal">스팸은 보내지 않습니다.</p>
+    <div class="success-msg" id="successMsg">
+      <i class="ph ph-check-circle" style="font-size:20px"></i>
+      등록 완료! 출시 소식을 가장 먼저 전해드리겠습니다.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><span class="pa">pa</span><span class="ct">ct</span></div>
+      <div class="footer-links">
+        <a href="https://pact-mvp.vercel.app/terms">이용약관</a>
+        <a href="https://pact-mvp.vercel.app/privacy">개인정보처리방침</a>
+        <a href="mailto:contact@pact.kr">contact@pact.kr</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 컨트롤지(ctrlZ Inc.) All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
 <script>
+  /* ===== SCROLL REVEAL (IntersectionObserver) ===== */
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger siblings
+        const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+        let idx = Array.from(siblings).indexOf(entry.target);
+        if (idx < 0) idx = 0;
+        entry.target.style.transitionDelay = (idx * 0.08) + 's';
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => revealObserver.observe(el));
+
+  /* ===== ANIMATED COUNTERS ===== */
+  function animateCounter(el, target, duration, suffix) {
+    suffix = suffix || '';
+    const start = performance.now();
+    const update = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  }
+
+  // Hero counter
+  const heroCountEl = document.getElementById('heroCount');
+  animateCounter(heroCountEl, 1247, 2000, '');
+  heroCountEl.textContent = '0';
+  setTimeout(() => animateCounter(heroCountEl, 1247, 2200, ''), 1600);
+
+  // AI section counters
+  const aiObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(document.getElementById('caseCount'), 56727, 2000, '+');
+        animateCounter(document.getElementById('channelCount'), 850, 1800, '+');
+        animateCounter(document.getElementById('patternCount'), 2400, 1800, '+');
+        aiObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const aiSection = document.querySelector('.ai-section');
+  if (aiSection) aiObserver.observe(aiSection);
+
+  // Social proof counter
+  const proofObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(document.getElementById('proofCount'), 1247, 2400, '');
+        proofObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const proofSection = document.querySelector('.proof-section');
+  if (proofSection) proofObserver.observe(proofSection);
+
+  /* ===== EMAIL FORM ===== */
   const SUPABASE_URL = 'https://gqwfkaqdnblhxvsezmsm.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdxd2ZrYXFkbmJsaHh2c2V6bXNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MDk5MjMsImV4cCI6MjA1NzQ4NTkyM30.oGwCMevJvRq8VBfP8EmbV3hLi0r4bMdPxzSgkJxXhUk';
+
   document.getElementById('emailForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const email = document.getElementById('emailInput').value.trim();
     if (!email) return;
+    const btn = document.getElementById('emailBtn');
+    btn.disabled = true;
+    btn.textContent = '전송 중…';
     try {
       const res = await fetch(SUPABASE_URL + '/rest/v1/notify_emails', {
         method: 'POST',
@@ -320,11 +949,30 @@
         document.getElementById('emailForm').style.display = 'none';
         document.querySelector('.email-note').style.display = 'none';
         document.getElementById('successMsg').classList.add('show');
+      } else {
+        btn.disabled = false;
+        btn.textContent = '사전 알림';
       }
     } catch (err) {
       console.error(err);
+      btn.disabled = false;
+      btn.textContent = '사전 알림';
     }
   });
+
+  /* ===== NAV SCROLL BEHAVIOR ===== */
+  const nav = document.querySelector('.nav');
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    if (currentScroll > 60) {
+      nav.style.borderBottomColor = 'rgba(255,255,255,0.06)';
+    } else {
+      nav.style.borderBottomColor = 'rgba(255,255,255,0.04)';
+    }
+    lastScroll = currentScroll;
+  }, { passive: true });
 </script>
+
 </body>
 </html>
