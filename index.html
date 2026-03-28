@@ -1372,57 +1372,42 @@
     requestAnimationFrame(update);
   }
 
-  /* Hero stats — real-time fetch from Supabase (PostgREST aggregate) */
-  var SB_REST = 'https://ticqpfxxbkyvhreywsax.supabase.co/rest/v1';
-  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpY3FwZnh4Ymt5dmhyZXl3c2F4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2MjkwMTUsImV4cCI6MjA1ODIwNTAxNX0.dPalKkVn92OA0b-5rl5BoSXaYxwcFz3TGm12HJfMiEg';
-
-  async function fetchCount(table) {
-    try {
-      var res = await fetch(SB_REST + '/' + table + '?select=count', {
-        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
-      });
-      if (!res.ok) { console.warn('fetchCount ' + table + ': HTTP ' + res.status); return 0; }
-      var data = await res.json();
-      return (data && data[0] && data[0].count) ? parseInt(data[0].count) : 0;
-    } catch (e) { console.warn('fetchCount ' + table + ':', e); return 0; }
-  }
+  /* Hero stats — fetch from MVP API (Supabase server-side) */
+  var STATS_API = 'https://pact-mvp.vercel.app/api/stats';
 
   async function loadHeroStats() {
-    var channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
-    var promises = [fetchCount('legal_cases')];
-    for (var i = 0; i < channelTables.length; i++) promises.push(fetchCount(channelTables[i]));
-    var results = await Promise.all(promises);
+    try {
+      var res = await fetch(STATS_API);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var data = await res.json();
+      console.log('Pact live stats:', data);
 
-    var caseCount = results[0];
-    var totalChannels = 0;
-    for (var j = 1; j < results.length; j++) totalChannels += results[j];
-    var issueTypes = 23;
-
-    console.log('Pact live stats:', { cases: caseCount, channels: totalChannels, types: issueTypes });
-
-    if (caseCount > 0) animateCounter(document.getElementById('heroCount1'), caseCount, 2200, '');
-    else document.getElementById('heroCount1').textContent = '—';
-    if (totalChannels > 0) animateCounter(document.getElementById('heroCount2'), totalChannels, 1800, '');
-    else document.getElementById('heroCount2').textContent = '—';
-    animateCounter(document.getElementById('heroCount3'), issueTypes, 1200, '');
+      if (data.cases > 0) animateCounter(document.getElementById('heroCount1'), data.cases, 2200, '');
+      else document.getElementById('heroCount1').textContent = '—';
+      if (data.channels > 0) animateCounter(document.getElementById('heroCount2'), data.channels, 1800, '');
+      else document.getElementById('heroCount2').textContent = '—';
+      animateCounter(document.getElementById('heroCount3'), data.issueTypes || 23, 1200, '');
+    } catch (e) {
+      console.warn('Stats fetch failed:', e);
+      document.getElementById('heroCount1').textContent = '—';
+      document.getElementById('heroCount2').textContent = '—';
+      document.getElementById('heroCount3').textContent = '23';
+    }
   }
   setTimeout(loadHeroStats, 800);
 
-  /* Learned AI KPIs — real-time from Supabase */
+  /* Learned AI KPIs — fetch from MVP API */
   var learnedObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
         (async function() {
-          var channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
-          var promises = [fetchCount('legal_cases')];
-          for (var i = 0; i < channelTables.length; i++) promises.push(fetchCount(channelTables[i]));
-          var results = await Promise.all(promises);
-          var cc = results[0];
-          var chTotal = 0;
-          for (var j = 1; j < results.length; j++) chTotal += results[j];
-          if (cc > 0) animateCounter(document.getElementById('kpiCases'), cc, 1800, '');
-          if (chTotal > 0) animateCounter(document.getElementById('kpiChannels'), chTotal, 1600, '');
-          animateCounter(document.getElementById('kpiTypes'), 23, 1200, '');
+          try {
+            var res = await fetch(STATS_API);
+            var data = await res.json();
+            if (data.cases > 0) animateCounter(document.getElementById('kpiCases'), data.cases, 1800, '');
+            if (data.channels > 0) animateCounter(document.getElementById('kpiChannels'), data.channels, 1600, '');
+            animateCounter(document.getElementById('kpiTypes'), data.issueTypes || 23, 1200, '');
+          } catch(e) { console.warn('KPI fetch failed:', e); }
         })();
         learnedObserver.disconnect();
       }
