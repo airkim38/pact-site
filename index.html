@@ -1375,42 +1375,57 @@
   }
 
   /* Hero stats — real-time fetch from Supabase */
-  const sb = window.supabase.createClient(
-    'https://ticqpfxxbkyvhreywsax.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpY3FwZnh4Ymt5dmhyZXl3c2F4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2MjkwMTUsImV4cCI6MjA1ODIwNTAxNX0.dPalKkVn92OA0b-5rl5BoSXaYxwcFz3TGm12HJfMiEg'
-  );
+  var sb;
+  try {
+    sb = supabase.createClient(
+      'https://ticqpfxxbkyvhreywsax.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpY3FwZnh4Ymt5dmhyZXl3c2F4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2MjkwMTUsImV4cCI6MjA1ODIwNTAxNX0.dPalKkVn92OA0b-5rl5BoSXaYxwcFz3TGm12HJfMiEg'
+    );
+  } catch (e) {
+    console.error('Supabase init failed:', e);
+  }
 
   async function fetchCount(table) {
     try {
-      const { count } = await sb.from(table).select('id', { count: 'exact', head: true });
-      return count || 0;
-    } catch (e) { return 0; }
+      var result = await sb.from(table).select('*', { count: 'exact', head: true });
+      if (result.error) { console.warn('fetchCount ' + table + ':', result.error.message); return 0; }
+      return result.count || 0;
+    } catch (e) { console.warn('fetchCount ' + table + ' exception:', e); return 0; }
   }
 
   async function loadHeroStats() {
-    const channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
-    const [caseCount, ...channelCounts] = await Promise.all([
+    var channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
+    var results = await Promise.all([
       fetchCount('legal_cases'),
-      ...channelTables.map(t => fetchCount(t))
+      ...channelTables.map(function(t) { return fetchCount(t); })
     ]);
-    const totalChannels = channelCounts.reduce((a, b) => a + b, 0);
-    const issueTypes = 23;
+    var caseCount = results[0];
+    var totalChannels = 0;
+    for (var i = 1; i < results.length; i++) totalChannels += results[i];
+    var issueTypes = 23;
 
-    animateCounter(document.getElementById('heroCount1'), caseCount || 0, 2200, '');
-    animateCounter(document.getElementById('heroCount2'), totalChannels || 0, 1800, '');
+    console.log('Pact stats:', { cases: caseCount, channels: totalChannels, types: issueTypes });
+
+    if (caseCount > 0) animateCounter(document.getElementById('heroCount1'), caseCount, 2200, '');
+    else document.getElementById('heroCount1').textContent = '—';
+    if (totalChannels > 0) animateCounter(document.getElementById('heroCount2'), totalChannels, 1800, '');
+    else document.getElementById('heroCount2').textContent = '—';
     animateCounter(document.getElementById('heroCount3'), issueTypes, 1200, '');
   }
   setTimeout(loadHeroStats, 800);
 
   /* Learned AI KPIs — real-time from Supabase */
-  const learnedObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+  var learnedObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        (async () => {
-          const channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
-          const [cc, ...ch] = await Promise.all([fetchCount('legal_cases'), ...channelTables.map(t => fetchCount(t))]);
-          animateCounter(document.getElementById('kpiCases'), cc || 0, 1800, '');
-          animateCounter(document.getElementById('kpiChannels'), ch.reduce((a,b) => a+b, 0) || 0, 1600, '');
+        (async function() {
+          var channelTables = ['government_agencies', 'legislators', 'committees', 'media_outlets', 'civic_organizations', 'community_channels', 'petition_channels'];
+          var results = await Promise.all([fetchCount('legal_cases')].concat(channelTables.map(function(t) { return fetchCount(t); })));
+          var cc = results[0];
+          var chTotal = 0;
+          for (var i = 1; i < results.length; i++) chTotal += results[i];
+          if (cc > 0) animateCounter(document.getElementById('kpiCases'), cc, 1800, '');
+          if (chTotal > 0) animateCounter(document.getElementById('kpiChannels'), chTotal, 1600, '');
           animateCounter(document.getElementById('kpiTypes'), 23, 1200, '');
         })();
         learnedObserver.disconnect();
