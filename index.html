@@ -1373,49 +1373,59 @@
     requestAnimationFrame(update);
   }
 
-  /* Hero stats — fetch from MVP API (Supabase server-side) */
+  /* Hero stats — fetch from MVP API (실시간 갱신) */
   var STATS_API = 'https://pact-mvp.vercel.app/api/stats';
+  var prevStats = { cases: 0, channels: 0, issueTypes: 23 };
+  var firstLoad = true;
+
+  function updateCounter(el, from, to, duration) {
+    if (from === to || !el) return;
+    var start = performance.now();
+    var update = function(now) {
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(from + (to - from) * eased);
+      el.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  }
 
   async function loadHeroStats() {
     try {
-      var res = await fetch(STATS_API);
+      var res = await fetch(STATS_API + '?t=' + Date.now());
       if (!res.ok) throw new Error('HTTP ' + res.status);
       var data = await res.json();
-      console.log('Pact live stats:', data);
 
-      if (data.cases > 0) animateCounter(document.getElementById('heroCount1'), data.cases, 2200, '');
-      else document.getElementById('heroCount1').textContent = '—';
-      if (data.channels > 0) animateCounter(document.getElementById('heroCount2'), data.channels, 1800, '');
-      else document.getElementById('heroCount2').textContent = '—';
-      animateCounter(document.getElementById('heroCount3'), data.issueTypes || 23, 1200, '');
+      var dur = firstLoad ? 2200 : 800;
+
+      if (data.cases > 0) {
+        updateCounter(document.getElementById('heroCount1'), firstLoad ? 0 : prevStats.cases, data.cases, dur);
+        updateCounter(document.getElementById('kpiCases'), firstLoad ? 0 : prevStats.cases, data.cases, dur);
+      }
+      if (data.channels > 0) {
+        updateCounter(document.getElementById('heroCount2'), firstLoad ? 0 : prevStats.channels, data.channels, dur);
+        updateCounter(document.getElementById('kpiChannels'), firstLoad ? 0 : prevStats.channels, data.channels, dur);
+      }
+      updateCounter(document.getElementById('heroCount3'), firstLoad ? 0 : prevStats.issueTypes, data.issueTypes || 23, dur);
+      updateCounter(document.getElementById('kpiTypes'), firstLoad ? 0 : prevStats.issueTypes, data.issueTypes || 23, dur);
+
+      prevStats = { cases: data.cases, channels: data.channels, issueTypes: data.issueTypes || 23 };
+      firstLoad = false;
     } catch (e) {
       console.warn('Stats fetch failed:', e);
-      document.getElementById('heroCount1').textContent = '—';
-      document.getElementById('heroCount2').textContent = '—';
-      document.getElementById('heroCount3').textContent = '23';
+      if (firstLoad) {
+        document.getElementById('heroCount1').textContent = '—';
+        document.getElementById('heroCount2').textContent = '—';
+        document.getElementById('heroCount3').textContent = '23';
+      }
     }
   }
-  setTimeout(loadHeroStats, 800);
 
-  /* Learned AI KPIs — fetch from MVP API */
-  var learnedObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        (async function() {
-          try {
-            var res = await fetch(STATS_API);
-            var data = await res.json();
-            if (data.cases > 0) animateCounter(document.getElementById('kpiCases'), data.cases, 1800, '');
-            if (data.channels > 0) animateCounter(document.getElementById('kpiChannels'), data.channels, 1600, '');
-            animateCounter(document.getElementById('kpiTypes'), data.issueTypes || 23, 1200, '');
-          } catch(e) { console.warn('KPI fetch failed:', e); }
-        })();
-        learnedObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-  const learnedSection = document.getElementById('learnedAI');
-  if (learnedSection) learnedObserver.observe(learnedSection);
+  // 첫 로딩 + 30초마다 자동 갱신
+  setTimeout(loadHeroStats, 800);
+  setInterval(loadHeroStats, 30000);
 
   /* Strategy bars animation */
   const stratObserver = new IntersectionObserver((entries) => {
